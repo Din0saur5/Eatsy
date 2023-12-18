@@ -24,7 +24,7 @@ const BaseLayout = () => {
   const {user} = authData
   
   id = user.id
-  email= user.id
+  email= user.email
   }
   useEffect(()=>{
   fetch(`${server}/users/${id}`)

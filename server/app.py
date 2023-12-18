@@ -276,5 +276,9 @@ class ReviewById(Resource):
 api.add_resource(ReviewById, '/reviews/<uuid:id>/<uuid:user_id>')
 
 
+@app.route('/')
+def home():
+    return 'Hello, World!'
+
 if __name__ == '__main__':
-    app.run(port=5555, debug=True)
+    app.run(host='0.0.0.0', port=80)
