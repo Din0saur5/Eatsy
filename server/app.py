@@ -9,7 +9,7 @@ load_dotenv()
 # Remote library imports
 from flask import request, make_response, jsonify
 from flask_restful import Resource
-from flask_cors import cross_origin
+from flask_cors import cross_origin, CORS
 # Local imports
 from config import *
 # Add your model imports
