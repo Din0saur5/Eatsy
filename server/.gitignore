@@ -72,6 +72,6 @@ instance
 /server/.env
 /client/.env
 /bfg--1.14.0
-Pipfile.lock 
+/Pipfile.lock 
 
 /recipes.json
