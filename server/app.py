@@ -7,9 +7,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 # Remote library imports
-from flask import request, make_response, jsonify
+from flask import request, make_response, jsonify, render_template
 from flask_restful import Resource
-from flask_cors import cross_origin, CORS
+# from flask_cors import cross_origin, CORS
 # Local imports
 from config import *
 # Add your model imports
@@ -275,10 +275,12 @@ class ReviewById(Resource):
 
 api.add_resource(ReviewById, '/reviews/<uuid:id>/<uuid:user_id>')
 
-
 @app.route('/')
-def home():
-    return 'Hello, World!'
+@app.route('/<int:id>')
+def index(id=0):
+    return render_template("index.html")
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80)
