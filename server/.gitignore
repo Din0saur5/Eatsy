@@ -65,8 +65,7 @@ __pycache__
 instance
 .vscode
 /server/recipes.json
-/client/package-lock.json 
-client/package-lock.json
+
 /server/Pipfile.lock 
 *.env   
 /.env
@@ -74,5 +73,5 @@ client/package-lock.json
 /client/.env
 /bfg--1.14.0
 Pipfile.lock 
-package-lock.json
+
 /recipes.json
