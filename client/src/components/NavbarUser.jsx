@@ -7,8 +7,7 @@ import {FaBars, FaTimes} from "react-icons/fa"
 import {  DarkThemeToggle } from 'flowbite-react'
 import { MdSearch } from 'react-icons/md'
 import { supabase } from '../supabaseClient'
-import { Button, DarkThemeToggle, TextInput } from 'flowbite-react'
-import { MdSearch } from "react-icons/md";
+
 
 
 

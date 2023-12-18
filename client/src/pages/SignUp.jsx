@@ -94,7 +94,7 @@ const SignUp = () => {
   return (
     <> 
       <Navbar/>
-<div className='bg-background6 bg-cover'>
+<div className='bg-background5 bg-cover'>
 <div className='flex justify-center items-center h-screen'> 
 <Card className="max-w-sm">
 <form className="max-w-md mx-auto" onSubmit={(e)=>handleSignUp(e)}>
