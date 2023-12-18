@@ -35,4 +35,4 @@ db.init_app(app)
 api = Api(app)
 
 # Instantiate 
-CORS(app, resources={r"/*": {"origins": "http://127.0.0.1:5173"}}, allow_headers=['Content-Type', 'Authorization', 'Accept'],)
+CORS(app, resources={r"/*": {"origins": os.environ.get('CORS_ORIGIN')}}, allow_headers=['Content-Type', 'Authorization', 'Accept'],)
