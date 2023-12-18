@@ -28,3 +28,5 @@ dist-ssr
 /server/.env
 bfg-1.14.0.jar
 Pipfile.lock
+
+/client/package-lock.json
