@@ -19,7 +19,7 @@ const NavbarUser = () => {
             const { error } = await supabase.auth.signOut()
             if (error) throw error
             sessionStorage.clear()
-            location.reload()
+            navigate('/')
             return 
             
         } catch (error) {
