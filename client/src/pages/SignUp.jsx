@@ -65,7 +65,7 @@ const SignUp = () => {
         username: '',
         first_name: '',
         last_name: '',
-        terms: '',
+        
        
       });
       alert("Check your email vor verification link");
