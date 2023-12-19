@@ -90,7 +90,7 @@ class CheckSession(Resource):
             user = User.query.filter(User.id == user_id).first()
             return user.to_dict(), 200
         
-        return {}, 401
+        return make_response({}, 401)
 
 
 class Login(Resource):
@@ -110,7 +110,7 @@ class Login(Resource):
                 session['d'] = user.id
                 return user.to_dict(), 200
 
-        return {'error': '401 Unauthorized'}, 401
+        return make_response({'error': '401 Unauthorized'}, 401)
 
 class Logout(Resource):
 

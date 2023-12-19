@@ -12,7 +12,7 @@ from flask_migrate import Migrate
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
-origin = os.getenv('CORS_ORIGIN')
+
 # Instantiate app, set attributes
 app = Flask(__name__)
 
@@ -38,8 +38,8 @@ db.init_app(app)
 bcrypt = Bcrypt(app)
 # Instantiate REST API
 api = Api(app)
-CORS_ORIGIN = 'http://localhost:5173/'
-origin = os.getenv('CORS_ORIGIN')
+
+origin = 'http://127.0.0.1:5174'
 cors = CORS(app, resources={
     r"/*": {
        "origins": origin,
