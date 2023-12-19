@@ -7,16 +7,16 @@ from dotenv import load_dotenv
 
 load_dotenv()
 # Remote library imports
-from flask import request, make_response, jsonify
+from flask import request, make_response
 from flask_restful import Resource
 # from flask_cors import cross_origin, CORS
 # Local imports
-from config import *
+from config import app, db, api
 # Add your model imports
 from models import User, Review, Recipe, Ingredient
 
 # app.py
-from flask import Flask, request, jsonify
+
 
 
 

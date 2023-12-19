@@ -38,7 +38,7 @@ api = Api(app)
 
 cors = CORS(app, resources={
     r"/*": {
-       "origins": os.getenv('CORS_ORIGINS'),
+       "origins": 'https://eatsy-8ewa.onrender.com',
        "methods": ["GET", "POST", "PUT", "DELETE"],
        "allow_headers": ["Content-Type", "Authorization"]
     }
