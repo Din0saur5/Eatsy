@@ -35,10 +35,10 @@ db.init_app(app)
 # Instantiate REST API
 api = Api(app)
 
-
+origin = os.getenv('CORS_ORIGIN')
 cors = CORS(app, resources={
     r"/*": {
-       "origins": 'https://eatsy-8ewa.onrender.com',
+       "origins": origin,
        "methods": ["GET", "POST", "PUT", "DELETE"],
        "allow_headers": ["Content-Type", "Authorization"]
     }
