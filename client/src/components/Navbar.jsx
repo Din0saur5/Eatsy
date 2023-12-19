@@ -5,6 +5,13 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import { DarkThemeToggle } from 'flowbite-react';
 import { MdSearch } from 'react-icons/md';
 
+
+function handleLogout( {onLogout, userData} ) {
+    fetch($`{server}`/logout, {
+      method: "DELETE",
+    }).then(() => onLogout(null));
+  }
+
 const Navbar = () => {
     const [click, setClick] = useState(false);
     const [mealsDropdown, setMealsDropdown] = useState(false);
