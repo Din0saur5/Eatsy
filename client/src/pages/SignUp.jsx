@@ -6,8 +6,7 @@ import { Button, Card } from 'flowbite-react';
 import Navbar from '../components/Navbar';
 const server = import.meta.env.VITE_BACK_END_SERVE
 
-const SignUp = () => {
-  let navigate = useNavigate() 
+const SignUp = ({onLogin}) => {
   const [formInfo, setFormInfo] = useState({
     email: '',
     password: '',
@@ -16,6 +15,8 @@ const SignUp = () => {
     last_name: '',
     
   });
+  const [errors, setErrors] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [checked, setChecked] = useState(false);
   
   const handleTerms = () => {
@@ -25,8 +26,10 @@ const SignUp = () => {
     setChecked(event.value);
   };
 
-  const handleSignUp = (user) => {
-    console.log(user)
+  const handleSignUp = (e) => {
+    e.preventDefault();
+    setErrors([]);
+    setIsLoading(true);
     const postData = {
       email: formInfo.email,
       username: formInfo.username,
@@ -42,17 +45,15 @@ const SignUp = () => {
       },
       body: JSON.stringify(postData), // Convert the JavaScript object to a JSON string
     })
-    .then(response => {
-      setIsLoading(false)
-      response.json()} )
-    .then(data => {
-      return data // Handle the response data
-    })
-    .catch(error => {
-      console.error('There was a problem with the fetch operation:', error); // Handle any errors
-      
+    .then((r) => {
+      setIsLoading(false);
+      if (r.ok) {
+        r.json().then((user) => onLogin(user));
+      } else {
+        r.json().then((err) => setErrors(err.errors));
+      }
     });
-    } 
+  }
     
  
    

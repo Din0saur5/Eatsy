@@ -65,7 +65,7 @@ const router = createBrowserRouter([
         loader: alreadyLoggedIn,
       },
       {
-        path: "search",
+        path: "search/",
         element: <SearchList/>, 
         
       }, 

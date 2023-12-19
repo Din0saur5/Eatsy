@@ -12,7 +12,7 @@ from flask_migrate import Migrate
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
-
+origin = os.getenv('CORS_ORIGIN')
 # Instantiate app, set attributes
 app = Flask(__name__)
 
@@ -42,7 +42,7 @@ api = Api(app)
 
 cors = CORS(app, resources={
     r"/*": {
-       "origins": 'https://eatsy-8ewa.onrender.com',
+       "origins": origin,
        "methods": ["GET", "POST", "PUT", "DELETE"],
        "allow_headers": ["Content-Type", "Authorization"]
     }
