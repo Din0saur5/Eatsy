@@ -5,6 +5,7 @@ import { createBrowserRouter, redirect, RouterProvider, useParams, } from 'react
 import Home from './pages/Home';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
+import MealPage from "./pages/MealPage";
 
 import ErrorPage from './pages/ErrorPage';
 
@@ -43,6 +44,14 @@ return null
 }
 
 const router = createBrowserRouter([
+  {
+    path: "/meals/:mealType",
+    element: <MealPage />,
+    loader: async ({ params }) => {
+      // Loader function to fetch data based on meal type, if necessary
+      return fetchMealData(params.mealType);
+    },
+  },
   {
     path: '/',
     element: <BaseLayout/>,
