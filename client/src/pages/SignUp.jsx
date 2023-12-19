@@ -17,6 +17,28 @@ const SignUp = () => {
     
   });
   const [checked, setChecked] = useState(false);
+  const handleLogin = async () => {
+    
+    try{
+
+      const { data, error } = await supabase.auth.signInWithPassword({ 
+        email: formInfo.email, 
+        password: formInfo.password, });
+            
+      if (error) throw error;
+      console.log(data)
+      if(data){
+        sessionStorage.setItem('token',JSON.stringify(data))
+       
+        
+      } 
+       
+      
+    } catch (error){
+      alert(error)
+    }
+    
+  };
   const handleTerms = () => {
     setChecked(!checked);
   };
@@ -58,7 +80,9 @@ const SignUp = () => {
         password:formInfo.password,
         disable_email_confirmation: true,
     })
-     .then(()=>{postPublicUser(data)
+     .then(()=>{
+      postPublicUser(data) 
+      handleLogin()
       setFormInfo({
         email: '',
         password: '',
@@ -68,8 +92,8 @@ const SignUp = () => {
         
        
       });
-      alert("Check your email vor verification link");
-      navigate('/login')
+      
+      location.reload()
     }
       )
 
