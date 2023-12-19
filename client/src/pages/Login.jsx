@@ -1,39 +1,18 @@
 // Login.jsx
 import { useState } from 'react';
 import { supabase } from '../supabaseClient';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 
 import Navbar from '../components/Navbar';
 import LoginForm from '../components/LoginForm';
 import { Card } from 'flowbite-react';
+import SignupForm from '../components/SignupForm';
 const Login = () => {
   const [showLogin, setShowLogin] = useState(true);
+  const [userData, setUserData] = useOutletContext(); 
   
-  
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try{
-
-      const { data, error } = await supabase.auth.signInWithPassword({ 
-        email: formInfo.email, 
-        password: formInfo.password, });
-            
-      if (error) throw error;
-      console.log(data)
-      if(data){
-        sessionStorage.setItem('token',JSON.stringify(data))
-        location.reload()
-        
-      } 
-       
-      
-    } catch (error){
-      alert(error)
-    }
-    
-  };
-
+ 
 
 
   return (
@@ -43,10 +22,10 @@ const Login = () => {
       <div className="flex justify-center items-center h-screen">
         <Card className="max-w-sm">
             {showLogin ? (
-                
+                <LoginForm onLogin={setUserData}/>
               ):
               (
-
+                <SignupForm onLogin={setUserData}/>
 
               )
           } 

@@ -105,7 +105,7 @@ const SignupForm = ({onLogin}) => {
       </form>
       <small className='dark:text-white'>Already have an account? <Link style={{color:"green"}} to ='/login'>Log-In</Link></small>
     
-    </Card>
+
     </div>
     </div>
         </> 

@@ -21,30 +21,30 @@ from models import User, Review, Recipe, Ingredient
 
 
 
-@app.route('/', endpoint='home')
+@app.route('/')
 def index():
-    return 
-'''<h1>Project Server</h1>
-<h2>Try one of our super fun routes!</h2>
-<ul>
-<li><a href="/recipes">/recipes</a></li>
-</ul>'''
+    return (
+    '''<h1>Project Server</h1>
+    <h2>Try one of our super fun routes!</h2>
+    <ul>
+    <li><a href="/recipes">/recipes</a></li>
+    </ul>'''
+    )
 
+# @app.before_request
+# def check_if_logged_in():
+#     open_access_list = [
+#         'signup',
+#         'login',
+#         'check_session',
+#         'recipes',
+#         'ingredient'
+#         'recip_id'
+#         'home'
+#     ]
 
-@app.before_request
-def check_if_logged_in():
-    open_access_list = [
-        'signup',
-        'login',
-        'check_session',
-        'recipes',
-        'ingredient'
-        'recip_id'
-        'home'
-    ]
-
-    if (request.endpoint) not in open_access_list and (not session.get('user_id')):
-        return {'error': '401 Unauthorized'}, 401
+#     if (request.endpoint) not in open_access_list and (not session.get('user_id')):
+#         return {'error': '401 Unauthorized'}, 401
 
 
 class Signup(Resource):
@@ -72,7 +72,7 @@ class Signup(Resource):
             db.session.add(user)
             db.session.commit()
 
-            session['user_id'] = user.id
+            session['id'] = user.id
 
             return user.to_dict(), 201
 
@@ -85,7 +85,7 @@ class CheckSession(Resource):
 
     def get(self):
         
-        user_id = session['user_id']
+        user_id = session.get('id')
         if user_id:
             user = User.query.filter(User.id == user_id).first()
             return user.to_dict(), 200
@@ -107,7 +107,7 @@ class Login(Resource):
         if user:
             if user.authenticate(password):
 
-                session['user_id'] = user.id
+                session['d'] = user.id
                 return user.to_dict(), 200
 
         return {'error': '401 Unauthorized'}, 401
@@ -116,13 +116,13 @@ class Logout(Resource):
 
     def delete(self):
 
-        session['user_id'] = None
+        session['id'] = None
         
         return {}, 204
 
 
 api.add_resource(Signup, '/signup', endpoint='signup')
-api.add_resource(CheckSession, '/check_session', endpoint='check_session')
+api.add_resource(CheckSession, '/check_session')
 api.add_resource(Login, '/login', endpoint='login')
 api.add_resource(Logout, '/logout', endpoint='logout')
 
