@@ -33,7 +33,8 @@ const Login = () => {
       console.log(data)
       if(data){
         sessionStorage.setItem('token',JSON.stringify(data))
-        navigate('/dashboard')
+        location.reload()
+        
       } 
        
       
