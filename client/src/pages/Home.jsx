@@ -10,11 +10,10 @@ const Home = () => {
   return (
     <>
     <Navbar/>
-    <div className='bg-light-grad bg-cover  h-screen dark:bg-dark-grad '>
+    <div className='bg-background5 bg-cover' >
+      <div className="flex justify-center items-center h-screen">
     
-    
-      <h1>Hello World</h1>
-      
+    </div>
     </div>
     </>
   )

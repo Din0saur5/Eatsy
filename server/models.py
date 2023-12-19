@@ -3,26 +3,43 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import validates
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.associationproxy import association_proxy
-from config import *
+from sqlalchemy.ext.hybrid import hybrid_property
+from config import db, bcrypt
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
 
 class User(db.Model, SerializerMixin):
    __tablename__ = 'users'
-   id = db.Column(UUID(as_uuid=True), primary_key=True)
+   id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+   email = db.Column(db.String(), unique=True, nullable=False)
    username = db.Column(db.String(), unique=True, nullable=False)
+   _password_hash = db.Column(db.String, nullable=False)
    first_name = db.Column(db.String(), nullable=False)
    last_name = db.Column(db.String(), nullable=False)
    created = db.Column(db.DateTime, server_default=db.func.now())
    
-   serialize_rules = ('-reviews', '-recipes')
+   serialize_rules = ('-reviews', '-recipes', '-_password_hash')
    
    reviews = db.relationship('Review', back_populates='user', cascade="all, delete-orphan")
    recipes = db.relationship('Recipe', back_populates='user', cascade="all, delete-orphan")
+   favorites = db.relationship('Favorite', back_populates='user', cascade="all, delete-orphan")
    
    def __repr__(self):
        return f'<User {self.username}: {self.display_name}, {self.email}>'
+   
+   @hybrid_property
+   def password_hash(self):
+        raise AttributeError('Password hashes may not be viewed.')
 
+   @password_hash.setter
+   def password_hash(self, password):
+        password_hash = bcrypt.generate_password_hash(
+            password.encode('utf-8'))
+        self._password_hash = password_hash.decode('utf-8')
+
+   def authenticate(self, password):
+        return bcrypt.check_password_hash(
+            self._password_hash, password.encode('utf-8'))        
 
 class Review(db.Model, SerializerMixin):
     __tablename__ = 'reviews'
@@ -63,6 +80,7 @@ class Recipe(db.Model, SerializerMixin):
     user = db.relationship('User', back_populates='recipes')
     ingredients = db.relationship('Ingredient', back_populates='recipe', cascade="all, delete-orphan")
     reviews = db.relationship('Review', back_populates='recipe', cascade="all, delete-orphan")
+    favorites = db.relationship('Favorite', back_populates='recipe', cascade="all, delete-orphan")
     
 class Ingredient(db.Model, SerializerMixin):
     __tablename__ = 'ingredients'
@@ -78,3 +96,15 @@ class Ingredient(db.Model, SerializerMixin):
     serialize_rules = ('-recipe',)
     
     recipe = db.relationship('Recipe', back_populates='ingredients')
+    
+class Favorite(db.Model, SerializerMixin):
+    __tablename__ = 'favorites'
+    id = db.Column(db.Integer, primary_key=True)
+    created = db.Column(db.DateTime, server_default=db.func.now())
+    user_id = db.Column(db.Uuid, db.ForeignKey('users.id'))
+    recipe_id = db.Column(db.Uuid, db.ForeignKey('recipes.id'))
+    
+    serialize_rules = ('-user.favorites', '-recipe.favorites')
+    
+    user = db.relationship('User', back_populates='favorites')
+    recipe = db.relationship('Recipe', back_populates='favorites')
