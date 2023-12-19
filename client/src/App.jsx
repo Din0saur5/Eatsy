@@ -10,7 +10,7 @@ import ErrorPage from './pages/ErrorPage';
 
 import './App.css';
 import Dashboard from "./pages/Dashboard";
-import PrivateRoute from "./components/PrivateRoute";
+
 import BaseLayout from "./components/BaseLayout";
 import SearchList from "./pages/SearchList";
 

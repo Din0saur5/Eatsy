@@ -1,7 +1,8 @@
 import { supabase } from "./supabaseClient";
 
 const checkSession = async () => {
-  const token = JSON.parse(sessionStorage.getItem('token'));
+    let token = false
+  token = JSON.parse(sessionStorage.getItem('token'));
   console.log(token)
   if (!token) {
       
