@@ -5,14 +5,8 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import { DarkThemeToggle } from 'flowbite-react';
 import { MdSearch } from 'react-icons/md';
 
-
-function handleLogout( {onLogout, userData} ) {
-    fetch($`{server}`/logout, {
-      method: "DELETE",
-    }).then(() => onLogout(null));
-  }
-
-const Navbar = () => {
+const Navbar = ({ onLogout, userData }) => {
+    const server = import.meta.env.VITE_BACK_END_SERVE
     const [click, setClick] = useState(false);
     const [mealsDropdown, setMealsDropdown] = useState(false);
     const [ingredientsDropdown, setIngredientsDropdown] = useState(false);
@@ -41,6 +35,12 @@ const Navbar = () => {
         setIngredientsDropdown(!ingredientsDropdown);
         setMealsDropdown(false);
     };
+
+    function handleLogout() {
+      fetch(`${server}/logout`, {
+        method: "DELETE",
+      }).then(() => onLogout(null));
+    }
 
     window.addEventListener("resize", () => setWidth(window.innerWidth));
 
@@ -131,16 +131,23 @@ const Navbar = () => {
            Home
         </NavLink>
         </li>
-        <li >
+        {userData === null? (
+          <li >
             <NavLink onClick={closeMobileMenu} to="/login" className={({isActive})=>{return `block py-2 px-3 text-orange-100 hover:text-green-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-950 md:p-0 md:dark:hover:text-green-950 dark:text-orange-100 dark:hover:bg-gray-700 dark:hover:text-orange-100 md:dark:hover:bg-transparent dark:border-gray-700 ${isActive? ' md:underline-custom ': ' '}`}}>
               Log-In
             </NavLink>
-        </li>
-        <li >
-          <NavLink onClick={closeMobileMenu} to="/signup" className={({isActive})=>{return `block py-2 px-3 text-orange-100 hover:text-green-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-950 md:p-0 md:dark:hover:text-green-950 dark:text-orange-100 dark:hover:bg-gray-700 dark:hover:text-orange-100 md:dark:hover:bg-transparent dark:border-gray-700 ${isActive? ' md:underline-custom ': ' '}`}}>
-            Sign-Up
-          </NavLink>
-        </li>
+          </li>
+        ):(
+          <li>
+            <div style={{cursor:"pointer"}} className= "block py-2 px-3 text-orange-100 hover:text-green-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-pink-800 md:p-0 md:dark:hover:text-pink-800 dark:text-orange-100 dark:hover:bg-gray-700 dark:hover:text-orange-100 md:dark:hover:bg-transparent dark:border-gray-700" onClick={()=>{handleLogout()}}>
+                Log-out
+            </div>
+          </li>
+        )
+        }
+        
+
+        
                             {/* Add other navigation links as needed */}
                         </ul>
                     </div>

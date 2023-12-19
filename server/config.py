@@ -39,7 +39,7 @@ bcrypt = Bcrypt(app)
 # Instantiate REST API
 api = Api(app)
 
-origin = 'http://127.0.0.1:5173'
+origin = 'http://127.0.0.1:5174'
 cors = CORS(app, resources={
     r"/*": {
        "origins": origin,

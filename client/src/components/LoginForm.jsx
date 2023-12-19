@@ -2,14 +2,37 @@ import React, { useState } from 'react'
 import { Button, Card, Label, TextInput } from 'flowbite-react';
 
 
-const LoginForm = ({handleLogin, setShowLogin}) => {
-
+const LoginForm = ({ onLogin }) => {
+  const server = import.meta.env.VITE_BACK_END_SERVE
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState([]);
   const [formInfo, setFormInfo] = useState({
-    email: '',
+    username: '',
     password: ''
     
   });
- 
+  
+  function handleLogin(e) {
+    e.preventDefault();
+    setIsLoading(true);
+    fetch(`${server}/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: formInfo.username,
+        password: formInfo.password,
+      }),
+    }).then((r) => {
+      setIsLoading(false);
+      if (r.ok) {
+        r.json().then((user) => onLogin(user));
+      } else {
+        r.json().then((err) => setErrors(err.errors));
+      }
+    });
+  }
   
   const handleChange = (e) => {
     const{name, value} = e.target
@@ -22,7 +45,7 @@ const LoginForm = ({handleLogin, setShowLogin}) => {
         <div className="mb-2 block">
           <Label htmlFor="email1" value="Your email" />
         </div>
-        <TextInput name='email' value={formInfo.email} onChange={handleChange} id="email1" type="email" placeholder="name@Eatsy.com" required />
+        <TextInput name='username' value={formInfo.username} onChange={handleChange} id="username3" type="text" placeholder="username" required />
       </div>
       <div>
         <div className="mb-2 block">
@@ -32,7 +55,10 @@ const LoginForm = ({handleLogin, setShowLogin}) => {
       </div>
       <div className="flex items-center gap-2">
       </div>
-      <Button gradientMonochrome="success"  type="submit">Submit</Button>
+      <Button gradientMonochrome="success"  type="submit">{isLoading ? "Loading..." : "Login"}</Button>
+      {errors.map((err) => (
+          <small key={err}>{err}</small>
+        ))}
     </form>
     
   )

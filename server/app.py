@@ -51,17 +51,20 @@ class Signup(Resource):
     
     def post(self):
 
-        request_json = request.get_json()
+       
 
-        username = request_json.get('username')
-        password = request_json.get('password')
-        first_name = request_json.get('first_name')
-        last_name = request_json.get('last_name')
+        username = request.json.get('username')
+        email = request.json.get('email')
+        password = request.json.get('password')
+        first_name = request.json.get('first_name')
+        last_name = request.json.get('last_name')
 
         user = User(
             username=username,
+            email = email,
             first_name=first_name,
             last_name=last_name,
+            
         )
 
         # the setter will encrypt this
@@ -97,17 +100,17 @@ class Login(Resource):
     
     def post(self):
 
-        request_json = request.get_json()
+        
 
-        username = request_json.get('username')
-        password = request_json.get('password')
+        username = request.json.get('username')
+        password = request.json.get('password')
 
         user = User.query.filter(User.username == username).first()
 
         if user:
             if user.authenticate(password):
 
-                session['d'] = user.id
+                session['id'] = user.id
                 return user.to_dict(), 200
 
         return make_response({'error': '401 Unauthorized'}, 401)
@@ -118,7 +121,7 @@ class Logout(Resource):
 
         session['id'] = None
         
-        return {}, 204
+        return make_response({}, 204)
 
 
 api.add_resource(Signup, '/signup', endpoint='signup')

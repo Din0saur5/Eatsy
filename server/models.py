@@ -11,11 +11,11 @@ from sqlalchemy.dialects.postgresql import UUID
 class User(db.Model, SerializerMixin):
    __tablename__ = 'users'
    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-   email = db.Column(db.String(), unique=True, nullable=False)
-   username = db.Column(db.String(), unique=True, nullable=False)
-   _password_hash = db.Column(db.String, nullable=False)
-   first_name = db.Column(db.String(), nullable=False)
-   last_name = db.Column(db.String(), nullable=False)
+   email = db.Column(db.String, unique=True, nullable=False)
+   username = db.Column(db.String, unique=True, nullable=False)
+   _password_hash = db.Column(db.String)
+   first_name = db.Column(db.String)
+   last_name = db.Column(db.String)
    created = db.Column(db.DateTime, server_default=db.func.now())
    
    serialize_rules = ('-reviews', '-recipes', '-_password_hash')

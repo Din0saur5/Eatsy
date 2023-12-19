@@ -61,11 +61,6 @@ const router = createBrowserRouter([
         loader: alreadyLoggedIn,
       },
       {
-        path: "signup",
-        element: <SignUp/>,
-        loader: alreadyLoggedIn,
-      },
-      {
         path: "login",
         element: <Login/>,
         loader: alreadyLoggedIn,
