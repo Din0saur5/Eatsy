@@ -44,6 +44,7 @@ return null
 
 const router = createBrowserRouter([
   {
+    path: "/",
     element: <BaseLayout/>,
     loader: protectedRendering,
     errorElement: <ErrorPage/>,

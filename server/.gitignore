@@ -66,12 +66,12 @@ instance
 .vscode
 /server/recipes.json
 
-/server/Pipfile.lock 
+
 *.env   
 /.env
 /server/.env
 /client/.env
 /bfg--1.14.0
-/Pipfile.lock 
+
 
 /recipes.json

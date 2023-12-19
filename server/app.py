@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 # Remote library imports
-from flask import request, make_response, jsonify, render_template
+from flask import request, make_response, jsonify
 from flask_restful import Resource
 # from flask_cors import cross_origin, CORS
 # Local imports
@@ -20,14 +20,14 @@ from flask import Flask, request, jsonify
 
 
 
-#@app.route('/')
-#def index():
-    #return 
-#'''<h1>Project Server</h1>
-#<h2>Try one of our super fun routes!</h2>
-#<ul>
-#<li><a href="/recipes">/recipes</a></li>
-#</ul>'''
+@app.route('/')
+def index():
+    return 
+'''<h1>Project Server</h1>
+<h2>Try one of our super fun routes!</h2>
+<ul>
+<li><a href="/recipes">/recipes</a></li>
+</ul>'''
 
 class AllUsers(Resource):
     #@cross_origin(origins=os.environ.get('CORS_ORIGIN') + '/signup', methods=['POST'])
@@ -274,11 +274,6 @@ class ReviewById(Resource):
         return make_response({"message":"Review deleted"}, 204)
 
 api.add_resource(ReviewById, '/reviews/<uuid:id>/<uuid:user_id>')
-
-@app.route('/')
-@app.route('/<int:id>')
-def index(id=0):
-    return render_template("index.html")
 
 
 
