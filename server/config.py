@@ -39,7 +39,7 @@ bcrypt = Bcrypt(app)
 # Instantiate REST API
 api = Api(app)
 
-origin = 'http://127.0.0.1:5174'
+origin = os.getenv('CORS_ORIGIN')
 cors = CORS(app, resources={
     r"/*": {
        "origins": origin,

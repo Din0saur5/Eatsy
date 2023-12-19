@@ -362,6 +362,8 @@ class ReviewById(Resource):
 api.add_resource(ReviewById, '/reviews/<uuid:id>/<uuid:user_id>')
 
 
-
+port = os.getenv('SERVER_PORT')
+debug = os.getenv('SERVER_DEBUG')
+host = os.getenv('SERVER_HOST')
 if __name__ == '__main__':
-     app.run(port=5555, debug=True)
+    app.run(host = host, port = port, debug = debug)
