@@ -47,11 +47,8 @@ const router = createBrowserRouter([
   {
     path: "/meals/:mealType",
     element: <MealPage />,
-    loader: async ({ params }) => {
-      // Loader function to fetch data based on meal type, if necessary
-      return fetchMealData(params.mealType);
-    },
   },
+  
   {
     path: '/',
     element: <BaseLayout/>,
