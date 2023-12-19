@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Button, Card, Label, TextInput } from 'flowbite-react';
 
 
-const LoginForm = ({handleLogin, setShowLogin}) => {
+const LoginForm = ({handleLogin}) => {
 
   const [formInfo, setFormInfo] = useState({
     email: '',

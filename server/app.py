@@ -31,20 +31,20 @@ def index():
 </ul>'''
 
 
-@app.before_request
-def check_if_logged_in():
-    open_access_list = [
-        'signup',
-        'login',
-        'check_session',
-        'recipes',
-        'ingredient'
-        'recip_id'
-        'home'
-    ]
+# @app.before_request
+# def check_if_logged_in():
+#     open_access_list = [
+#         'signup',
+#         'login',
+#         'check_session',
+#         'recipes',
+#         'ingredient'
+#         'recip_id'
+#         'home'
+#     ]
 
-    if (request.endpoint) not in open_access_list and (not session.get('user_id')):
-        return {'error': '401 Unauthorized'}, 401
+#     if (request.endpoint) not in open_access_list and (not session.get('user_id')):
+#         return {'error': '401 Unauthorized'}, 401
 
 
 class Signup(Resource):

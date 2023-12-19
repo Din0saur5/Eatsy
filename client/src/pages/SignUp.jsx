@@ -103,11 +103,11 @@ const SignUp = ({onLogin}) => {
     <label htmlFor="terms" className="ms-2 text-sm font-light text-gray-900 dark:text-gray-300">I agree with the <a href="#" className="text-green-600 hover:underline dark:text-green-500">terms and conditions</a></label>
   </div>
   <Button gradientMonochrome="success" type="submit">Register new account</Button>
-  <FormField>
+  <small>
         {errors.map((err) => (
           <Error key={err}>{err}</Error>
         ))}
-  </FormField> 
+  </small> 
   </form>
   <small className='dark:text-white'>Already have an account? <Link style={{color:"green"}} to ='/login'>Log-In</Link></small>
 
