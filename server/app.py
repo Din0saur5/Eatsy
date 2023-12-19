@@ -20,14 +20,14 @@ from flask import Flask, request, jsonify
 
 
 
-@app.route('/')
-def index():
-    return 
-'''<h1>Project Server</h1>
-<h2>Try one of our super fun routes!</h2>
-<ul>
-<li><a href="/recipes">/recipes</a></li>
-</ul>'''
+#@app.route('/')
+#def index():
+    #return 
+#'''<h1>Project Server</h1>
+#<h2>Try one of our super fun routes!</h2>
+#<ul>
+#<li><a href="/recipes">/recipes</a></li>
+#</ul>'''
 
 class AllUsers(Resource):
     #@cross_origin(origins=os.environ.get('CORS_ORIGIN') + '/signup', methods=['POST'])
