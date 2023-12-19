@@ -3,7 +3,15 @@ const plugin = require('tailwindcss/plugin')
 export default {
   content: ['./src/**/*.{js,jsx,ts,tsx}', './node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}'],
   theme: {
+    colors: {
+      'forest_green':'#228B22',
+      'beige':'#F5E8D6',
+      'raspberry':'#E30B5D'
+    },
     extend: {
+      fontFamily: {
+        'cormorant': ['cormorant-garamond', 'serif']
+      },
       backgroundImage: {
         'background1': "url('/images/background1.png')",
         'background2': "url('/images/background2.png')",
@@ -41,9 +49,10 @@ export default {
     }),
     plugin(function({ addBase, theme }) {
       addBase({
-        'h1': { fontSize: theme('fontSize.2xl') },
-        'h2': { fontSize: theme('fontSize.xl') },
-        'h3': { fontSize: theme('fontSize.lg') },
+        'h1': { fontSize: theme('fontSize.4xl') },
+        'h2': { fontSize: theme('fontSize.2xl') },
+        'h3': { fontSize: theme('fontSize.xl') }, 
+        'h4': { fontSize: theme('fontSize.lg') }, 
       })
     })
   
