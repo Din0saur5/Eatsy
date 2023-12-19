@@ -17,51 +17,34 @@ const SignUp = () => {
     
   });
   const [checked, setChecked] = useState(false);
-  const handleLogin = async () => {
-    
-    try{
-
-      const { data, error } = await supabase.auth.signInWithPassword({ 
-        email: formInfo.email, 
-        password: formInfo.password, });
-            
-      if (error) throw error;
-      console.log(data)
-      if(data){
-        sessionStorage.setItem('token',JSON.stringify(data))
-       
-        
-      } 
-       
-      
-    } catch (error){
-      alert(error)
-    }
-    
-  };
+  
   const handleTerms = () => {
     setChecked(!checked);
   };
   const handleCheck = (event) => {
     setChecked(event.value);
   };
-  const postPublicUser = (user) => {
+
+  const handleSignUp = (user) => {
     console.log(user)
     const postData = {
-      id: user.user.id,
+      email: formInfo.email,
       username: formInfo.username,
+      password: formInfo.password,
       first_name: formInfo.first_name,
       last_name: formInfo.last_name
 
     }
-    fetch(`${server}/users`,{
+    fetch(`${server}/signup`,{
       method: 'POST',
       headers: {
         'Content-Type': 'application/json', // Specify the content type header
       },
       body: JSON.stringify(postData), // Convert the JavaScript object to a JSON string
     })
-    .then(response => response.json() )
+    .then(response => {
+      setIsLoading(false)
+      response.json()} )
     .then(data => {
       return data // Handle the response data
     })
@@ -71,37 +54,9 @@ const SignUp = () => {
     });
     } 
     
-  const handleSignUp = async (e) => {
-    e.preventDefault();
-    
-    try{
-    const { data , error } = await supabase.auth.signUp({
-        email:formInfo.email, 
-        password:formInfo.password,
-        disable_email_confirmation: true,
-    })
-     
-      postPublicUser(data) 
-      await handleLogin()
-      setFormInfo({
-        email: '',
-        password: '',
-        username: '',
-        first_name: '',
-        last_name: '',                 
-    })
-    navigate('/dashboard')
-
-    if (error) throw error;
-    
+ 
    
-    } catch (error){
-        console.log('Error signing up:', error.message)
-        alert(error)
-    }
   
-   
-  };
   const handleChange = (e) => {
     e.preventDefault()
     const{name, value} = e.target
@@ -147,6 +102,11 @@ const SignUp = () => {
     <label htmlFor="terms" className="ms-2 text-sm font-light text-gray-900 dark:text-gray-300">I agree with the <a href="#" className="text-green-600 hover:underline dark:text-green-500">terms and conditions</a></label>
   </div>
   <Button gradientMonochrome="success" type="submit">Register new account</Button>
+  <FormField>
+        {errors.map((err) => (
+          <Error key={err}>{err}</Error>
+        ))}
+  </FormField> 
   </form>
   <small className='dark:text-white'>Already have an account? <Link style={{color:"green"}} to ='/login'>Log-In</Link></small>
 
