@@ -13,6 +13,15 @@ from sqlalchemy import MetaData
 
 # Instantiate app, set attributes
 app = Flask(__name__)
+
+cors = CORS(app, resources={
+    r"/*": {
+       "origins": os.getenv('CORS_ORIGINS'),
+       "methods": ["GET", "POST", "PUT", "DELETE"],
+       "allow_headers": ["Content-Type", "Authorization"]
+    }
+})
+
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SUPABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
@@ -34,5 +43,4 @@ db.init_app(app)
 # Instantiate REST API
 api = Api(app)
 
-# Instantiate 
-CORS(app)
+
