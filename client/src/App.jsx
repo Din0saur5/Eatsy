@@ -44,54 +44,54 @@ return null
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <BaseLayout/>,
     loader: protectedRendering,
     errorElement: <ErrorPage/>,
     children:[
       {
-        path: "/",
+        path: "",
         element: <Home/>,
         loader: alreadyLoggedIn,
       },
       {
-        path: "/signup",
+        path: "signup",
         element: <SignUp/>,
         loader: alreadyLoggedIn,
       },
       {
-        path: "/login",
+        path: "login",
         element: <Login/>,
         loader: alreadyLoggedIn,
       },
       {
-        path: "/search/:query",
+        path: "search/:query",
         element: <SearchList/>, 
         
       }, 
       {
-        path: "/recipe/:id",
+        path: "recipe/:id",
         element: <Recipe/>,
        
         
       },    
       {
-        path:"/dashboard",
+        path:"dashboard",
         element: <Dashboard/>,
         loader: protectedRoute,
       },
       {
-        path: "/account",
+        path: "account",
         element: <Account/>,
         loader: protectedRoute,
       },
       {
-        path: "/create-recipe",
+        path: "create-recipe",
         element: <CreateRecipe/>,
         loader: protectedRoute,
       },
       {
-        path: "/edit-recipe/:id",
+        path: "edit-recipe/:id",
         element: <UpdateRecipe/>,
         loader: protectedRoute,
       }
