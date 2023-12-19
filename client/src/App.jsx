@@ -5,6 +5,7 @@ import { createBrowserRouter, redirect, RouterProvider, useParams, } from 'react
 import Home from './pages/Home';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
+import MealPage from "./pages/MealPage";
 
 import ErrorPage from './pages/ErrorPage';
 
@@ -43,6 +44,11 @@ return null
 }
 
 const router = createBrowserRouter([
+  {
+    path: "/meals/:mealType",
+    element: <MealPage />,
+  },
+  
   {
     path: '/',
     element: <BaseLayout/>,

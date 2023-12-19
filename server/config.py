@@ -38,8 +38,8 @@ db.init_app(app)
 bcrypt = Bcrypt(app)
 # Instantiate REST API
 api = Api(app)
-
-
+CORS_ORIGIN = 'http://localhost:5173/'
+origin = os.getenv('CORS_ORIGIN')
 cors = CORS(app, resources={
     r"/*": {
        "origins": origin,
