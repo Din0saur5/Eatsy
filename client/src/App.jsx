@@ -65,12 +65,12 @@ const router = createBrowserRouter([
         loader: alreadyLoggedIn,
       },
       {
-        path: "search/:query",
+        path: "search",
         element: <SearchList/>, 
         
       }, 
       {
-        path: "recipe/:id",
+        path: "recipe",
         element: <Recipe/>,
        
         
