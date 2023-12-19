@@ -44,13 +44,13 @@ return null
 
 const router = createBrowserRouter([
   {
-    path: "/0",
+    path: "/",
     element: <BaseLayout/>,
     loader: protectedRendering,
     errorElement: <ErrorPage/>,
     children:[
       {
-        path: "/0",
+        path: "/",
         element: <Home/>,
         loader: alreadyLoggedIn,
       },
