@@ -14,7 +14,7 @@ from sqlalchemy import MetaData
 # Instantiate app, set attributes
 app = Flask(__name__,
             static_url_path='',
-    static_folder='../client/dist',
+    static_folder='../client/dist/assets',
     template_folder='../client/dist'
     )
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SUPABASE_URI')
