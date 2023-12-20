@@ -7,11 +7,7 @@ import { MdSearch } from 'react-icons/md';
 import checkSession from '../checkSession';
 
 const Navbar = ({ onLogout, userData }) => {
-<<<<<<< Updated upstream
-    
-=======
-//   console.log(typeof(userData))
->>>>>>> Stashed changes
+
     const server = import.meta.env.VITE_BACK_END_SERVE
     const [click, setClick] = useState(false);
     const [mealsDropdown, setMealsDropdown] = useState(false);
