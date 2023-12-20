@@ -4,9 +4,9 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, redirect, RouterProvider, useParams, } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import SignUp from './pages/SignUp';
-import MealPage from "./pages/MealPage";
 
+import MealPage from "./pages/MealPage";
+import IngredientPage from "./pages/IngredientPage";
 import ErrorPage from './pages/ErrorPage';
 
 import './App.css';
@@ -27,57 +27,52 @@ const protectedRoute = async () => {
   if (!auth){
     return redirect("/login"); 
   }
-  return null;
+  return auth;
 }
 
 const protectedRendering = async () => {
   const auth = await checkSession()
+  console.log(auth)
   return auth
 }
 
-const alreadyLoggedIn = async () => {
-  const auth = await checkSession()
-  if (auth){
-    return redirect("/dashboard"); 
-}
-return null
-}
 
 const router = createBrowserRouter([
   {
     path: "/meals/:mealType",
     element: <MealPage />,
   },
+  {
+    path: "/ingredients/:ingredient",
+    element: <IngredientPage />, // Add this line for ingredient route
+  },
   
   {
     path: '/',
     element: <BaseLayout/>,
-    loader: protectedRendering,
+    
     errorElement: <ErrorPage/>,
     children:[
       {
         path: "",
         element: <Home/>,
-        loader: alreadyLoggedIn,
-      },
-      {
-        path: "signup",
-        element: <SignUp/>,
-        loader: alreadyLoggedIn,
+        loader: protectedRendering, 
       },
       {
         path: "login",
         element: <Login/>,
-        loader: alreadyLoggedIn,
+        loader: protectedRendering, 
       },
       {
         path: "search/",
-        element: <SearchList/>, 
+        element: <SearchList/>,
+        loader: protectedRendering, 
         
       }, 
       {
         path: "recipe/:id",
         element: <Recipe/>,
+        loader: protectedRendering,
        
         
       },    

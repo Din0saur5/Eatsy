@@ -14,7 +14,7 @@ from sqlalchemy.exc import IntegrityError
 # Local imports
 from config import app, db, api
 # Add your model imports
-from models import User, Review, Recipe, Ingredient
+from models import User, Review, Recipe, Ingredient, Favorite
 
 # app.py
 
@@ -46,22 +46,30 @@ def index():
 #     if (request.endpoint) not in open_access_list and (not session.get('user_id')):
 #         return {'error': '401 Unauthorized'}, 401
 
+@app.route('/set-cookie')
+def set_cookie():
+    # Example of setting a session variable
+    session['user_id'] = 'some_user_id'
+    return 'Cookie is set'
 
 class Signup(Resource):
     
     def post(self):
 
-        request_json = request.get_json()
+       
 
-        username = request_json.get('username')
-        password = request_json.get('password')
-        first_name = request_json.get('first_name')
-        last_name = request_json.get('last_name')
+        username = request.json.get('username')
+        email = request.json.get('email')
+        password = request.json.get('password')
+        first_name = request.json.get('first_name')
+        last_name = request.json.get('last_name')
 
         user = User(
             username=username,
+            email = email,
             first_name=first_name,
             last_name=last_name,
+            
         )
 
         # the setter will encrypt this
@@ -72,8 +80,8 @@ class Signup(Resource):
             db.session.add(user)
             db.session.commit()
 
-            session['id'] = user.id
-
+            session['user_id'] = user.id
+            print(session['user_id']) 
             return user.to_dict(), 201
 
         except IntegrityError:
@@ -85,29 +93,31 @@ class CheckSession(Resource):
 
     def get(self):
         
-        user_id = session.get('id')
+        user_id = session.get('user_id')
+        print(user_id)
         if user_id:
             user = User.query.filter(User.id == user_id).first()
-            return user.to_dict(), 200
+            return make_response(user.to_dict(), 200)
         
-        return make_response({}, 401)
+        return make_response({'error':'not loading cookie'}, 401)
 
 
 class Login(Resource):
     
     def post(self):
 
-        request_json = request.get_json()
+        
 
-        username = request_json.get('username')
-        password = request_json.get('password')
+        username = request.json.get('username')
+        password = request.json.get('password')
 
         user = User.query.filter(User.username == username).first()
 
         if user:
             if user.authenticate(password):
 
-                session['d'] = user.id
+                session['user_id'] = user.id
+                print(session['user_id']) 
                 return user.to_dict(), 200
 
         return make_response({'error': '401 Unauthorized'}, 401)
@@ -116,10 +126,10 @@ class Logout(Resource):
 
     def delete(self):
 
-        session['id'] = None
-        
-        return {}, 204
-
+        session.pop('user_id', None)
+        response =  make_response({}, 204)
+        response.set_cookie('user_id', '', expires=0)
+        return response
 
 api.add_resource(Signup, '/signup', endpoint='signup')
 api.add_resource(CheckSession, '/check_session')
@@ -332,6 +342,10 @@ class AllReviews(Resource):
 
 api.add_resource(AllReviews, '/reviews')
 
+class GetRecipeByIngredient(Resource):
+    def get(self, ingredient):
+        return make_response({"message": f"Ingredient received: {ingredient}"}, 200)
+
 class ReviewById(Resource):
     #@cross_origin(origins=os.environ.get('CORS_ORIGIN') + '/private/recipe/*', methods=['PATCH', 'DELETE'])
 
@@ -358,9 +372,36 @@ class ReviewById(Resource):
 
 api.add_resource(ReviewById, '/reviews/<uuid:id>/<uuid:user_id>')
 
+class GetRecipeByMealType(Resource):
+    def get(self, meal_type):
+        # Fetch recipes filtered by meal type
+        recipes = Recipe.query.filter(Recipe.meal_type == meal_type).all()
+        if not recipes:
+            return make_response({"message": "No recipes found for this meal type"}, 404)
+        return make_response([recipe.to_dict() for recipe in recipes], 200)
 
+# Add the resource to the API
+api.add_resource(GetRecipeByMealType, '/recipes/meal_type/<string:meal_type>')
+
+
+class GetUserFavorites(Resource):
+    def get(self, id):
+        recipes = Favorite.query.filter(Favorite.user_id == id).all()
+        if not recipes:
+            return make_response({"message": "No favorites"}, 404)
+        return make_response([recipe.to_dict() for recipe in recipes], 200)
+
+class GetCreatedByUser(Resource):
+    def get(self, id):
+        recipes = Recipe.query.filter(Recipe.user_id == id).all()
+        if not recipes:
+            return make_response({"message": "No Created Recipes"}, 404)
+        return make_response([recipe.to_dict() for recipe in recipes], 200)
+
+api.add_resource(GetUserFavorites, '/favorites/<uuid:id>')
+api.add_resource(GetCreatedByUser, '/recipes/created_by/<uuid:id>')
 port = os.getenv('SERVER_PORT')
 debug = os.getenv('SERVER_DEBUG')
 host = os.getenv('SERVER_HOST')
 if __name__ == '__main__':
-    app.run(host = host, port = port, debug = debug)
+    app.run(host = host, port = 5555, debug = debug)
