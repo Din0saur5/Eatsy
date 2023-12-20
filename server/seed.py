@@ -39,7 +39,7 @@ def get_recipes(parsed_data):
     for item in parsed_data:
         recipe_data = item['recipe']
         dish_type = recipe_data['dishType'][0] if 'dishType' in recipe_data else 'Unknown'  # Handle missing dishType
-        if not recipe_data.url in [recipe.source for recipe in recipes]:
+        if not recipe_data['url'] in [recipe.source for recipe in recipes]:
             recipe = Recipe(
                 name = recipe_data['label'],
                 image = recipe_data['image'],
@@ -50,10 +50,11 @@ def get_recipes(parsed_data):
                 meal_type = recipe_data['mealType'][0] if 'mealType' in recipe_data else 'Unknown',
                 dish_type = dish_type,
                 time = recipe_data['totalTime'],
-                source = recipe_data.url,
+                source = recipe_data['url'],
                 user_id = rc(users).id
             )
             db.session.add(recipe)
+            db.session.commit()
             for ingredient_data in recipe_data['ingredients']:
                 ingredient = Ingredient(
                     text=ingredient_data['text'],
@@ -63,8 +64,8 @@ def get_recipes(parsed_data):
                     unit=ingredient_data['measure']
                 )
                 db.session.add(ingredient)
-        db.session.commit()
-        recipes.append(recipe)
+            db.session.commit()
+            recipes.append(recipe)
 
 def fake_reviews():
     users = User.query.all()
@@ -83,28 +84,35 @@ def fake_reviews():
 
 if __name__ == "__main__":
     with app.app_context():
+        # print("Deleting existing data...")
+        # Review.query.delete()
+        # print("reviews are deleted")
+        # Ingredient.query.delete()
+        # print("Ingredients are deleted")
+        # Recipe.query.delete()
+        # print("recipes are deleted")
         cuisine_types = [
-    "american" 
-    # "asian", 
-    # "british", 
-    # "caribbean", 
-    # "central europe", 
-    # "chinese", 
-    # "eastern europe", 
-    # "french", 
-    # "greek", 
-    # "indian", 
-    # "italian", 
-    # "japanese", 
-    # "korean", 
-    # "kosher", 
-    # "mediterranean", 
-    # "mexican", 
-    # "middle eastern", 
-    # "nordic", 
-    # "south american", 
-    # "south east asian", 
-    # "world"
+    # "american", 
+    "asian", 
+    "british", 
+    "caribbean", 
+    "central europe", 
+    "chinese", 
+    "eastern europe", 
+    "french", 
+    "greek", 
+    "indian", 
+    "italian", 
+    "japanese", 
+    "korean", 
+    "kosher", 
+    "mediterranean", 
+    "mexican", 
+    "middle eastern", 
+    "nordic", 
+    "south american", 
+    "south east asian", 
+    "world"
 ]
         print("Starting seed...")
         for cuisine in cuisine_types:
@@ -114,15 +122,9 @@ if __name__ == "__main__":
             if parsed_data:
                 print("Creating new recipes...")
                 get_recipes(parsed_data)
-
-            print("Deleting existing data...")
-            Review.query.delete()
-            Ingredient.query.delete()
-            Recipe.query.delete()
-
             current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             print(f"Finished fetching {cuisine} cuisine at {current_time}")
-            time.sleep(80)  # Sleep for 60 seconds
+            time.sleep(60)  # Sleep for 60 seconds
 
         print("Creating new reviews...")
         fake_reviews()
