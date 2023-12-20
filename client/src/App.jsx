@@ -6,7 +6,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 
 import MealPage from "./pages/MealPage";
-
+import IngredientPage from "./pages/IngredientPage";
 import ErrorPage from './pages/ErrorPage';
 
 import './App.css';
@@ -41,6 +41,10 @@ const router = createBrowserRouter([
   {
     path: "/meals/:mealType",
     element: <MealPage />,
+  },
+  {
+    path: "/ingredients/:ingredient",
+    element: <IngredientPage />, // Add this line for ingredient route
   },
   
   {
