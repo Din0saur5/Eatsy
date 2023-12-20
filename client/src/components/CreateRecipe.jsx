@@ -1,19 +1,30 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
-import { useOutletContext } from "react-router-dom";
+
 import CreateRecipeForm from './CreateRecipeForm';
 
 const CreateRecipe = ({ isOpen, onClose, userData }) => {
-  
+ const [showModal, setShowModal] = useState(isOpen); 
+
+  useEffect(() => {
+    setShowModal(isOpen); 
+  }, [isOpen]);
+  const handleClose = () => {
+    // Start the slide up animation
+    setShowModal(false);
+    // Set a timeout to match the animation duration
+    setTimeout(() => {
+      onClose();
+    }, 500); // 500ms should match the CSS animation duration
+  };
 
   if (!isOpen) return null;
   return (
     <>
     <div className="fixed z-50 inset-0 bg-black bg-opacity-50 flex justify-center items-start pt-10">
-      <div className="modal-slide-down bg-white rounded p-4 w-full max-w-lg mx-4 md:mx-0">
-        <CreateRecipeForm userData={userData}/>
-        <div className="text-lg">This is a modal!</div>
-        <button onClick={onClose} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Close Modal</button>
+      <div className={` modal-content bg-white rounded p-4 w-full max-w-lg mx-4 md:mx-0 ${showModal ? 'animate-slideDown' : 'animate-slideUp'}`}>
+        <CreateRecipeForm handleClose={handleClose} userData={userData} />
+        
       </div>
     </div>
     </>
