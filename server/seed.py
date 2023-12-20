@@ -93,7 +93,7 @@ if __name__ == "__main__":
         # print("recipes are deleted")
         cuisine_types = [
     # "american", 
-    "asian", 
+    # "asian", 
     "british", 
     "caribbean", 
     "central europe", 
@@ -124,7 +124,7 @@ if __name__ == "__main__":
                 get_recipes(parsed_data)
             current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             print(f"Finished fetching {cuisine} cuisine at {current_time}")
-            time.sleep(60)  # Sleep for 60 seconds
+            # time.sleep(60)  # Sleep for 60 seconds
 
         print("Creating new reviews...")
         fake_reviews()
