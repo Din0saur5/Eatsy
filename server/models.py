@@ -71,6 +71,7 @@ class Recipe(db.Model, SerializerMixin):
     meal_type = db.Column(db.String)
     dish_type = db.Column(db.String)
     time = db.Column(db.Integer)
+    source = db.Column(db.String)
     
     user_id = db.Column(db.Uuid, db.ForeignKey('users.id'))
     
