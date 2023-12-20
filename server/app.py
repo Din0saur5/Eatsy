@@ -342,6 +342,10 @@ class AllReviews(Resource):
 
 api.add_resource(AllReviews, '/reviews')
 
+class GetRecipeByIngredient(Resource):
+    def get(self, ingredient):
+        return make_response({"message": f"Ingredient received: {ingredient}"}, 200)
+
 class ReviewById(Resource):
     #@cross_origin(origins=os.environ.get('CORS_ORIGIN') + '/private/recipe/*', methods=['PATCH', 'DELETE'])
 
@@ -368,9 +372,20 @@ class ReviewById(Resource):
 
 api.add_resource(ReviewById, '/reviews/<uuid:id>/<uuid:user_id>')
 
+class GetRecipeByMealType(Resource):
+    def get(self, meal_type):
+        # Fetch recipes filtered by meal type
+        recipes = Recipe.query.filter(Recipe.meal_type == meal_type).all()
+        if not recipes:
+            return make_response({"message": "No recipes found for this meal type"}, 404)
+        return make_response([recipe.to_dict() for recipe in recipes], 200)
+
+# Add the resource to the API
+api.add_resource(GetRecipeByMealType, '/recipes/meal_type/<string:meal_type>')
+
 
 port = os.getenv('SERVER_PORT')
 debug = os.getenv('SERVER_DEBUG')
 host = os.getenv('SERVER_HOST')
 if __name__ == '__main__':
-    app.run(host = host, port = port, debug = debug)
+    app.run(host = host, port = 5555, debug = debug)
