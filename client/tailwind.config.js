@@ -23,6 +23,7 @@ export default {
         'background4': "url('/images/background4.png')",
         'background5': "url('/images/background5.png')",
         'background6': "url('/images/background6.png')",
+        'old-paper': "url('/images/old_page_1.jpg')",
         'bg7': "url('/images/border-3.png')",
         'beveled-edge': 'linear-gradient(to bottom, #6A9A62, #4F7942 50%, #4F7942 51%, #3B5F31 100%)',
         'dark-grad': "linear-gradient(180deg, rgba(229,194,167,1) 0%, rgba(206,174,150,1) 20%, rgba(190,160,138,1) 41%, rgba(136,115,100,1) 70%, rgba(114,97,83,1) 80%, rgba(45,38,33,1) 100% )",
