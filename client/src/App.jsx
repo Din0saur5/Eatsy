@@ -4,7 +4,7 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, redirect, RouterProvider, useParams, } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import SignUp from './pages/SignUp';
+
 import MealPage from "./pages/MealPage";
 
 import ErrorPage from './pages/ErrorPage';

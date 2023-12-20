@@ -1,6 +1,6 @@
 // Login.jsx
 import { useState } from 'react';
-import { supabase } from '../supabaseClient';
+
 import { Link, redirect, useNavigate, useOutletContext } from 'react-router-dom';
 
 
