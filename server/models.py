@@ -99,7 +99,7 @@ class Ingredient(db.Model, SerializerMixin):
     
 class Favorite(db.Model, SerializerMixin):
     __tablename__ = 'favorites'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     created = db.Column(db.DateTime, server_default=db.func.now())
     user_id = db.Column(db.Uuid, db.ForeignKey('users.id'))
     recipe_id = db.Column(db.Uuid, db.ForeignKey('recipes.id'))

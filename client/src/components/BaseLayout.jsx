@@ -3,12 +3,12 @@ import { Outlet, useLoaderData } from 'react-router-dom';
 import { Flowbite } from "flowbite-react";
 import { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
+import checkSession from '../checkSession';
 const BaseLayout = () => {
   
-  const auth = useLoaderData() 
-  console.log(auth)
+  const auth = checkSession()
   const [userData, setUserData] = useState(auth)
-  
+ 
 
     return(
       <>

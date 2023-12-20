@@ -14,7 +14,7 @@ from sqlalchemy.exc import IntegrityError
 # Local imports
 from config import app, db, api
 # Add your model imports
-from models import User, Review, Recipe, Ingredient
+from models import User, Review, Recipe, Ingredient, Favorite
 
 # app.py
 
@@ -384,6 +384,22 @@ class GetRecipeByMealType(Resource):
 api.add_resource(GetRecipeByMealType, '/recipes/meal_type/<string:meal_type>')
 
 
+class GetUserFavorites(Resource):
+    def get(self, id):
+        recipes = Favorite.query.filter(Favorite.user_id == id).all()
+        if not recipes:
+            return make_response({"message": "No favorites"}, 404)
+        return make_response([recipe.to_dict() for recipe in recipes], 200)
+
+class GetCreatedByUser(Resource):
+    def get(self, id):
+        recipes = Recipe.query.filter(Recipe.user_id == id).all()
+        if not recipes:
+            return make_response({"message": "No Created Recipes"}, 404)
+        return make_response([recipe.to_dict() for recipe in recipes], 200)
+
+api.add_resource(GetUserFavorites, '/favorites/<uuid:id>')
+api.add_resource(GetCreatedByUser, '/recipes/created_by/<uuid:id>')
 port = os.getenv('SERVER_PORT')
 debug = os.getenv('SERVER_DEBUG')
 host = os.getenv('SERVER_HOST')

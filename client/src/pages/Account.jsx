@@ -1,5 +1,4 @@
 import React from 'react'
-import NavbarUser from '../components/NavbarUser'
 import { useOutletContext } from "react-router-dom";
 
 const Account = () => {

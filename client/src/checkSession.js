@@ -13,7 +13,7 @@ const checkSession = async () => {
       const response = await fetch(`${server}/check_session`,{
         method: 'GET',
         credentials: 'include'  // Important for including cookies in cross-origin requests
-        // other settings...
+       
       });
       if (response.ok) {
         const data = await response.json();

@@ -4,9 +4,10 @@ import "./Navbar.css";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { DarkThemeToggle } from 'flowbite-react';
 import { MdSearch } from 'react-icons/md';
+import checkSession from '../checkSession';
 
 const Navbar = ({ onLogout, userData }) => {
-  console.log(typeof(userData))
+    
     const server = import.meta.env.VITE_BACK_END_SERVE
     const [click, setClick] = useState(false);
     const [mealsDropdown, setMealsDropdown] = useState(false);
@@ -60,7 +61,7 @@ const Navbar = ({ onLogout, userData }) => {
 
     return (
         <>
-            <nav className="bg-beveled-edge shadow-inner-highlight">
+            <nav className="bg-beveled-edge shadow-inner-highlight" style={{zIndex:"999"}}>
                 <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                     <Link to="/" className="flex items-center space-x-3 rtl:space-x-reverse" onClick={closeMobileMenu}>
                         <img src='/images/logo_s.png' className='navbar-icon' alt="Logo" />
@@ -140,24 +141,33 @@ const Navbar = ({ onLogout, userData }) => {
                                     </div>
                                 )}
                             </li>
-                            <li>
-                              <NavLink to="/" onClick={closeMobileMenu}  className={({isActive})=>{return `block py-2 px-3 text-orange-100 hover:text-green-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-950 md:p-0 md:dark:hover:text-green-950 dark:text-orange-100 dark:hover:bg-gray-700 dark:hover:text-orange-100 md:dark:hover:bg-transparent dark:border-gray-700 ${isActive? ' md:underline-custom ': ' '}`}} >
-                                Home
-                              </NavLink>
-                              </li>
+                            
                               {typeof(userData) === 'object' ?  (
+                               <>
+                               <li>
+                                    <NavLink to="/account" onClick={closeMobileMenu}  className={({isActive})=>{return `block py-2 px-3 text-orange-100 hover:text-green-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-950 md:p-0 md:dark:hover:text-green-950 dark:text-orange-100 dark:hover:bg-gray-700 dark:hover:text-orange-100 md:dark:hover:bg-transparent dark:border-gray-700 ${isActive? ' md:underline-custom ': ' '}`}} >
+                                    Account
+                                    </NavLink>
+                                </li>
                                 <li>
                                   <div style={{cursor:"pointer"}} className= "block py-2 px-3 text-orange-100 hover:text-green-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-pink-800 md:p-0 md:dark:hover:text-pink-800 dark:text-orange-100 dark:hover:bg-gray-700 dark:hover:text-orange-100 md:dark:hover:bg-transparent dark:border-gray-700" onClick={()=>{handleLogout()}}>
                                       Log-out
                                   </div>
                                 </li>
-                               
+                                </>
                               ):(
-                                 <li>
-                                 <NavLink onClick={closeMobileMenu} to="/login" className={({isActive})=>{return `block py-2 px-3 text-orange-100 hover:text-green-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-950 md:p-0 md:dark:hover:text-green-950 dark:text-orange-100 dark:hover:bg-gray-700 dark:hover:text-orange-100 md:dark:hover:bg-transparent dark:border-gray-700 ${isActive? ' md:underline-custom ': ' '}`}}>
-                                   Log-In
-                                 </NavLink>
+                                <>
+                                <li>
+                                    <NavLink to="/" onClick={closeMobileMenu}  className={({isActive})=>{return `block py-2 px-3 text-orange-100 hover:text-green-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-950 md:p-0 md:dark:hover:text-green-950 dark:text-orange-100 dark:hover:bg-gray-700 dark:hover:text-orange-100 md:dark:hover:bg-transparent dark:border-gray-700 ${isActive? ' md:underline-custom ': ' '}`}} >
+                                    Home
+                                    </NavLink>
+                                </li>
+                                <li>
+                                    <NavLink onClick={closeMobileMenu} to="/login" className={({isActive})=>{return `block py-2 px-3 text-orange-100 hover:text-green-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-950 md:p-0 md:dark:hover:text-green-950 dark:text-orange-100 dark:hover:bg-gray-700 dark:hover:text-orange-100 md:dark:hover:bg-transparent dark:border-gray-700 ${isActive? ' md:underline-custom ': ' '}`}}>
+                                    Log-In
+                                    </NavLink>
                                </li>
+                               </>
                               )
                               }
         
