@@ -6,7 +6,8 @@ import Navbar from '../components/Navbar';
 import checkSession from '../checkSession';
 const BaseLayout = () => {
   
-  const auth = checkSession()
+    
+  const auth = useLoaderData()
   const [userData, setUserData] = useState(auth)
  
 

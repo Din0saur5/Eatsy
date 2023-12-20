@@ -32,7 +32,7 @@ const protectedRoute = async () => {
 
 const protectedRendering = async () => {
   const auth = await checkSession()
-  console.log(auth)
+  
   return auth
 }
 
@@ -50,29 +50,29 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <BaseLayout/>,
-    
+    loader: protectedRendering,
     errorElement: <ErrorPage/>,
     children:[
       {
         path: "",
         element: <Home/>,
-        loader: protectedRendering, 
+         
       },
       {
         path: "login",
         element: <Login/>,
-        loader: protectedRendering, 
+        
       },
       {
         path: "search/",
         element: <SearchList/>,
-        loader: protectedRendering, 
+        
         
       }, 
       {
         path: "recipe/:id",
         element: <Recipe/>,
-        loader: protectedRendering,
+        
        
         
       },    

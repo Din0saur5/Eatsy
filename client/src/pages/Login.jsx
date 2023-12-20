@@ -10,7 +10,7 @@ import SignupForm from '../components/SignupForm';
 const Login = () => {
   const [showLogin, setShowLogin] = useState(true);
   const [userData, setUserData] = useOutletContext(); 
-  console.log(userData)
+  
   if (userData !== null){
     redirect('/dashboard')
   }

@@ -7,7 +7,7 @@ import { MdSearch } from 'react-icons/md';
 import checkSession from '../checkSession';
 
 const Navbar = ({ onLogout, userData }) => {
-    
+    console.log(userData)
     const server = import.meta.env.VITE_BACK_END_SERVE
     const [click, setClick] = useState(false);
     const [mealsDropdown, setMealsDropdown] = useState(false);
@@ -142,7 +142,7 @@ const Navbar = ({ onLogout, userData }) => {
                                 )}
                             </li>
                             
-                              {typeof(userData) === 'object' ?  (
+                              {userData ?  (
                                <>
                                <li>
                                     <NavLink to="/account" onClick={closeMobileMenu}  className={({isActive})=>{return `block py-2 px-3 text-orange-100 hover:text-green-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-950 md:p-0 md:dark:hover:text-green-950 dark:text-orange-100 dark:hover:bg-gray-700 dark:hover:text-orange-100 md:dark:hover:bg-transparent dark:border-gray-700 ${isActive? ' md:underline-custom ': ' '}`}} >
