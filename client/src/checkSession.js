@@ -17,16 +17,16 @@ const checkSession = async () => {
       });
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         return data;
       } else {
         // Handle non-OK responses here, e.g., redirect to login or show message
-        console.error('Session check failed:', response.status);
+        // console.error('Session check failed:', response.status);
         return null;
       }
     } catch (error) {
       // Handle network error, server down, etc.
-      console.error('Error during session check:', error);
+      // console.error('Error during session check:', error);
       return null;
     }
   };

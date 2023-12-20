@@ -24,8 +24,7 @@ class User(db.Model, SerializerMixin):
    recipes = db.relationship('Recipe', back_populates='user', cascade="all, delete-orphan")
    favorites = db.relationship('Favorite', back_populates='user', cascade="all, delete-orphan")
    
-   def __repr__(self):
-       return f'<User {self.username}: {self.display_name}, {self.email}>'
+   
    
    @hybrid_property
    def password_hash(self):

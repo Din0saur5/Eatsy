@@ -6,6 +6,7 @@ import ToggleSwitch from '../components/ToggleSwitch';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import RecipeCard from '../components/RecipeCard';
+import CreateRecipeButton from '../components/CreateRecipeButton';
 
 
 const server = import.meta.env.VITE_BACK_END_SERVE
@@ -81,10 +82,12 @@ const fetchMyRecipes = async () => {
     <div className=' flex justify-center items-center bg-bg7' >
       
       <div className='w-4/5 bg-beige dark:bg-brown'>
+        
 <div className=" flex items-center justify-center py-4 md:py-8 flex-wrap">
   <ToggleSwitch toggle={toggle} isToggled={isToggled}/>
-  
-
+  <div>
+  <CreateRecipeButton/>
+  </div>
 </div>
 <div className=" sm:ml-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-4">
   {toggle ? (
