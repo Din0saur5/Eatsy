@@ -80,8 +80,14 @@ def fake_reviews():
 
 if __name__ == "__main__":
     with app.app_context():
-        cuisine_types = [ 
-    "eastern+europe", 
+        cuisine_types = [
+    "american", 
+    "asian", 
+    "british", 
+    "caribbean", 
+    "central europe", 
+    "chinese", 
+    "eastern europe", 
     "french", 
     "greek", 
     "indian", 
@@ -91,10 +97,10 @@ if __name__ == "__main__":
     "kosher", 
     "mediterranean", 
     "mexican", 
-    "middle+eastern", 
+    "middle eastern", 
     "nordic", 
-    "south+american", 
-    "south+east+asian", 
+    "south american", 
+    "south east asian", 
     "world"
 ]
         print("Starting seed...")
