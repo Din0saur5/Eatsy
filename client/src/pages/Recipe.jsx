@@ -48,9 +48,9 @@ const Recipe = () => {
       <div className="text-center p-6 font-bold">
         <h1 style={{textShadow:'-1px 1px 8px #F5E8D6'}}>{recipe.name}</h1>
       </div>
-      <div className='md:grid md:grid-cols-2 md:gap-4 w-screen m-4'>
+      <div className='md:grid md:grid-cols-2 md:gap-4 m-4'>
         <div className='bg-beige p-4 pl-7 shadow-[0_0_5px_5px_#F5E8D6]'>
-          <img src={recipe.image} className="h-96 w-96 mx-auto rounded-lg"/>
+          <img src={recipe.image} className="h-96 w-96 mx-auto rounded-lg" title={recipe.name} alt={`Image of ${recipe.name}`}/>
           <h2 className='text-center'>Ingredients</h2>
           <ul className='list-disc'>{ingredients.map(ingredient => <li>{ingredient}</li>)}</ul>
         </div>
