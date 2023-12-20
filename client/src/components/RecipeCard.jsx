@@ -4,7 +4,7 @@ const RecipeCard = ({recipe}) => {
   return (
     
 <div data-aos="fade-up ">
-<div className="w-full h-auto max-w-sm bg-flesh rounded-lg shadow bg-pink dark:border-gray-700">
+<div className="w-full h-auto max-w-sm bg-gray-200 dark:bg-gray-800 rounded-lg shadow bg-pink border border-gray-400 dark:border-gray-400">
     <a href="#">
         <img className="p-8 rounded-t-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image.jpg" alt="product image" />
     </a>
