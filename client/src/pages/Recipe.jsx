@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-
+import Review from '../components/Review';
 import { useOutletContext, useParams } from "react-router-dom";
 
 const Recipe = () => {
@@ -39,43 +39,56 @@ const Recipe = () => {
   for(let i in recipe.reviews)
   {
     reviews.push(
-      <div key={reviews[i].id} className='bg-white p-6 radius-lg'>
-        <h4>{recipe.reviews[i].title}</h4>
-        <p>{recipe.reviews[i].comment}</p>
-      </div>
+      <Review review = {recipe.reviews[i]}/>
     )
   }
   let contents
   if(error){
-    contents = <div className='bg-red'>Whoops! There was an error: {error}</div>
+    contents = 
+    <div className='min-h-screen bg-background1 bg-cover'>
+      <div className='flex items-center justify-center h-screen'>
+        <h4 className='bg-red'>Whoops! There was an error: {error}</h4>
+      </div>
+    </div>
     console.log(error)
   }
-  else if(!recipe){
+  else if(!recipe.id){
     contents = 
-    <div>
-      <h2>Loading...</h2>
-      <img src="images/load-37_256.gif" />
+    <div className='min-h-screen bg-background1 bg-cover'>
+      <div className="flex items-center justify-center h-screen">
+        <h2 className = 'block'>Loading...</h2 >
+        <img src="/images/load-37_256.gif" className='block'/>
+      </div>
     </div>
   }
   else{
-    contents = 
-    <div className='text-black'>
-      <div className="text-center p-6 font-bold">
-        <h1 style={{textShadow:'-1px 1px 8px #F5E8D6'}}>{recipe.name}</h1>
-      </div>
-      <div className='md:grid md:grid-cols-2 m-4'>
-        <div className='bg-old-paper p-6 pl-10'>
-          <img 
-          src={recipe.image} 
-          className="h-96 w-96 mx-auto rounded-lg" 
-          title={recipe.name} 
-          alt={`Image of ${recipe.name}`}/>
-          <h2 className='text-center'>Ingredients</h2>
-          <ul className='list-disc pl-4 font-semibold'>{ingredients.map(ingredient => <li key={ingredient}>{ingredient}</li>)}</ul>
-        </div>
-        <div className='bg-old-paper p-6 pl-10 bg-right-top'>
-          <h2 className='text-center'>Steps</h2>
-          <ol className='list-decimal'>{recipe.steps?recipe.steps.map(instruction => <li key={instruction}>{instruction}</li>):''}</ol>
+    contents =
+    <div className='bg-[#F5E8D6]'>
+      <div className='min-h-screen bg-background1 bg-cover'>
+        <div className='text-black'>
+          <div className="text-center p-6 font-bold">
+            <h1 className='inline-flex bg-[#F5E8D6] bg-opacity-40 pb-2 rounded-2xl shadow-[0_0_10px_5px_rgba(245,232,214,0.4)]'>{recipe.name}</h1>
+          </div>
+          <div className='md:grid md:grid-cols-2 m-4 max-w-[1480px] mx-auto'>
+            <div className='bg-old-paper p-20 pl-24'>
+              <img 
+              src={recipe.image} 
+              className="aspect-square w-1/2 mb-4 rounded-lg object-contain" 
+              title={recipe.name} 
+              alt={`Image of ${recipe.name}`}/>
+              <div className='bg-[#F5E8D6] bg-opacity-40 pb-2 rounded-2xl shadow-[0_0_10px_5px_rgba(245,232,214,0.4)]'>
+                <h2 className='text-center'>Ingredients</h2>
+                <ul className='list-disc pl-4 font-semibold'>{ingredients.map(ingredient => <li key={ingredient}>{ingredient}</li>)}</ul>
+              </div>
+            </div>
+            <div className='bg-old-paper p-20 bg-right-top pl-12'>
+              <div className='bg-[#F5E8D6] bg-opacity-40 pl-8 pb-2 rounded-2xl shadow-[0_0_10px_5px_rgba(245,232,214,0.4)]'>
+                <h2 className='text-center'>Steps</h2>
+                <ol className='list-decimal'>{recipe.steps?recipe.steps.map(instruction => <li key={instruction}>{instruction}</li>):''}</ol>
+              </div>
+            </div>
+          </div>
+          
         </div>
       </div>
       {reviews}
@@ -83,11 +96,7 @@ const Recipe = () => {
   }
   return (
     <>
-    <div className='min-h-screen bg-background1 bg-cover'>
-
       {contents}
-      
-    </div>
     </>
   )
 }
