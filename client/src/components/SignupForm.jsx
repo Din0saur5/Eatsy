@@ -30,6 +30,7 @@ const SignupForm = ({ onLogin }) => {
         setIsLoading(true);
         
         fetch(`${server}/signup`,{
+          credentials: 'include',
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', // Specify the content type header

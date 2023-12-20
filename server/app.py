@@ -46,11 +46,11 @@ def index():
 #     if (request.endpoint) not in open_access_list and (not session.get('user_id')):
 #         return {'error': '401 Unauthorized'}, 401
 
-@app.route('/set-cookie')
-def set_cookie():
-    # Example of setting a session variable
-    session['user_id'] = 'some_user_id'
-    return 'Cookie is set'
+# @app.route('/set-cookie')
+# def set_cookie():
+#     # Example of setting a session variable
+#     session['user_id'] = 'some_user_id'
+#     return 'Cookie is set'
 
 class Signup(Resource):
     
@@ -65,7 +65,7 @@ class Signup(Resource):
         last_name = request.json.get('last_name')
 
         user = User(
-            username=username,
+            username= username,
             email = email,
             first_name=first_name,
             last_name=last_name,
@@ -74,10 +74,11 @@ class Signup(Resource):
 
         # the setter will encrypt this
         user.password_hash = password
-
+        print(user)
         try:
 
             db.session.add(user)
+            print(user)
             db.session.commit()
 
             session['user_id'] = user.id
@@ -261,16 +262,23 @@ class ChangeRecipeById(Resource):
 api.add_resource(ChangeRecipeById, '/recipes/<uuid:id>/<uuid:user_id>')
 
 class GetRecipeByIngredient(Resource):
-    #@cross_origin(origins=os.environ.get('CORS_ORIGIN') + '/*', methods=['GET'])
     def get(self, ingredient):
-        recipes = []
+        limit = request.args.get('limit', 20, type=int)  # Default to 10 if not provided
+        offset = request.args.get('offset', 0, type=int)  # Default to 0 if not provided
+
+        filtered_recipes = []
         for recipe in Recipe.query.all():
             for ing in recipe.ingredients:
-                if recipe not in recipes and (ingredient in ing.food or ing.food in ingredient):
-                    recipes.append(recipe)
-        if not recipes:
+                if recipe not in filtered_recipes and (ingredient in ing.food or ing.food in ingredient):
+                    filtered_recipes.append(recipe)
+
+        # Apply pagination after filtering
+        paginated_recipes = filtered_recipes[offset:offset + limit]
+
+        if not paginated_recipes:
             return make_response({"message":"No matching recipes found"}, 404)
-        return make_response([recipe.to_dict() for recipe in recipes], 200)
+        return make_response([recipe.to_dict() for recipe in paginated_recipes], 200)
+
 api.add_resource(GetRecipeByIngredient, '/recipes/ingredient/<string:ingredient>', endpoint='ingredient')
     
 class AllIngredients(Resource):
@@ -374,8 +382,15 @@ api.add_resource(ReviewById, '/reviews/<uuid:id>/<uuid:user_id>')
 
 class GetRecipeByMealType(Resource):
     def get(self, meal_type):
-        # Fetch recipes filtered by meal type
-        recipes = Recipe.query.filter(Recipe.meal_type == meal_type).all()
+        # Fetch recipes filtered by meal type with pagination
+        limit = request.args.get('limit', 20, type=int)  # Default to 10 if not provided
+        offset = request.args.get('offset', 0, type=int)  # Default to 0 if not provided
+
+        recipes = Recipe.query.filter(Recipe.meal_type == meal_type)\
+                              .offset(offset)\
+                              .limit(limit)\
+                              .all()
+
         if not recipes:
             return make_response({"message": "No recipes found for this meal type"}, 404)
         return make_response([recipe.to_dict() for recipe in recipes], 200)
