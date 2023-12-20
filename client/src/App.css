@@ -79,10 +79,6 @@ button.create_new:hover span {
   
 }
 
-.modal-slide-down {
-  animation: slideDown 0.5s ease-out forwards;
-}
-
 @keyframes slideDown {
   from {
     transform: translateY(-100%);
@@ -90,4 +86,21 @@ button.create_new:hover span {
   to {
     transform: translateY(0);
   }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+.animate-slideDown {
+  animation: slideDown 0.5s ease-out forwards;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.5s ease-out forwards;
 }
