@@ -35,33 +35,36 @@ def fetch_and_parse_data(base_api_url):
 
 def get_recipes(parsed_data):
     users = User.query.all()
+    recipes = Recipe.query.all()
     for item in parsed_data:
         recipe_data = item['recipe']
         dish_type = recipe_data['dishType'][0] if 'dishType' in recipe_data else 'Unknown'  # Handle missing dishType
-
-        recipe = Recipe(
-            name = recipe_data['label'],
-            image = recipe_data['image'],
-            description = recipe_data.get('summary', ''),
-            steps = recipe_data['instructionLines'],
-            tags = recipe_data.get('tags', []),
-            cuisine = recipe_data['cuisineType'][0] if 'cuisineType' in recipe_data else 'Unknown',
-            meal_type = recipe_data['mealType'][0] if 'mealType' in recipe_data else 'Unknown',
-            dish_type = dish_type,
-            time = recipe_data['totalTime'],
-            user_id = rc(users).id
-        )
-        db.session.add(recipe)
-        for ingredient_data in recipe_data['ingredients']:
-            ingredient = Ingredient(
-                text=ingredient_data['text'],
-                recipe_id=recipe.id,
-                food=ingredient_data['food'],
-                quantity=ingredient_data['quantity'],
-                unit=ingredient_data['measure']
+        if not recipe_data.url in [recipe.source for recipe in recipes]:
+            recipe = Recipe(
+                name = recipe_data['label'],
+                image = recipe_data['image'],
+                description = recipe_data.get('summary', ''),
+                steps = recipe_data['instructionLines'],
+                tags = recipe_data.get('tags', []),
+                cuisine = recipe_data['cuisineType'][0] if 'cuisineType' in recipe_data else 'Unknown',
+                meal_type = recipe_data['mealType'][0] if 'mealType' in recipe_data else 'Unknown',
+                dish_type = dish_type,
+                time = recipe_data['totalTime'],
+                source = recipe_data.url,
+                user_id = rc(users).id
             )
-            db.session.add(ingredient)
-    db.session.commit()
+            db.session.add(recipe)
+            for ingredient_data in recipe_data['ingredients']:
+                ingredient = Ingredient(
+                    text=ingredient_data['text'],
+                    recipe_id=recipe.id,
+                    food=ingredient_data['food'],
+                    quantity=ingredient_data['quantity'],
+                    unit=ingredient_data['measure']
+                )
+                db.session.add(ingredient)
+        db.session.commit()
+        recipes.append(recipe)
 
 def fake_reviews():
     users = User.query.all()
@@ -81,36 +84,41 @@ def fake_reviews():
 if __name__ == "__main__":
     with app.app_context():
         cuisine_types = [
-    "american", 
-    "asian", 
-    "british", 
-    "caribbean", 
-    "central europe", 
-    "chinese", 
-    "eastern europe", 
-    "french", 
-    "greek", 
-    "indian", 
-    "italian", 
-    "japanese", 
-    "korean", 
-    "kosher", 
-    "mediterranean", 
-    "mexican", 
-    "middle eastern", 
-    "nordic", 
-    "south american", 
-    "south east asian", 
-    "world"
+    "american" 
+    # "asian", 
+    # "british", 
+    # "caribbean", 
+    # "central europe", 
+    # "chinese", 
+    # "eastern europe", 
+    # "french", 
+    # "greek", 
+    # "indian", 
+    # "italian", 
+    # "japanese", 
+    # "korean", 
+    # "kosher", 
+    # "mediterranean", 
+    # "mexican", 
+    # "middle eastern", 
+    # "nordic", 
+    # "south american", 
+    # "south east asian", 
+    # "world"
 ]
         print("Starting seed...")
         for cuisine in cuisine_types:
-            api_url = f'https://api.edamam.com/api/recipes/v2?type=public&app_id=your-ID&app_key=your-key&cuisineType={cuisine}'
+            api_url = f'https://api.edamam.com/api/recipes/v2?type=public&app_id=ba2f2269&app_key=a9b60738f0cf11abf6b1acd5d0950ddd&cuisineType={cuisine}'
             print(f"Fetching recipes for {cuisine} cuisine...")
             parsed_data = fetch_and_parse_data(api_url)
             if parsed_data:
                 print("Creating new recipes...")
                 get_recipes(parsed_data)
+
+            print("Deleting existing data...")
+            Review.query.delete()
+            Ingredient.query.delete()
+            Recipe.query.delete()
 
             current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             print(f"Finished fetching {cuisine} cuisine at {current_time}")
