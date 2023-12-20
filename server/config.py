@@ -20,6 +20,10 @@ app.secret_key = os.getenv('SECRET_KEY')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SUPABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SESSION_COOKIE_NAME'] = 'id'
+app.config['SESSION_COOKIE_SECURE'] = True  # Send cookie over HTTPS only
+app.config['SESSION_COOKIE_HTTPONLY'] = True  # Prevent JavaScript access to session cookie
+app.config['SESSION_COOKIE_SAMESITE'] = 'None' 
 app.json.compact = False
 
 # Define metadata, instantiate db
@@ -39,12 +43,13 @@ bcrypt = Bcrypt(app)
 # Instantiate REST API
 api = Api(app)
 
-origin = os.getenv('CORS_ORIGIN')
-cors = CORS(app, resources={
+
+cors = CORS(app, supports_credentials=True, resources={
     r"/*": {
-       "origins": origin,
+       "origins": 'http://127.0.0.1:5174',
        "methods": ["GET", "POST", "PUT", "DELETE"],
-       "allow_headers": ["Content-Type", "Authorization"]
+       "allow_headers": ["Content-Type", "Authorization"],
+       
     }
 })
 

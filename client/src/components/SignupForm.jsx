@@ -1,8 +1,9 @@
 import { Button } from 'flowbite-react';
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, Navigate, redirect, useNavigate } from 'react-router-dom';
 
 const SignupForm = ({ onLogin }) => {
+    const navigate = useNavigate();
     const server = import.meta.env.VITE_BACK_END_SERVE
     const [formInfo, setFormInfo] = useState({
         email: '',
@@ -44,7 +45,7 @@ const SignupForm = ({ onLogin }) => {
         .then((r) => {
           setIsLoading(false);
           if (r.ok) {
-            r.json().then((user) => onLogin(user));
+            r.json().then((user) => {onLogin(user); navigate('/dashboard')});
           } else {
             r.json().then((err) => setErrors(err.errors));
           }

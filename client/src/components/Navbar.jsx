@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { Link, useNavigate, NavLink } from 'react-router-dom';
+import { Link, useNavigate, NavLink, redirect } from 'react-router-dom';
 import "./Navbar.css";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { DarkThemeToggle } from 'flowbite-react';
 import { MdSearch } from 'react-icons/md';
 
 const Navbar = ({ onLogout, userData }) => {
+  console.log(typeof(userData))
     const server = import.meta.env.VITE_BACK_END_SERVE
     const [click, setClick] = useState(false);
     const [mealsDropdown, setMealsDropdown] = useState(false);
@@ -38,9 +39,18 @@ const Navbar = ({ onLogout, userData }) => {
 
     function handleLogout() {
       fetch(`${server}/logout`, {
-        method: "DELETE",
-      }).then(() => onLogout(null));
-    }
+          credentials: 'include',
+          method: "DELETE",
+      })
+      .then(() => {
+          onLogout(null);  // Assuming onLogout handles the client-side session state
+            location.reload()// Redirect to the login page
+      })
+      .catch(error => {
+          console.error('Logout failed:', error);
+      });
+  }
+  
 
     window.addEventListener("resize", () => setWidth(window.innerWidth));
 
@@ -127,24 +137,25 @@ const Navbar = ({ onLogout, userData }) => {
                                 )}
                             </li>
                             <li>
-        <NavLink to="/" onClick={closeMobileMenu}  className={({isActive})=>{return `block py-2 px-3 text-orange-100 hover:text-green-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-950 md:p-0 md:dark:hover:text-green-950 dark:text-orange-100 dark:hover:bg-gray-700 dark:hover:text-orange-100 md:dark:hover:bg-transparent dark:border-gray-700 ${isActive? ' md:underline-custom ': ' '}`}} >
-           Home
-        </NavLink>
-        </li>
-        {userData === null? (
-          <li >
-            <NavLink onClick={closeMobileMenu} to="/login" className={({isActive})=>{return `block py-2 px-3 text-orange-100 hover:text-green-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-950 md:p-0 md:dark:hover:text-green-950 dark:text-orange-100 dark:hover:bg-gray-700 dark:hover:text-orange-100 md:dark:hover:bg-transparent dark:border-gray-700 ${isActive? ' md:underline-custom ': ' '}`}}>
-              Log-In
-            </NavLink>
-          </li>
-        ):(
-          <li>
-            <div style={{cursor:"pointer"}} className= "block py-2 px-3 text-orange-100 hover:text-green-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-pink-800 md:p-0 md:dark:hover:text-pink-800 dark:text-orange-100 dark:hover:bg-gray-700 dark:hover:text-orange-100 md:dark:hover:bg-transparent dark:border-gray-700" onClick={()=>{handleLogout()}}>
-                Log-out
-            </div>
-          </li>
-        )
-        }
+                              <NavLink to="/" onClick={closeMobileMenu}  className={({isActive})=>{return `block py-2 px-3 text-orange-100 hover:text-green-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-950 md:p-0 md:dark:hover:text-green-950 dark:text-orange-100 dark:hover:bg-gray-700 dark:hover:text-orange-100 md:dark:hover:bg-transparent dark:border-gray-700 ${isActive? ' md:underline-custom ': ' '}`}} >
+                                Home
+                              </NavLink>
+                              </li>
+                              {typeof(userData) === 'object' ?  (
+                                <li>
+                                  <div style={{cursor:"pointer"}} className= "block py-2 px-3 text-orange-100 hover:text-green-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-pink-800 md:p-0 md:dark:hover:text-pink-800 dark:text-orange-100 dark:hover:bg-gray-700 dark:hover:text-orange-100 md:dark:hover:bg-transparent dark:border-gray-700" onClick={()=>{handleLogout()}}>
+                                      Log-out
+                                  </div>
+                                </li>
+                               
+                              ):(
+                                 <li>
+                                 <NavLink onClick={closeMobileMenu} to="/login" className={({isActive})=>{return `block py-2 px-3 text-orange-100 hover:text-green-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-950 md:p-0 md:dark:hover:text-green-950 dark:text-orange-100 dark:hover:bg-gray-700 dark:hover:text-orange-100 md:dark:hover:bg-transparent dark:border-gray-700 ${isActive? ' md:underline-custom ': ' '}`}}>
+                                   Log-In
+                                 </NavLink>
+                               </li>
+                              )
+                              }
         
 
         

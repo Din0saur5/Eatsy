@@ -6,9 +6,9 @@ import Navbar from '../components/Navbar';
 const BaseLayout = () => {
   
   const auth = useLoaderData() 
-
+  console.log(auth)
   const [userData, setUserData] = useState(auth)
-    
+  
 
     return(
       <>

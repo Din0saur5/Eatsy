@@ -46,6 +46,11 @@ def index():
 #     if (request.endpoint) not in open_access_list and (not session.get('user_id')):
 #         return {'error': '401 Unauthorized'}, 401
 
+@app.route('/set-cookie')
+def set_cookie():
+    # Example of setting a session variable
+    session['user_id'] = 'some_user_id'
+    return 'Cookie is set'
 
 class Signup(Resource):
     
@@ -75,8 +80,8 @@ class Signup(Resource):
             db.session.add(user)
             db.session.commit()
 
-            session['id'] = user.id
-
+            session['user_id'] = user.id
+            print(session['user_id']) 
             return user.to_dict(), 201
 
         except IntegrityError:
@@ -88,12 +93,13 @@ class CheckSession(Resource):
 
     def get(self):
         
-        user_id = session.get('id')
+        user_id = session.get('user_id')
+        print(user_id)
         if user_id:
             user = User.query.filter(User.id == user_id).first()
-            return user.to_dict(), 200
+            return make_response(user.to_dict(), 200)
         
-        return make_response({}, 401)
+        return make_response({'error':'not loading cookie'}, 401)
 
 
 class Login(Resource):
@@ -110,7 +116,8 @@ class Login(Resource):
         if user:
             if user.authenticate(password):
 
-                session['id'] = user.id
+                session['user_id'] = user.id
+                print(session['user_id']) 
                 return user.to_dict(), 200
 
         return make_response({'error': '401 Unauthorized'}, 401)
@@ -119,10 +126,10 @@ class Logout(Resource):
 
     def delete(self):
 
-        session['id'] = None
-        
-        return make_response({}, 204)
-
+        session.pop('user_id', None)
+        response =  make_response({}, 204)
+        response.set_cookie('user_id', '', expires=0)
+        return response
 
 api.add_resource(Signup, '/signup', endpoint='signup')
 api.add_resource(CheckSession, '/check_session')

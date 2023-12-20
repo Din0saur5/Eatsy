@@ -1,7 +1,7 @@
 // Login.jsx
 import { useState } from 'react';
 import { supabase } from '../supabaseClient';
-import { Link, useNavigate, useOutletContext } from 'react-router-dom';
+import { Link, redirect, useNavigate, useOutletContext } from 'react-router-dom';
 
 
 import LoginForm from '../components/LoginForm';
@@ -10,8 +10,10 @@ import SignupForm from '../components/SignupForm';
 const Login = () => {
   const [showLogin, setShowLogin] = useState(true);
   const [userData, setUserData] = useOutletContext(); 
-  
-
+  console.log(userData)
+  if (userData !== null){
+    redirect('/dashboard')
+  }
  
 
 

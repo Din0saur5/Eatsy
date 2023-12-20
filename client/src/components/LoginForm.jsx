@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
 import { Button, Card, Label, TextInput } from 'flowbite-react';
+import { redirect, useNavigate } from 'react-router-dom';
 
 
 const LoginForm = ({ onLogin }) => {
+    const navigate = useNavigate();
+
   const server = import.meta.env.VITE_BACK_END_SERVE
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState([]);
@@ -16,6 +19,7 @@ const LoginForm = ({ onLogin }) => {
     e.preventDefault();
     setIsLoading(true);
     fetch(`${server}/login`, {
+        credentials: 'include',
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -28,6 +32,7 @@ const LoginForm = ({ onLogin }) => {
       setIsLoading(false);
       if (r.ok) {
         r.json().then((user) => onLogin(user));
+        navigate('/dashboard')
       } else {
         r.json().then((err) => setErrors(err.errors));
       }
@@ -43,7 +48,7 @@ const LoginForm = ({ onLogin }) => {
     <form className="flex flex-col gap-4" onSubmit={(e)=>{handleLogin(e)}}>
       <div>
         <div className="mb-2 block">
-          <Label htmlFor="email1" value="Your email" />
+          <Label htmlFor="username3" value="Your Username" />
         </div>
         <TextInput name='username' value={formInfo.username} onChange={handleChange} id="username3" type="text" placeholder="username" required />
       </div>
@@ -56,9 +61,10 @@ const LoginForm = ({ onLogin }) => {
       <div className="flex items-center gap-2">
       </div>
       <Button gradientMonochrome="success"  type="submit">{isLoading ? "Loading..." : "Login"}</Button>
-      {errors.map((err) => (
+      {errors ? errors.map((err) => (
           <small key={err}>{err}</small>
-        ))}
+        )):<></>
+        }
     </form>
     
   )
