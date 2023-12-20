@@ -17,7 +17,7 @@ import SearchList from "./pages/SearchList";
 
 import Recipe from "./pages/Recipe";
 
-import CreateRecipe from "./pages/CreateRecipe";
+
 import Account from "./pages/Account";
 import UpdateRecipe from "./pages/UpdateRecipe";
 import checkSession from "./checkSession";
@@ -84,11 +84,6 @@ const router = createBrowserRouter([
       {
         path: "account",
         element: <Account/>,
-        loader: protectedRoute,
-      },
-      {
-        path: "create-recipe",
-        element: <CreateRecipe/>,
         loader: protectedRoute,
       },
       {

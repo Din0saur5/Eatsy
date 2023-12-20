@@ -98,7 +98,7 @@ class CheckSession(Resource):
         print(user_id)
         if user_id:
             user = User.query.filter(User.id == user_id).first()
-            return make_response(user.to_dict(), 200)
+            return make_response(user.to_dict(rules=('-favorites','-created',)), 200)
         
         return make_response({'error':'not loading cookie'}, 401)
 
@@ -387,10 +387,13 @@ api.add_resource(GetRecipeByMealType, '/recipes/meal_type/<string:meal_type>')
 
 class GetUserFavorites(Resource):
     def get(self, id):
-        recipes = Favorite.query.filter(Favorite.user_id == id).all()
-        if not recipes:
-            return make_response({"message": "No favorites"}, 404)
-        return make_response([recipe.to_dict() for recipe in recipes], 200)
+        user = User.query.filter(User.id == id).first()
+        if not user:
+            return make_response({"message": "No user"}, 404)
+       
+        rb=user.to_dict(only=('favorites',))
+        
+        return make_response(rb, 200)
 
 class GetCreatedByUser(Resource):
     def get(self, id):

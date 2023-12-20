@@ -1,14 +1,14 @@
 import React from 'react';
-import { FaPlus } from 'react-icons/fa'; // Replace with your preferred icon
+import { FaPlus } from 'react-icons/fa'; // Import your icon
 
-const CreateRecipeButton = () => {
+const CreateRecipeButton = ({setIsModalOpen}) => {
   return (
-    <button className="button-container relative flex items-center bg-blue-500 text-white rounded overflow-hidden transition-all duration-300 px-2 py-2">
-    <FaPlus className="w-6 h-6" />
-    <span className="button-text absolute whitespace-nowrap ml-2 opacity-0">
-      Create Recipe
-    </span>
-  </button>
+    <button onClick={()=>setIsModalOpen(true)} className=" create_new flex items-center bg-blue-500 text-white rounded p-2 overflow-hidden relative transition-all duration-500">
+      <FaPlus className="w-6 h-6" />
+      <span className="ml-2 whitespace-nowrap overflow-hidden max-w-0 hover:transition-all duration-1000 ease-in-out group-hover:max-w-xs ">
+        Create Recipe
+      </span>
+    </button>
   );
 };
 

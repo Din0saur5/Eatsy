@@ -62,37 +62,32 @@
   background-color: #E30B5D; /* this is your underline color */
 }
 
+
+
 button.create_new {
-  transition: width 0.3s ease, background-color 0.3s ease;
+  transition: all 0.5s ease;
+  
 }
 
-button.create_new:hover {
-  width: auto;
-   /* Adjust width on hover */ 
+button.create_new span {
+  transition: max-width 0.5s ease;
+  
 }
 
 button.create_new:hover span {
-  opacity: 1; /* Show text on hover */
+  max-width: 200px; /* Adjust as needed */
+  
 }
 
-button.create_new:hover .plus_sign{
-  color:transparent;
+.modal-slide-down {
+  animation: slideDown 0.5s ease-out forwards;
 }
 
-.button-container {
-  transition: all 0.3s ease;
-  clip-path: circle(25px at center);
-}
-
-.button-container:hover {
-  width: auto; /* Adjust to fit the content */
-  clip-path: circle(75px at center);
-}
-
-.button-text {
-  transition: opacity 0.3s ease 0.3s;
-}
-
-.button-container:hover .button-text {
-  opacity: 1;
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
 }

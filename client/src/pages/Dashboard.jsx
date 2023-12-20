@@ -7,6 +7,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import RecipeCard from '../components/RecipeCard';
 import CreateRecipeButton from '../components/CreateRecipeButton';
+import CreateRecipe from '../components/CreateRecipe';
 
 
 const server = import.meta.env.VITE_BACK_END_SERVE
@@ -20,7 +21,7 @@ const Dashboard = () => {
   const [isToggled, setIsToggled] = useState(true); // true for 'My Recipes', false for 'Favorites'
   const [favorites, setFavorites] = useState([])
   const [ userRecipes, setUserRecipes] = useState([])
-
+const [isModalOpen, setIsModalOpen] = useState(false);
   const fetchFavorites = async () => {
     const server = import.meta.env.VITE_BACK_END_SERVE
     try {
@@ -83,11 +84,11 @@ const fetchMyRecipes = async () => {
       
       <div className='w-4/5 bg-beige dark:bg-brown'>
         
+  <div className='m-3'>
+  <CreateRecipeButton setIsModalOpen={setIsModalOpen}/>
+  </div>
 <div className=" flex items-center justify-center py-4 md:py-8 flex-wrap">
   <ToggleSwitch toggle={toggle} isToggled={isToggled}/>
-  <div>
-  <CreateRecipeButton/>
-  </div>
 </div>
 <div className=" sm:ml-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-4">
   {toggle ? (
@@ -99,6 +100,8 @@ const fetchMyRecipes = async () => {
 </div>
 </div>
     </div>
+    <CreateRecipe userData={userData} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+
     </>
   );
 };
