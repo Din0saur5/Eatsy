@@ -336,7 +336,7 @@ class AllReviews(Resource):
             new_review = Review(**data)
             db.session.add(new_review)
             db.session.commit()
-            return make_response(new_review.to_dict(),201)
+            return make_response(new_review.to_dict(rules=('-user', '-recipe')),201)
         except Exception as e:
             return make_response({"message":str(e)}, 400)
 
@@ -400,6 +400,25 @@ class GetCreatedByUser(Resource):
 
 api.add_resource(GetUserFavorites, '/favorites/<uuid:id>')
 api.add_resource(GetCreatedByUser, '/recipes/created_by/<uuid:id>')
+
+class FavoriteRecipe(Resource):
+    def post(self, rec_id, user_id):
+        fav = Favorite.query.filter_by(user_id = user_id, recipe_id = rec_id).first()
+        if fav:
+            db.session.delete(fav)
+            db.session.commit()
+            return make_response({"message": "Recipe removed from favorites"}, 200)
+        else:
+            favorite = Favorite(
+                user_id = user_id,
+                recipe_id = rec_id
+            )
+            db.session.add(favorite)
+            db.session.commit()
+            return make_response(favorite.to_dict(rules=('-user', '-recipe')), 201)
+
+api.add_resource(FavoriteRecipe, '/favorites/<uuid:rec_id>/<uuid:user_id>')
+
 port = os.getenv('SERVER_PORT')
 debug = os.getenv('SERVER_DEBUG')
 host = os.getenv('SERVER_HOST')
