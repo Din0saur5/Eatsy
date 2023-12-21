@@ -129,30 +129,7 @@ const Navbar = ({ onLogout, userData }) => {
                                 )}
                             </li>
                             <li>
-                                <NavLink to="" onClick={closeMobileMenu} className="block py-2 px-3 text-orange-100 hover:text-green-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-950 md:p-0 md:dark:hover:text-green-950 dark:text-orange-100 dark:hover:bg-gray-700 dark:hover:text-orange-100 md:dark:hover:bg-transparent dark:border-gray-700">
-                                    Ingredients
-                                    <button onClick={toggleIngredientsDropdown} className="text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-600">
-                                    ▼
-                                    </button>
-                                </NavLink>
-                                {ingredientsDropdown && (
-                                    <div className="absolute z-10 bg-white rounded shadow-lg py-1 mt-1">
-                                        <a href="#" onClick={() => handleDropdownItemClick('ingredient', 'egg')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Eggs</a>
-                                        <a href="#" onClick={() => handleDropdownItemClick('ingredient', 'sugar')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sugar</a>
-                                        <a href="#" onClick={() => handleDropdownItemClick('ingredient', 'meats')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Meats</a>
-                                        <a href="#" onClick={() => handleDropdownItemClick('ingredient', 'dairy')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dairy</a>
-                                        <a href="#" onClick={() => handleDropdownItemClick('ingredient', 'grains')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Grains</a>
-                                        <a href="#" onClick={() => handleDropdownItemClick('ingredient', 'spices')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Spices</a>
-                                        <a href="#" onClick={() => handleDropdownItemClick('ingredient', 'herbs')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Herbs</a>
-                                        <a href="#" onClick={() => handleDropdownItemClick('ingredient', 'nuts-seeds')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Nuts & Seeds</a>
-                                        <a href="#" onClick={() => handleDropdownItemClick('ingredient', 'oils')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Oils</a>
-                                        <a href="#" onClick={() => handleDropdownItemClick('ingredient', 'sweeteners')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sweeteners</a>
-                                        <a href="#" onClick={() => handleDropdownItemClick('ingredient', 'all-ingredients')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 font-bold">View All</a>
-                                    </div>
-                                )}
-                            </li>
-                            <li>
-                                <NavLink to="" onClick={closeMobileMenu} className="block py-2 px-3 text-orange-100 hover:text-green-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-950 md:p-0 md:dark:hover:text-green-950 dark:text-orange-100 dark:hover:bg-gray-700 dark:hover:text-orange-100 md:dark:hover:bg-transparent dark:border-gray-700">
+                                <NavLink to="/international-recipes" onClick={closeMobileMenu} className="block py-2 px-3 text-orange-100 hover:text-green-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-950 md:p-0 md:dark:hover:text-green-950 dark:text-orange-100 dark:hover:bg-gray-700 dark:hover:text-orange-100 md:dark:hover:bg-transparent dark:border-gray-700">
                                     International Recipes
                                     <button onClick={toggleCuisineDropdown} className="text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-600">
                                     ▼

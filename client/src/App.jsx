@@ -5,7 +5,6 @@ import { createBrowserRouter, redirect, RouterProvider, useParams, } from 'react
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Cuisine from "./pages/Cuisine"; 
-
 import MealPage from "./pages/MealPage";
 import IngredientPage from "./pages/IngredientPage";
 import ErrorPage from './pages/ErrorPage';
@@ -18,7 +17,7 @@ import SearchList from "./pages/SearchList";
 
 import Recipe from "./pages/Recipe";
 
-
+import InternationalRecipesPage from "./pages/InternationalRecipesPage";
 import Account from "./pages/Account";
 import UpdateRecipe from "./components/UpdateRecipe";
 import checkSession from "./checkSession";
@@ -48,6 +47,10 @@ const router = createBrowserRouter([
     loader: protectedRendering,
     errorElement: <ErrorPage/>,
     children:[
+      {
+        path: "/international-recipes", // New route for International Recipes
+        element: <InternationalRecipesPage />,
+      },
       {
         path: "/cuisine/:cuisineType", // Add this route for cuisine
         element: <Cuisine />,
