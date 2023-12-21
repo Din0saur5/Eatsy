@@ -16,6 +16,13 @@ from sqlalchemy import MetaData
 # Instantiate app, set attributes
 app = Flask(__name__)
 
+cors = CORS(app, supports_credentials=True, resources={
+    r"/*": {
+       "origins": ["http://127.0.0.1:5174"],
+       "methods": ["GET", "POST", "PATCH", "PUT", "DELETE"],
+       "allow_headers": ["Content-Type", "Authorization"]
+    }
+})
 app.secret_key = os.getenv('SECRET_KEY')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SUPABASE_URI')
@@ -43,13 +50,4 @@ bcrypt = Bcrypt(app)
 # Instantiate REST API
 api = Api(app)
 
-
-cors = CORS(app, supports_credentials=True, resources={
-    r"/*": {
-       "origins": 'http://127.0.0.1:5174',
-       "methods": ["GET", "POST", "PATCH","PUT", "DELETE"],
-       "allow_headers": ["Content-Type", "Authorization"],
-       
-    }
-})
 

@@ -85,7 +85,10 @@ const Recipe = () => {
                 href={recipe.source}
                 target='_blank'>Source</button>
                 :''}</p>
-                <LikeButton recipe_id={recipe.id} user_id={userData.id} favorited={recipe.favorites.includes(userData.id)}/>
+                {userData? 
+                (<LikeButton recipe_id={recipe.id} user_id={userData.id} favorited={recipe.favorites.includes(userData.id)}/>
+                ):(<></>)
+                }
               </div>
               <div className='bg-[#F5E8D6] bg-opacity-40 pb-2 rounded-2xl shadow-[0_0_10px_5px_rgba(245,232,214,0.4)]'>
                 <h2 className='text-center'>Ingredients</h2>

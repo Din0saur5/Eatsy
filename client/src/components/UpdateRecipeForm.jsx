@@ -112,8 +112,14 @@ console.log(formData)
 
   // Create the final form data object for submission
     const finalFormData = {
-    ...formData,
-    tags:formData,
+    name: formData.name,
+    image: formData.image,
+    description: formData.description,
+    steps: formData.steps,
+    meal_type: formData.meal_type,
+    time: formData.time,
+    user_id: userData.id, 
+    tags:formData.tags,
     cuisine: cuisineType,
     dish_type: dishType,
   };
@@ -136,6 +142,9 @@ console.log(formData)
     } catch (error) {
       console.error('Error updating recipe:', error);
     }
+
+   
+
   };
 
 

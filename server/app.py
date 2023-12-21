@@ -240,12 +240,37 @@ class ChangeRecipeById(Resource):
     #@cross_origin(origins=os.environ.get('CORS_ORIGIN') + '/private/update-recipe/*', methods=['PATCH', 'DELETE'])
     def patch(self, id):
         recipe = Recipe.query.filter_by(id=id).first()
-        if not recipe:
-            return make_response({"message":"Recipe not found"}, 404)
-        for key in request.json:
-            setattr(recipe, key, request.json.get(key))
-        db.session.commit()
-        return make_response(recipe.to_dict(), 200)
+        if recipe:
+            try:
+                for attr in request.json:
+                    if attr != 'ingredients':
+                        setattr(recipe, attr, request.json[attr])
+                        db.session.commit()
+                    else:
+                        for ingredient in request.json.get('ingredients'):
+                            i = Ingredient.query.filter(Ingredient.id == ingredient.get(id)).first()
+                            if i:
+                                try:
+                                    for attr in ingredient:
+                                        setattr(i, attr, ingredient[attr])
+                                        db.session.commit()
+                                        print('sucess')
+                                except ValueError: 
+                                    rb = {
+                                    "errors": ["validation errors"]
+                                    }
+                                    print('fail')
+                            else:
+                                return make_response({"message":"Ingredient not found"}, 404)
+                  
+                return make_response(recipe.to_dict(), 200)
+            except ValueError: 
+                rb = {
+                "errors": ["validation errors"]
+                }
+                return make_response(rb, 400)  
+        else:
+                return make_response({"message":"Recipe not found"}, 404)
 
     def delete(self, id):
         recipe = Recipe.query.filter_by(id=id).first()
@@ -253,6 +278,22 @@ class ChangeRecipeById(Resource):
             return make_response({"message":"Recipe not found"}, 404)
         else:
             
+            for ingredient in request.json.get('ingredients'):
+                i = Ingredient.query.filter(Ingredient.id == ingredient.get(id)).first()
+                if i:
+                    try:
+                        for attr in ingredient:
+                            setattr(i, attr, ingredient[attr])
+                            db.session.commit()
+                        return make_response(recipe.to_dict(), 200)
+                    except ValueError: 
+                        rb = {
+                        "errors": ["validation errors"]
+                        }
+                        return make_response(rb, 400) 
+                else:
+                    return make_response({"message":"Ingredient not found"}, 404)
+                
             db.session.delete(recipe)
             db.session.commit()
             return make_response({"message":"Recipe deleted"}, 204)
@@ -304,12 +345,10 @@ api.add_resource(AllIngredients, '/ingredients')
 class ChangeIngredientById(Resource):
     #@cross_origin(origins=os.environ.get('CORS_ORIGIN') + '/private/update-recipe/*', methods=['PATCH', 'DELETE'])
 
-    def patch(self, id, user_id):
+    def patch(self, id):
         ingredient = Ingredient.query.filter_by(id=id).first()
         if not ingredient:
             return make_response({"message":"Ingredient not found"}, 404)
-        if ingredient.recipe.user_id != user_id:
-            return make_response({"message":"You do not have permission to update this ingredient."}, 403)
         for key in request.json:
             setattr(ingredient, key, request.json[key])
         db.session.commit()
@@ -319,13 +358,11 @@ class ChangeIngredientById(Resource):
         ingredient = Ingredient.query.filter_by(id=id).first()
         if not ingredient:
             return make_response({"message":"Ingredient not found"}, 404)
-        if ingredient.recipe.user_id != user_id:
-            return make_response({"message":"You do not have permission to delete this ingredient."}, 403)
         db.session.delete(ingredient)
         db.session.commit()
         return make_response({"message":"Ingredient deleted"}, 204)
 
-api.add_resource(ChangeIngredientById, '/ingredients/<uuid:id>/<uuid:user_id>')
+api.add_resource(ChangeIngredientById, '/ingredients/<uuid:id>')
 
 class AllReviews(Resource):
     # @recipeId_cors(origins=os.environ.get('CORS_ORIGIN') + '/private/recipe/*', methods=['POST'])
