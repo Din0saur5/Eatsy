@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 import { Accordion, Button, Select } from 'flowbite-react';
 import React, { useEffect, useState } from 'react';
-import AutocompleteInput from './AutoCompleteCuisine';
+import AutocompleteInput from './AutoComplete';
 
 const CreateRecipeForm = ({userData, handleClose}) => {
-    console.log(userData)
+
   const [formData, setFormData] = useState({
     name: '',
     image: '',
@@ -12,15 +12,26 @@ const CreateRecipeForm = ({userData, handleClose}) => {
     steps: [''],
     is_draft: false,
     tags: [''],
-    cuisine: '',
     meal_type: '',
-    dish_type: '',
     time: '',
     user_id: userData.id, 
     ingredients: [{ text: '', food: '', quantity: '', unit: '' }]
   });
 
+  const [cuisineType, setCuisineType]=useState('')
+  const [dishType, setDishType]=useState('')
   const [isFormValid, setIsFormValid] = useState(false); 
+
+
+  const cuisineTypes = [
+    "american", "asian", "british", "caribbean", "central europe", "chinese", "eastern europe", 
+    "french", "greek", "indian", "italian", "japanese", "korean", "kosher", "mediterranean", 
+    "mexican", "middle eastern", "nordic", "south american", "south east asian", "world"
+  ];
+
+  const dishTypes = ["soup",  "starter",  "desserts",  "main course",  "drinks",  "condiments and sauces",
+  "bread",  "salad",  "biscuits and cookies",  "sandwiches",  "cereals"]
+
 
   useEffect(() => {
     // Update isFormValid based on formData
@@ -31,6 +42,7 @@ const CreateRecipeForm = ({userData, handleClose}) => {
   }, [formData]);
 
   const handleChange = (e) => {
+    
     if (e.target.name.startsWith('ingredients')) {
       const index = parseInt(e.target.dataset.index);
       const newIngredients = formData.ingredients.map((ingredient, i) => {
@@ -55,12 +67,14 @@ const CreateRecipeForm = ({userData, handleClose}) => {
   // Create the final form data object for submission
     const finalFormData = {
     ...formData,
-    tags: processedTags
+    tags: processedTags,
+    cuisine: cuisineType,
+    dish_type: dishType,
   };
   console.log(finalFormData);
     const server = import.meta.env.VITE_BACK_END_SERVE
     try {
-      const response = await fetch(`${server}/create_recipe`, {
+      const response = await fetch(`${server}/recipes/create`, {
         credentials: 'include',
         method: 'POST',
         headers: {
@@ -96,6 +110,7 @@ const CreateRecipeForm = ({userData, handleClose}) => {
   };
   
 
+
   return (
     <form className="h-96 overflow-y-auto" onSubmit={handleSubmit}>
         <Accordion>
@@ -105,13 +120,13 @@ const CreateRecipeForm = ({userData, handleClose}) => {
                 <input className='rounded-lg mb-2 mr-1' type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Name"  required/>
                 <input className='rounded-lg mb-2 mr-1' type="text" name="image" value={formData.image} onChange={handleChange} placeholder="Image URL"  required/>
                 <input className='rounded-lg mb-2 mr-1' type="number" name="time" value={formData.time} onChange={handleChange} placeholder="Est. Cook Time" required />
-                <input className='rounded-lg mb-2 mr-1' type="text" name="meal_type" value={formData.meal_type} onChange={handleChange} placeholder="Meal Type"  required/>
-                <AutocompleteInput type="text" name="cuisine" value={formData.cuisine} onChange={handleChange} placeholder="Cuisine" required />
+                <AutocompleteInput  dataSet={dishTypes}  valueOf={dishType} placeholder={"Dish Type"} action={setDishType} />
+                <AutocompleteInput dataSet={cuisineTypes}  valueOf={cuisineType} action={setCuisineType} placeholder={"Cuisine"} required />
                 <div className="max-w-md">
                 <div className="mb-2 block">
                     </div>
-                <Select name="dish_type" value={formData.dish_type} onChange={handleChange}  required> 
-                    <option className='text-white hover:text-blue-400'>Dish Type</option>
+                <Select name="meal_type" value={formData.meal_type} onChange={handleChange}  required> 
+                    <option className='text-white hover:text-blue-400'>Meal Type</option>
                     <option>Breakfast</option>
                     <option>Lunch/Dinner</option>
                     <option>Teatime</option>
@@ -136,9 +151,9 @@ const CreateRecipeForm = ({userData, handleClose}) => {
                 
                 {formData.ingredients.map((ingredient, index) => (
                 <div key={index}>
-                <input className='rounded-lg mb-2 mr-1' type="text" name={`ingredients[${index}].text`} data-index={index} data-field="text" value={ingredient.text} onChange={handleChange} placeholder="Extra Details"  required/>
+                <input className='rounded-lg mb-2 mr-1' type="text" name={`ingredients[${index}].text`} data-index={index} data-field="text" value={ingredient.text} onChange={handleChange} placeholder="Extra Details" />
                 <input className='rounded-lg mb-2 mr-1' type="text" name={`ingredients[${index}].food`} data-index={index} data-field="food" value={ingredient.food} onChange={handleChange} placeholder="Food"  required/>
-                <input className='rounded-lg mb-2 mr-1' type="text" name={`ingredients[${index}].quantity`} data-index={index} data-field="quantity" value={ingredient.quantity} onChange={handleChange} placeholder="Quantity"  required/>
+                <input className='rounded-lg mb-2 mr-1' type="number" name={`ingredients[${index}].quantity`} data-index={index} data-field="quantity" value={ingredient.quantity} onChange={handleChange} placeholder="Quantity"  required/>
                 <input className='rounded-lg mb-2 mr-1' type="text" name={`ingredients[${index}].unit`} data-index={index} data-field="unit" value={ingredient.unit} onChange={handleChange} placeholder="Unit"  required/>
                 </div>
             ))}

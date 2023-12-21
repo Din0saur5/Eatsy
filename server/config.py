@@ -47,7 +47,7 @@ api = Api(app)
 cors = CORS(app, supports_credentials=True, resources={
     r"/*": {
        "origins": 'http://127.0.0.1:5174',
-       "methods": ["GET", "POST", "PUT", "DELETE"],
+       "methods": ["GET", "POST", "PATCH", "DELETE"],
        "allow_headers": ["Content-Type", "Authorization"],
        
     }
