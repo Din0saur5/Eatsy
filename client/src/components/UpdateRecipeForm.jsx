@@ -3,7 +3,7 @@ import { Accordion, Button, Select } from 'flowbite-react';
 import React, { useEffect, useState } from 'react';
 import AutocompleteInput from './AutoComplete';
 
-const UpdateRecipeForm = ({userData, selectedRecipe, userRecipes, setUserRecipes, handleClose}) => {
+const UpdateRecipeForm = ({userData,  selectedRecipe, userRecipes, setUserRecipes, handleClose}) => {
 
   const [formData, setFormData] = useState({
     name: '',
@@ -15,7 +15,7 @@ const UpdateRecipeForm = ({userData, selectedRecipe, userRecipes, setUserRecipes
     meal_type: '',
     time: '',
     user_id: userData.id, 
-    ingredients: [{ text: '', food: '', quantity: '', unit: '' }]
+    ingredients: [{ text: '', food: '', quantity: '', unit: '' , id: ''}]
   });
 
   const [cuisineType, setCuisineType]=useState('')
@@ -44,7 +44,7 @@ console.log(formData)
         meal_type: selectedRecipe.meal_type || '',
         time: selectedRecipe.time || '',
          user_id: userData.id,
-        ingredients: selectedRecipe.ingredients || [{ text: '', food: '', quantity: '', unit: '' }]
+        ingredients: selectedRecipe.ingredients || [{ text: '', food: '', quantity: '', unit: '', id: '' }]
       });
       setCuisineType(selectedRecipe.cuisine || '');
       setDishType(selectedRecipe.dish_type || '');
@@ -133,14 +133,113 @@ console.log(formData)
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(finalFormData)
+        body: JSON.stringify({
+          name: finalFormData.name,
+          image: finalFormData.image,
+          description: finalFormData.description,
+          steps: finalFormData.steps,
+          meal_type: finalFormData.meal_type,
+          time: finalFormData.time,
+          user_id: finalFormData.user_id,
+          tags:finalFormData.tags,
+          cuisine: finalFormData.cuisine,
+          dish_type: finalFormData.dish_type,
+        })
       });
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      // Handle response
-      console.log('Recipe updated successfully');
-      setUserRecipes([response,...userRecipes])
+      const data = await response.json()
+      
+      
+      const newRecipes = userData.recipes.map(recipe => recipe.id === data.id ? data : recipe);
+      
+      const storedUserStr= sessionStorage.getItem('token')
+      if (storedUserStr){
+        let storedUser = JSON.parse(storedUserStr)
+        storedUser.recipes = newRecipes
+        sessionStorage.setItem('token', JSON.stringify(storedUser))}
+        setUserRecipes(newRecipes)
+      } catch (error) {
+        console.error('Error updating recipe:', error);
+        
+      }
+      for(const ingredient in selectedRecipe.ingredients ) { 
+       if(!(ingredient in finalFormData.ingredients) ){
+        try {
+          const response = await fetch(`${server}/ingredients/${ingredient.id}`, {
+              method: 'DELETE',
+              credentials: 'include', // include if needed for credentials like cookies/session
+              headers: {
+                  'Content-Type': 'application/json'
+                  // Include additional headers as required by your server
+              }
+          });
+  
+          if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`); 
+          }
+              const data = await response.json()
+              console.log(data);
+             
+          
+          } catch (error) {
+          console.error('Er ')
+       }}
+        if (ingredient.id && ingredient in finalFormData.ingredients){
+        try{
+        const resp = await fetch(`${server}/ingredients/${ingredient.id}`, {
+            credentials: 'include',
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+            text: ingredient.text,
+            food: ingredient.food,
+            quantity: ingredient.quantity,
+            unit: ingredient.unit,
+            
+            })
+          })
+          if (!resp.ok) {
+            throw new Error(`HTTP error! Status: ${resp.status}`);
+          }
+          const d = await resp.json()
+          console.log(d)
+        } catch (error) {
+          console.error('Error updating recipe:', error);
+          handleClose();
+          alert('Error updating recipe')
+        }
+      }else{
+        try {
+          const resp = await fetch(`${server}/ingredients`,{
+             credentials: 'include',
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              text: ingredient.text,
+              food: ingredient.food,
+              quantity: ingredient.quantity,
+              unit: ingredient.unit,
+              recipe_id: ingredient.recipe_id,
+              })
+          });
+          if (!resp.ok) {
+            throw new Error(`HTTP error! Status: ${resp.status}`);
+          }
+          const d = await resp.json()
+          console.log(d)
+        } catch (error) {
+          console.error('Error creating recipe:', error);
+        }
+
+
+      }
+    }
       handleClose()
       alert('Recipe updated successfully')
       setFormData({
@@ -155,11 +254,8 @@ console.log(formData)
         user_id: userData.id, 
         ingredients: [{ text: '', food: '', quantity: '', unit: '' }]
       })
-    } catch (error) {
-      console.error('Error updating recipe:', error);
-      handleClose();
-      alert('Error creating recipe')
-    }
+      
+   
 
    
 
@@ -213,6 +309,7 @@ console.log(formData)
   };
 
   const handleDeleteIngredient = (index) => {
+    
     const newIngredients = formData.ingredients.filter((_, i) => i !== index);
     setFormData({ ...formData, ingredients: newIngredients });
   };

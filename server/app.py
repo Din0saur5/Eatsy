@@ -16,7 +16,7 @@ from config import app, db, api
 # Add your model imports
 from models import User, Review, Recipe, Ingredient, Favorite
 from collections import defaultdict
-
+import uuid
 # app.py
 
 
@@ -194,34 +194,27 @@ class AllRecipes(Resource):
 class CreateRecipe(Resource):
     def post(self):
         try:
+            
             new_recipe = Recipe(
+                id = uuid.uuid4(),
                 name = request.json.get('name'),
                 image = request.json.get('image'),
                 description = request.json.get('description'),
-                steps = request.json.get('steps'),
-                is_draft = request.json.get('is_draft'),
+                steps = list(request.json.get('steps')),
+                is_draft = False,
                 tags = request.json.get('tags'),
                 cuisine = request.json.get('cuisine'),
                 meal_type = request.json.get('meal_type'),
                 dish_type = request.json.get('dish_type'),
-                time = request.json.get('time'),
+                time = int(request.json.get('time')),
                 user_id = request.json.get('user_id')
             )
-            print(new_recipe)
+            print(new_recipe.id)
             db.session.add(new_recipe)
-            db.session.commit()
+            
             print(new_recipe)
-            ingredients = []
-            for ingredient in request.json.get('ingredients'):
-                new_ingredient = Ingredient(
-                    text = ingredient.get('text'),
-                    food = ingredient.get('food'),
-                    quantity = ingredient.get('quantity'),
-                    unit = ingredient.get('unit'),
-                    recipe_id = new_recipe.id
-                )
-                ingredients.append(new_ingredient)
-            db.session.add_all(ingredients)
+
+          
             db.session.commit()
             return make_response(new_recipe.to_dict(),201)
         except Exception as e:
@@ -242,30 +235,14 @@ api.add_resource(GetRecipeById, '/recipes/<uuid:id>', endpoint='recipe_id')
 class ChangeRecipeById(Resource):
     #@cross_origin(origins=os.environ.get('CORS_ORIGIN') + '/private/update-recipe/*', methods=['PATCH', 'DELETE'])
     def patch(self, id):
-        recipe = Recipe.query.filter_by(id=id).first()
+        recipe = Recipe.query.filter(Recipe.id==id).first()
         if recipe:
             try:
                 for attr in request.json:
-                    if attr != 'ingredients':
-                        setattr(recipe, attr, request.json[attr])
+                        setattr(recipe, attr, request.json.get(attr))
                         db.session.commit()
-                    else:
-                        for ingredient in request.json.get('ingredients'):
-                            i = Ingredient.query.filter(Ingredient.id == ingredient.get(id)).first()
-                            if i:
-                                try:
-                                    for attr in ingredient:
-                                        setattr(i, attr, ingredient[attr])
-                                        db.session.commit()
-                                        print('success')
-                                except ValueError: 
-                                    rb = {
-                                    "errors": ["validation errors"]
-                                    }
-                                    print('fail')
-                                    continue
-                            else:
-                                return make_response({"message":"Ingredient not found"}, 404)
+                    
+                
                   
                 return make_response(recipe.to_dict(), 200)
             except ValueError: 
@@ -281,22 +258,6 @@ class ChangeRecipeById(Resource):
         if not recipe:
             return make_response({"message":"Recipe not found"}, 404)
         else:
-            
-            # for ingredient in request.json.get('ingredients'):
-            #     i = Ingredient.query.filter(Ingredient.id == ingredient.get(id)).first()
-            #     if i:
-            #         try:
-            #             for attr in ingredient:
-            #                 setattr(i, attr, ingredient[attr])
-            #                 db.session.commit()
-            #             return make_response(recipe.to_dict(), 200)
-            #         except ValueError: 
-            #             rb = {
-            #             "errors": ["validation errors"]
-            #             }
-            #             return make_response(rb, 400) 
-            #     else:
-            #         return make_response({"message":"Ingredient not found"}, 404)
                 
             db.session.delete(recipe)
             db.session.commit()

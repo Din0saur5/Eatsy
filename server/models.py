@@ -10,7 +10,7 @@ from sqlalchemy.dialects.postgresql import UUID
 
 class User(db.Model, SerializerMixin):
    __tablename__ = 'users'
-   id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+   id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4())
    email = db.Column(db.String, unique=True, nullable=False)
    username = db.Column(db.String, unique=True, nullable=False)
    _password_hash = db.Column(db.String)
@@ -42,7 +42,7 @@ class User(db.Model, SerializerMixin):
 
 class Review(db.Model, SerializerMixin):
     __tablename__ = 'reviews'
-    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4())
     rating = db.Column(db.Integer)
     title = db.Column(db.String)
     comment = db.Column(db.String)
@@ -58,7 +58,7 @@ class Review(db.Model, SerializerMixin):
 
 class Recipe(db.Model, SerializerMixin):
     __tablename__ = 'recipes'
-    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4())
     name = db.Column(db.String, nullable=False)
     image = db.Column(db.String)
     description = db.Column(db.String)
@@ -83,7 +83,7 @@ class Recipe(db.Model, SerializerMixin):
     
 class Ingredient(db.Model, SerializerMixin):
     __tablename__ = 'ingredients'
-    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4())
     text = db.Column(db.String)
     food = db.Column(db.String)
     quantity = db.Column(db.Float)
@@ -98,7 +98,7 @@ class Ingredient(db.Model, SerializerMixin):
     
 class Favorite(db.Model, SerializerMixin):
     __tablename__ = 'favorites'
-    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4())
     created = db.Column(db.DateTime, server_default=db.func.now())
     user_id = db.Column(db.Uuid, db.ForeignKey('users.id'))
     recipe_id = db.Column(db.Uuid, db.ForeignKey('recipes.id'))

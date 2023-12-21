@@ -3,7 +3,7 @@ import { Accordion, Button, Select } from 'flowbite-react';
 import React, { useEffect, useState } from 'react';
 import AutocompleteInput from './AutoComplete';
 
-const CreateRecipeForm = ({userData,  handleClose}) => {
+const CreateRecipeForm = ({userData, setUserData,  handleClose}) => {
 
   const [formData, setFormData] = useState({
     name: '',
@@ -15,7 +15,7 @@ const CreateRecipeForm = ({userData,  handleClose}) => {
     meal_type: '',
     time: '',
     user_id: userData.id, 
-    ingredients: [{ text: '', food: '', quantity: '', unit: '' }]
+    ingredients: [{ text: '', food: '', quantity: '', unit: '' , recipe_id: ''}]
   });
 
   const [cuisineType, setCuisineType]=useState('')
@@ -87,26 +87,51 @@ const CreateRecipeForm = ({userData,  handleClose}) => {
       }
       // Handle response
       const data = await response.json()
-      console.log(data);
-      handleClose();
-      alert('Recipe created successfully')
-    //   setFormData({
-    //     name: '',
-    //     image: '',
-    //     description: '',
-    //     steps: [''],
-    //     is_draft: false,
-    //     tags: [''],
-    //     meal_type: '',
-    //     time: '',
-    //     user_id: userData.id, 
-    //     ingredients: [{ text: '', food: '', quantity: '', unit: '' }]
-    //   })
+      finalFormData.ingredients.recipe_id=data.id
     } catch (error) {
       console.error('Error creating recipe:', error);
-      handleClose();
-      alert('Error creating recipe')
+     
     }
+    for (const ingredient in finalFormData.ingredients) {
+      try {
+      const resp = await fetch(`${server}/ingredients`,{
+         credentials: 'include',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          text: ingredient.text,
+          food: ingredient.food,
+          quantity: ingredient.quantity,
+          unit: ingredient.unit,
+          recipe_id: ingredient.recipe_id,
+          })
+      });
+      if (!resp.ok) {
+        throw new Error(`HTTP error! Status: ${resp.status}`);
+      }
+      const d = await resp.json()
+      console.log(d)
+    } catch (error) {
+      console.error('Error creating recipe:', error);
+    }
+  }
+      handleClose();
+      alert('Recipe created successfully')
+      setFormData({
+        name: '',
+        image: '',
+        description: '',
+        steps: [''],
+        is_draft: false,
+        tags: [''],
+        meal_type: '',
+        time: '',
+        user_id: userData.id, 
+        ingredients: [{ text: '', food: '', quantity: '', unit: '' }]
+      })
+     
   };
 
   const handleAddIngredient = () => {

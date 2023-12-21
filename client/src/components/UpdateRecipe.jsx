@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import UpdateRecipeForm from './UpdateRecipeForm'
 
 
-const UpdateRecipe = ({ isEditOpen, selectedRecipe, onCloseEdit, userData }) => {
+const UpdateRecipe = ({ isEditOpen, selectedRecipe,  onCloseEdit, setUserRecipes, userData }) => {
  const [showModal, setShowModal] = useState(isEditOpen); 
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const UpdateRecipe = ({ isEditOpen, selectedRecipe, onCloseEdit, userData }) => 
     <>
     <div className="fixed z-50 inset-0 bg-black bg-opacity-50 flex justify-center items-start pt-10">
       <div className={` modal-content bg-white rounded p-4 w-full max-w-lg mx-4 md:mx-0 ${showModal ? 'animate-slideDown' : 'animate-slideUp'}`}>
-        <UpdateRecipeForm handleClose={handleClose} selectedRecipe={selectedRecipe} userData={userData} />
+        <UpdateRecipeForm handleClose={handleClose} selectedRecipe={selectedRecipe} setUserRecipes={setUserRecipes} userData={userData} />
         
       </div>
     </div>
