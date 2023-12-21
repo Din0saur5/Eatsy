@@ -51,7 +51,7 @@ class Review(db.Model, SerializerMixin):
     user_id = db.Column(db.Uuid, db.ForeignKey('users.id'))
     recipe_id = db.Column(db.Uuid, db.ForeignKey('recipes.id'))
     
-    serialize_rules = ('-user', '-recipe')
+    serialize_rules = ('-user.reviews', '-recipe', '-user.recipes', '-user.favorites')
     
     user = db.relationship('User', back_populates='reviews')
     recipe = db.relationship('Recipe', back_populates='reviews')
