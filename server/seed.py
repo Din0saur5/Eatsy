@@ -18,7 +18,7 @@ fake = Faker()
 def fetch_and_parse_data(base_api_url):
     all_data = []
     page_count = 0
-    max_pages = 10  # Maximum number of pages to fetch
+    max_pages = 2  # Maximum number of pages to fetch
 
     while base_api_url and page_count < max_pages:
         response = requests.get(base_api_url)
@@ -94,10 +94,10 @@ if __name__ == "__main__":
         cuisine_types = [
     # "american", 
     # "asian", 
-    "british", 
-    "caribbean", 
-    "central europe", 
-    "chinese", 
+    # "british", 
+    # "caribbean", 
+    # "central europe", 
+    # "chinese", 
     "eastern europe", 
     "french", 
     "greek", 

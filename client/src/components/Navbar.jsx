@@ -107,16 +107,10 @@ const Navbar = ({ onLogout, userData }) => {
                                 {mealsDropdown && (
                                     <div className="absolute z-10 bg-white rounded shadow-lg py-1 mt-1">
                                         <a href="#" onClick={() => handleDropdownItemClick('meal', 'breakfast')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Breakfast</a>
-                                        <a href="#" onClick={() => handleDropdownItemClick('meal', 'lunch')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Lunch</a>
+                                        <a href="#" onClick={() => handleDropdownItemClick('meal', 'brunch')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Brunch</a>
                                         <a href="#" onClick={() => handleDropdownItemClick('meal', 'dinner')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dinner</a>
-                                        <a href="#" onClick={() => handleDropdownItemClick('meal', 'appetizers-snacks')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Appetizers & Snacks</a>
-                                        <a href="#" onClick={() => handleDropdownItemClick('meal', 'salads')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Salads</a>
-                                        <a href="#" onClick={() => handleDropdownItemClick('meal', 'side-dishes')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Side Dishes</a>
-                                        <a href="#" onClick={() => handleDropdownItemClick('meal', 'soups')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Soups</a>
-                                        <a href="#" onClick={() => handleDropdownItemClick('meal', 'bread')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Bread</a>
-                                        <a href="#" onClick={() => handleDropdownItemClick('meal', 'drinks')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Drinks</a>
-                                        <a href="#" onClick={() => handleDropdownItemClick('meal', 'desserts')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Desserts</a>
-                                        <a href="#" onClick={() => handleDropdownItemClick('meal', 'all')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 font-bold">View All</a>
+                                        <a href="#" onClick={() => handleDropdownItemClick('meal', 'snack')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Appetizers & Snacks</a>
+                                        <a href="#" onClick={() => handleDropdownItemClick('meal', 'teatime')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">TeaTime</a>
                                     </div>                                    
                                 )}
                             </li>
