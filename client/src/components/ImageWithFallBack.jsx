@@ -21,12 +21,13 @@ const ImageWithFallback = ({ src,  alt, cN='' }) => {
   };
   
   const randomFile = getRandomFile(files)
+  
   const handleError = () => {
     setImgSrc(randomFile);
   };
 
   return (
-    <img src={imgSrc} className={cN} alt={alt} onError={handleError} />
+    <img src={randomFile} className={cN} alt={alt} onError={handleError} />
   );
 };
 

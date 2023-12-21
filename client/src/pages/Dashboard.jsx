@@ -11,12 +11,11 @@ import UpdateRecipe from '../components/UpdateRecipe';
 const Dashboard = () => {
   const [isToggled, setIsToggled] = useState(true); // true for 'My Recipes', false for 'Favorites'
   const [userData, setUserData] = useOutletContext();
-  console.log(userData.favorites? true:false)
   const [userRecipes, setUserRecipes] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditOpen, setIsEditOpen]= useState(false)
   const [selectedRecipe, setSelectedRecipe] = useState({})
-
+  const [userFavs, setUserFavs] = useState([])
   useEffect(() => {
     AOS.init({
       duration: 1000,
@@ -24,32 +23,23 @@ const Dashboard = () => {
     });
   }, []);
 
+  useEffect(()=>{
+    setUserRecipes(userData.recipes)
+    console.log(userData.recipes)
+  },[userData.recipes])
+  
+  useEffect(()=>{
+    setUserFavs(userData.favorites)
+
+  },[userData.favorites])
+  
   const toggle = () => {
     setIsToggled(!isToggled);
-    if (!isToggled && (userData.favorties)){
-      setUserRecipes(userData.favorites)
-      
-    }else if(!isToggled && (!userData.favorties)){
-        setUserRecipes([])
-    }else if (isToggled && (userData.recipes)){
-      setUserRecipes(userData.recipes)
-      console.log(`recipes ${userRecipes}`)
-    } else{
-      setUserRecipes([])
-    }
+  
   }
 
 
-  const RecipeList = () => {
-    return userData.recipes.length === 0  ? (<></>):(
-      
-      <>
-        {userRecipes.map((recipe, index) => {
-          return <RecipeCard owned={(userRecipes===userData.recipes)} setIsModalOpen={setIsEditOpen} setSelectedRecipe={setSelectedRecipe} recipe={recipe} key={index} />
-        })}
-      </>
-    );
-  };
+ 
 
   return (
     <>
@@ -62,14 +52,24 @@ const Dashboard = () => {
             <ToggleSwitch toggle={toggle} isToggled={isToggled} />
           </div>
           <div className="sm:ml-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {userRecipes.length > 0 ? (<RecipeList  list={userRecipes} />):(<div className='h-screen'><h1>no recipes</h1></div>) }
-              
+           {isToggled? (
+              userFavs.length > 0 ? (
+                userFavs.map((recipe, index)=>{
+                return  <RecipeCard owned={(userRecipes===userData.recipes)} setIsModalOpen={setIsEditOpen} setSelectedRecipe={setSelectedRecipe} recipe={recipe} key={index} />
+                })):(<div className='block h-screen'><h1>no recipes</h1></div>)
+            ):(
+              userRecipes.length> 0 ? (
+                userRecipes.map((recipe, index)=>{
+                return  <RecipeCard owned={(userRecipes===userData.recipes)} setIsModalOpen={setIsEditOpen} setSelectedRecipe={setSelectedRecipe} recipe={recipe} key={index} />
+                })):(<div className='h-screen'><h1>no recipes</h1></div>)
+              )  
+           }
           </div>
-          {/* Removed the 'Load More' button since infinite scroll is implemented */}
+         
         </div>
       </div>
-      <CreateRecipe userData={userData}  isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-      <UpdateRecipe userData={userData} selectedRecipe={selectedRecipe} isEditOpen={isEditOpen} onCloseEdit={()=>setIsEditOpen(false)} />
+      <CreateRecipe userData={userData} userRecipes={userRecipes} setUserRecipes={setUserRecipes} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <UpdateRecipe userData={userData} userRecipes={userRecipes} setUserRecipes={setUserRecipes} selectedRecipe={selectedRecipe} isEditOpen={isEditOpen} onCloseEdit={()=>setIsEditOpen(false)} />
     </>
   );
 };

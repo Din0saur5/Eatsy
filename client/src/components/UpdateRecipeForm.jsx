@@ -3,7 +3,7 @@ import { Accordion, Button, Select } from 'flowbite-react';
 import React, { useEffect, useState } from 'react';
 import AutocompleteInput from './AutoComplete';
 
-const UpdateRecipeForm = ({userData, selectedRecipe, handleClose}) => {
+const UpdateRecipeForm = ({userData, selectedRecipe, userRecipes, setUserRecipes, handleClose}) => {
 
   const [formData, setFormData] = useState({
     name: '',
@@ -122,6 +122,7 @@ console.log(formData)
     tags:formData.tags,
     cuisine: cuisineType,
     dish_type: dishType,
+    ingredients: formData.ingredients,
   };
   console.log(finalFormData);
     const server = import.meta.env.VITE_BACK_END_SERVE
@@ -139,8 +140,25 @@ console.log(formData)
       }
       // Handle response
       console.log('Recipe updated successfully');
+      setUserRecipes([response,...userRecipes])
+      handleClose()
+      alert('Recipe updated successfully')
+      setFormData({
+        name: '',
+        image: '',
+        description: '',
+        steps: [''],
+        is_draft: false,
+        tags: [''],
+        meal_type: '',
+        time: '',
+        user_id: userData.id, 
+        ingredients: [{ text: '', food: '', quantity: '', unit: '' }]
+      })
     } catch (error) {
       console.error('Error updating recipe:', error);
+      handleClose();
+      alert('Error creating recipe')
     }
 
    
@@ -149,7 +167,7 @@ console.log(formData)
 
 
   const deleteRecipe = async (recipeId) => {
-    const server = import.meta.env.VITE_BACK_END_SERVER; // Ensure this is the correct environment variable for your server URL
+    const server = import.meta.env.VITE_BACK_END_SERVE; // Ensure this is the correct environment variable for your server URL
 
     try {
         const response = await fetch(`${server}/recipes/change/${recipeId}`, {
@@ -162,15 +180,29 @@ console.log(formData)
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            throw new Error(`HTTP error! Status: ${response.status}`); 
         }
-
-        const data = await response.json();
-        console.log(data.message); // Logs the success message
-        // Additional logic to handle successful deletion
-    } catch (error) {
+            const data = await response.json()
+            console.log('Recipe deleted successfully');
+            setUserRecipes(userRecipes.filter((r)=> r!== response))
+            handleClose()
+            alert('Recipe deleted successfully')
+            setFormData({
+                name: '',
+                image: '',
+                description: '',
+                steps: [''],
+                is_draft: false,
+                tags: [''],
+                meal_type: '',
+                time: '',
+                user_id: userData.id, 
+        })
+        } catch (error) {
         console.error('Error deleting recipe:', error);
-    }
+        handleClose()        
+        .then(alert('Error deleting recipe'))
+        }
 };
 
   const handleAddIngredient = () => {
@@ -294,7 +326,7 @@ console.log(formData)
 
         <div className='flex flex-row justify-between'> 
             <Button  disabled={!isFormValid} gradientMonochrome="success"  className={`mt-4 px-4 py-2 ${isFormValid ? '': 'bg-gray-500 text-gray-200'}` } type="submit">Update Recipe</Button>
-            <Button gradientMonochrome="failure" onClick={deleteRecipe} className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Delete Recipe</Button>
+            <Button gradientMonochrome="failure" onClick={()=>deleteRecipe(selectedRecipe.id)} className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Delete Recipe</Button>
             <Button gradientMonochrome="failure" onClick={handleClose} className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Cancel</Button>
 
         </div>

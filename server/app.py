@@ -99,7 +99,7 @@ class CheckSession(Resource):
         print(user_id)
         if user_id:
             user = User.query.filter(User.id == user_id).first()
-            return make_response(user.to_dict(rules=('-favorites','-created',)), 200)
+            return make_response(user.to_dict(rules=('-created',)), 200)
         
         return make_response({'error':'not loading cookie'}, 401)
 
@@ -207,8 +207,10 @@ class CreateRecipe(Resource):
                 time = request.json.get('time'),
                 user_id = request.json.get('user_id')
             )
+            print(new_recipe)
             db.session.add(new_recipe)
             db.session.commit()
+            print(new_recipe)
             ingredients = []
             for ingredient in request.json.get('ingredients'):
                 new_ingredient = Ingredient(
@@ -255,12 +257,13 @@ class ChangeRecipeById(Resource):
                                     for attr in ingredient:
                                         setattr(i, attr, ingredient[attr])
                                         db.session.commit()
-                                        print('sucess')
+                                        print('success')
                                 except ValueError: 
                                     rb = {
                                     "errors": ["validation errors"]
                                     }
                                     print('fail')
+                                    continue
                             else:
                                 return make_response({"message":"Ingredient not found"}, 404)
                   
@@ -279,21 +282,21 @@ class ChangeRecipeById(Resource):
             return make_response({"message":"Recipe not found"}, 404)
         else:
             
-            for ingredient in request.json.get('ingredients'):
-                i = Ingredient.query.filter(Ingredient.id == ingredient.get(id)).first()
-                if i:
-                    try:
-                        for attr in ingredient:
-                            setattr(i, attr, ingredient[attr])
-                            db.session.commit()
-                        return make_response(recipe.to_dict(), 200)
-                    except ValueError: 
-                        rb = {
-                        "errors": ["validation errors"]
-                        }
-                        return make_response(rb, 400) 
-                else:
-                    return make_response({"message":"Ingredient not found"}, 404)
+            # for ingredient in request.json.get('ingredients'):
+            #     i = Ingredient.query.filter(Ingredient.id == ingredient.get(id)).first()
+            #     if i:
+            #         try:
+            #             for attr in ingredient:
+            #                 setattr(i, attr, ingredient[attr])
+            #                 db.session.commit()
+            #             return make_response(recipe.to_dict(), 200)
+            #         except ValueError: 
+            #             rb = {
+            #             "errors": ["validation errors"]
+            #             }
+            #             return make_response(rb, 400) 
+            #     else:
+            #         return make_response({"message":"Ingredient not found"}, 404)
                 
             db.session.delete(recipe)
             db.session.commit()

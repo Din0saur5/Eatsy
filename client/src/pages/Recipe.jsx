@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Review from '../components/Review';
 import { useOutletContext, useParams } from "react-router-dom";
 import LikeButton from '../components/LikeButton';
+import ImageWithFallback from '../components/ImageWithFallBack';
 
 const Recipe = () => {
   const { id } = useParams()
@@ -73,10 +74,9 @@ const Recipe = () => {
           <div className='md:grid md:grid-cols-2 m-4 max-w-[1480px] mx-auto'>
             <div className='bg-old-paper p-10 pt-20 pl-24'>
               <div className='flex justify-between'>
-                <img 
+                <ImageWithFallback 
                 src={recipe.image} 
-                className="aspect-square w-1/2 mb-4 rounded-lg object-contain" 
-                title={recipe.name} 
+                cN="aspect-square w-1/2 mb-4 rounded-lg object-contain"  
                 alt={`Image of ${recipe.name}`}/>
                 <p className=' italic text-center bg-[#F5E8D6] bg-opacity-40 p-2 rounded-2xl shadow-[0_0_10px_5px_rgba(245,232,214,0.4)]'>{recipe.description}<br />
                 {recipe.source?

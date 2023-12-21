@@ -3,7 +3,7 @@ import { Accordion, Button, Select } from 'flowbite-react';
 import React, { useEffect, useState } from 'react';
 import AutocompleteInput from './AutoComplete';
 
-const CreateRecipeForm = ({userData, handleClose}) => {
+const CreateRecipeForm = ({userData,  handleClose}) => {
 
   const [formData, setFormData] = useState({
     name: '',
@@ -86,9 +86,26 @@ const CreateRecipeForm = ({userData, handleClose}) => {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       // Handle response
-      console.log('Recipe created successfully');
+      const data = await response.json()
+      console.log(data);
+      handleClose();
+      alert('Recipe created successfully')
+    //   setFormData({
+    //     name: '',
+    //     image: '',
+    //     description: '',
+    //     steps: [''],
+    //     is_draft: false,
+    //     tags: [''],
+    //     meal_type: '',
+    //     time: '',
+    //     user_id: userData.id, 
+    //     ingredients: [{ text: '', food: '', quantity: '', unit: '' }]
+    //   })
     } catch (error) {
       console.error('Error creating recipe:', error);
+      handleClose();
+      alert('Error creating recipe')
     }
   };
 
