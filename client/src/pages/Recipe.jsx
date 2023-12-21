@@ -87,7 +87,9 @@ const Recipe = () => {
                 :''}</p>
                 {userData? 
                 (<LikeButton recipe_id={recipe.id} user_id={userData.id} favorited={recipe.favorites.includes(userData.id)}/>
-                ):(<></>)
+                ):(
+                  <LikeButton recipe_id={recipe.id} user_id={null} favorited={recipe.favorites.includes(userData.id)}/>
+                )
                 }
               </div>
               <div className='bg-[#F5E8D6] bg-opacity-40 pb-2 rounded-2xl shadow-[0_0_10px_5px_rgba(245,232,214,0.4)]'>
