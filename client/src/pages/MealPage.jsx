@@ -54,7 +54,7 @@ const MealPage = () => {
 
   const loadMoreOnScroll = useCallback(() => {
     const currentScrollY = window.scrollY;
-    if (currentScrollY > lastScrollY && window.innerHeight + window.scrollY >= document.body.offsetHeight && hasMoreRecipes) {
+    if (currentScrollY > lastScrollY && window.innerHeight + window.scrollY >= document.body.offsetHeight - 200 && hasMoreRecipes) {
       const newRecipesToLoad = 6;
       const currentOffset = recipes.length;
       setLoadMoreCount(prevCount => prevCount + newRecipesToLoad);
@@ -70,10 +70,10 @@ const MealPage = () => {
 
   return (
     <>
-      <div className='bg-background5 bg-cover p-4'>
-        <div>
+      <div className='flex justify-center items-center bg-background5 '>
+        <div className='w-4/5'>
+            <div className="m-3">
           <div className='flex items-center justify-center py-4 md:py-8 flex-wrap'>
-            <div className="text-center">
               <h2 className="text-2xl font-semibold">Recipes</h2>
               <h1 className="text-3xl font-bold">{capitalizedMealType} Recipes</h1>
             </div>

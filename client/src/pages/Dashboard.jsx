@@ -6,53 +6,16 @@ import 'aos/dist/aos.css';
 import RecipeCard from '../components/RecipeCard';
 import CreateRecipeButton from '../components/CreateRecipeButton';
 import CreateRecipe from '../components/CreateRecipe';
+import UpdateRecipe from '../components/UpdateRecipe';
 
 const Dashboard = () => {
-  const [userData, setUserData] = useOutletContext();
   const [isToggled, setIsToggled] = useState(true); // true for 'My Recipes', false for 'Favorites'
-  const [favorites, setFavorites] = useState([]);
+  const [userData, setUserData] = useOutletContext();
+  console.log(userData.favorites? true:false)
   const [userRecipes, setUserRecipes] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [loadMoreCount, setLoadMoreCount] = useState(6);
-  const [hasMoreRecipes, setHasMoreRecipes] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
-
-  const fetchFavorites = async () => {
-    const server = import.meta.env.VITE_BACK_END_SERVE;
-    try {
-      const response = await fetch(`${server}/favorites/${userData.id}`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const data = await response.json();
-      setFavorites(data);
-    } catch (error) {
-      console.error('Error fetching favorites:', error);
-    }
-  };
-
-  const fetchMyRecipes = async (limit = 6, offset = 0) => {
-    const server = import.meta.env.VITE_BACK_END_SERVER;
-    try {
-      const url = `${server}/recipes/created_by/${userData.id}?limit=${limit}&offset=${offset}`;
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const data = await response.json();
-      if (data.length < limit) {
-        setHasMoreRecipes(false);
-      }
-      setUserRecipes(prevRecipes => [...prevRecipes, ...data]);
-    } catch (error) {
-      console.error('Error fetching recipes:', error);
-    }
-  };
-
-  useEffect(() => {
-    fetchFavorites();
-    fetchMyRecipes();
-  }, []);
+  const [isEditOpen, setIsEditOpen]= useState(false)
+  const [selectedRecipe, setSelectedRecipe] = useState({})
 
   useEffect(() => {
     AOS.init({
@@ -63,29 +26,26 @@ const Dashboard = () => {
 
   const toggle = () => {
     setIsToggled(!isToggled);
-  };
-
-  const loadMoreOnScroll = useCallback(() => {
-    const currentScrollY = window.scrollY;
-    if (currentScrollY > lastScrollY && window.innerHeight + window.scrollY >= document.documentElement.offsetHeight && hasMoreRecipes && !isToggled) {
-      const newRecipesToLoad = 6;
-      const currentOffset = userRecipes.length;
-      setLoadMoreCount(prevCount => prevCount + newRecipesToLoad);
-      fetchMyRecipes(newRecipesToLoad, currentOffset);
+    if (!isToggled && (userData.favorties)){
+      setUserRecipes(userData.favorites)
+      
+    }else if(!isToggled && (!userData.favorties)){
+        setUserRecipes([])
+    }else if (isToggled && (userData.recipes)){
+      setUserRecipes(userData.recipes)
+      console.log(`recipes ${userRecipes}`)
+    } else{
+      setUserRecipes([])
     }
-    setLastScrollY(currentScrollY);
-  }, [lastScrollY, hasMoreRecipes, userRecipes.length, isToggled]);
+  }
 
-  useEffect(() => {
-    window.addEventListener('scroll', loadMoreOnScroll);
-    return () => window.removeEventListener('scroll', loadMoreOnScroll);
-  }, [loadMoreOnScroll]);
 
-  const RecipeList = ({ list }) => {
-    return (
+  const RecipeList = () => {
+    return userData.recipes.length === 0  ? (<></>):(
+      
       <>
-        {list.map((recipe, index) => {
-          return <RecipeCard recipe={recipe} key={index} />
+        {userRecipes.map((recipe, index) => {
+          return <RecipeCard owned={(userRecipes===userData.recipes)} setIsModalOpen={setIsEditOpen} setSelectedRecipe={setSelectedRecipe} recipe={recipe} key={index} />
         })}
       </>
     );
@@ -102,16 +62,14 @@ const Dashboard = () => {
             <ToggleSwitch toggle={toggle} isToggled={isToggled} />
           </div>
           <div className="sm:ml-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {isToggled ? (
-              <RecipeList list={favorites} />
-            ) : (
-              <RecipeList list={userRecipes} />
-            )}
+            {userRecipes.length > 0 ? (<RecipeList  list={userRecipes} />):(<div className='h-screen'><h1>no recipes</h1></div>) }
+              
           </div>
           {/* Removed the 'Load More' button since infinite scroll is implemented */}
         </div>
       </div>
-      <CreateRecipe userData={userData} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <CreateRecipe userData={userData}  isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <UpdateRecipe userData={userData} selectedRecipe={selectedRecipe} isEditOpen={isEditOpen} onCloseEdit={()=>setIsEditOpen(false)} />
     </>
   );
 };

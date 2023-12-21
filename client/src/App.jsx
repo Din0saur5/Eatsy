@@ -19,7 +19,7 @@ import Recipe from "./pages/Recipe";
 
 
 import Account from "./pages/Account";
-import UpdateRecipe from "./pages/UpdateRecipe";
+import UpdateRecipe from "./components/UpdateRecipe";
 import checkSession from "./checkSession";
 
 import RecipeSearchPage from "./pages/RecipeByName";
@@ -100,13 +100,7 @@ const router = createBrowserRouter([
         path: "account",
         element: <Account/>,
         loader: protectedRoute,
-      },
-      {
-        path: "edit-recipe/:id",
-        element: <UpdateRecipe/>,
-        loader: protectedRoute,
-      }
-    
+      }   
             
             
       

@@ -238,28 +238,26 @@ class GetRecipeById(Resource):
 api.add_resource(GetRecipeById, '/recipes/<uuid:id>', endpoint='recipe_id')
 class ChangeRecipeById(Resource):
     #@cross_origin(origins=os.environ.get('CORS_ORIGIN') + '/private/update-recipe/*', methods=['PATCH', 'DELETE'])
-    def patch(self, id, user_id):
+    def patch(self, id):
         recipe = Recipe.query.filter_by(id=id).first()
         if not recipe:
             return make_response({"message":"Recipe not found"}, 404)
-        if recipe.user_id != user_id:
-            return make_response({"message":"You do not have permission to update this recipe."}, 403)
         for key in request.json:
-            setattr(recipe, key, request.json[key])
+            setattr(recipe, key, request.json.get(key))
         db.session.commit()
         return make_response(recipe.to_dict(), 200)
 
-    def delete(self, id, user_id):
+    def delete(self, id):
         recipe = Recipe.query.filter_by(id=id).first()
         if not recipe:
             return make_response({"message":"Recipe not found"}, 404)
-        if recipe.user_id != user_id:
-            return make_response({"message":"You do not have permission to delete this recipe."}, 403)
-        db.session.delete(recipe)
-        db.session.commit()
-        return make_response({"message":"Recipe deleted"}, 204)
+        else:
+            
+            db.session.delete(recipe)
+            db.session.commit()
+            return make_response({"message":"Recipe deleted"}, 204)
 
-api.add_resource(ChangeRecipeById, '/recipes/<uuid:id>/<uuid:user_id>')
+api.add_resource(ChangeRecipeById, '/recipes/change/<uuid:id>')
 
 class GetRecipeByIngredient(Resource):
     def get(self, ingredient):
@@ -301,6 +299,7 @@ class AllIngredients(Resource):
             return make_response({"message":str(e)}, 400)
 
 api.add_resource(AllIngredients, '/ingredients')
+
 
 class ChangeIngredientById(Resource):
     #@cross_origin(origins=os.environ.get('CORS_ORIGIN') + '/private/update-recipe/*', methods=['PATCH', 'DELETE'])
@@ -399,35 +398,6 @@ class GetRecipeByMealType(Resource):
 api.add_resource(GetRecipeByMealType, '/recipes/meal_type/<string:meal_type>')
 
 
-class GetUserFavorites(Resource):
-    def get(self, id):
-        limit = request.args.get('limit', 20, type=int)  # Default to 20 if not provided
-        offset = request.args.get('offset', 0, type=int)  # Default to 0 if not provided
-
-        user = User.query.filter(User.id == id).first()
-        if not user:
-            return make_response({"message": "No user"}, 404)
-
-        favorites = user.favorites[offset:offset+limit]  # Apply pagination to favorites
-        return make_response(favorites, 200)
-
-
-class GetCreatedByUser(Resource):
-    def get(self, id):
-        limit = request.args.get('limit', 20, type=int)  # Default to 20 if not provided
-        offset = request.args.get('offset', 0, type=int)  # Default to 0 if not provided
-
-        recipes = Recipe.query.filter(Recipe.user_id == id)\
-                              .offset(offset)\
-                              .limit(limit)\
-                              .all()
-        if not recipes:
-            return make_response({"message": "No Created Recipes"}, 404)
-        return make_response([recipe.to_dict() for recipe in recipes], 200)
-
-
-api.add_resource(GetUserFavorites, '/favorites/<uuid:id>')
-api.add_resource(GetCreatedByUser, '/recipes/created_by/<uuid:id>')
 
 class FavoriteRecipe(Resource):
     def post(self, rec_id, user_id):
