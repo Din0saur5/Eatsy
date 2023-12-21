@@ -39,20 +39,19 @@ const protectedRendering = async () => {
 
 const router = createBrowserRouter([
   {
-    path: "/meals/:mealType",
-    element: <MealPage />,
-  },
-  {
-    path: "/ingredients/:ingredient",
-    element: <IngredientPage />, // Add this line for ingredient route
-  },
-  
-  {
     path: '/',
     element: <BaseLayout/>,
     loader: protectedRendering,
     errorElement: <ErrorPage/>,
     children:[
+      {
+        path: "/meals/:mealType",
+        element: <MealPage />,
+      },
+      {
+        path: "/ingredients/:ingredient",
+        element: <IngredientPage />, // Add this line for ingredient route
+      },
       {
         path: "",
         element: <Home/>,

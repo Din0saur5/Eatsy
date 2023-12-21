@@ -51,8 +51,7 @@ const MealPage = () => {
   };
 
   return (
-    <div className='bg-background5 bg-cover p-4'>
-      <Navbar />
+    <div className='bg-background5 bg-cover p-4' h-full >
       <div>
         <div className="text-center">
           <h2 className="text-2xl font-semibold">Recipes</h2>
