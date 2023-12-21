@@ -80,9 +80,7 @@ const fetchMyRecipes = async () => {
  console.log(userData)
  return (
   <>
-  <div className='bg-bg7 h-full w-full' ></div>
-  {/* <img src='/images/border-3.png' className='fixed top-0' style={{zIndex:"0"}}/>
-   */}
+
     <div className=' flex justify-center items-center bg-bg7' >
       
       <div className='w-4/5 bg-beige dark:bg-brown'>

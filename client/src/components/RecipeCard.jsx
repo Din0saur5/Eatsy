@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 const RecipeCard = ({recipe}) => {
     
     const  {name, time, image, id} = recipe
@@ -13,7 +14,7 @@ const RecipeCard = ({recipe}) => {
     </Link>
     <div className="px-5 pb-5">
         <Link to={`/recipe/${id}`} >
-            <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{name}</h5>
+            <h5 className="text-xl lg:h-20 xl:h-12 font-semibold tracking-tight text-gray-900 dark:text-white">{name}</h5>
         </Link>
         <div className="flex items-center mt-2.5 mb-5">
             <div className="flex items-center space-x-1 rtl:space-x-reverse">

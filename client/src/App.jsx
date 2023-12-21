@@ -38,15 +38,7 @@ const protectedRendering = async () => {
 
 
 const router = createBrowserRouter([
-  {
-    path: "/meals/:mealType",
-    element: <MealPage />,
-  },
-  {
-    path: "/ingredients/:ingredient",
-    element: <IngredientPage />, // Add this line for ingredient route
-  },
-  
+ 
   {
     path: '/',
     element: <BaseLayout/>,
@@ -58,6 +50,15 @@ const router = createBrowserRouter([
         element: <Home/>,
          
       },
+      {
+        path: "/meals/:mealType",
+        element: <MealPage />,
+      },
+      {
+        path: "/ingredients/:ingredient",
+        element: <IngredientPage />, // Add this line for ingredient route
+      },
+      
       {
         path: "login",
         element: <Login/>,
