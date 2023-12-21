@@ -1,5 +1,5 @@
 import {FaHeart, FaRegHeart} from 'react-icons/fa'
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 const LikeButton = ({user_id, recipe_id, favorited}) => {
     const [favorite, setFavorited] = useState(favorited)

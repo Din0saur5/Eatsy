@@ -71,7 +71,7 @@ const Recipe = () => {
             <h1 className='inline-flex bg-[#F5E8D6] bg-opacity-40 pb-2 rounded-2xl shadow-[0_0_10px_5px_rgba(245,232,214,0.4)]'>{recipe.name}</h1>
           </div>
           <div className='md:grid md:grid-cols-2 m-4 max-w-[1480px] mx-auto'>
-            <div className='bg-old-paper p-20 pl-24'>
+            <div className='bg-old-paper p-10 pt-20 pl-24'>
               <div className='flex justify-between'>
                 <img 
                 src={recipe.image} 
