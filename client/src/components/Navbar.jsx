@@ -97,7 +97,7 @@ const Navbar = ({ onLogout, userData }) => {
                     <div style={click || width > 768 ? { display: "block" } : { display: "none" }} className='items-center justify-between w-full md:flex md:w-auto md:order-1'>
                         <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium text-xl md:space-x-9 lg:space-x-12 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0">
                         <li className="relative">
-                                <NavLink to="" onClick={closeMobileMenu} className="block py-2 px-3 text-orange-100 hover:text-green-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-950 md:p-0 md:dark:hover:text-green-950 dark:text-orange-100 dark:hover:bg-gray-700 dark:hover:text-orange-100 md:dark:hover:bg-transparent dark:border-gray-700">
+                                <NavLink to="/meals" onClick={closeMobileMenu} className="block py-2 px-3 text-orange-100 hover:text-green-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-950 md:p-0 md:dark:hover:text-green-950 dark:text-orange-100 dark:hover:bg-gray-700 dark:hover:text-orange-100 md:dark:hover:bg-transparent dark:border-gray-700">
                                     Meals
                                     <button onClick={toggleMealsDropdown} className="text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-600">
                                     ▼

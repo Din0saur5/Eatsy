@@ -1,0 +1,72 @@
+/* Basic Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .container {
+    width: 80%;
+    margin: 0 auto;
+  }
+  
+  /* Search Bar */
+  .search-bar {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    font-size: 16px;
+  }
+  
+  /* Alphabet Navigation */
+  .alphabet-nav {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .alphabet-nav a {
+    display: inline-block;
+    margin: 0 5px;
+    padding: 5px 10px;
+    text-decoration: none;
+    border: 1px solid #ccc;
+    color: #333;
+  }
+  
+  .alphabet-nav a:hover {
+    border-color: #888;
+    color: #000;
+  }
+  
+  /* Letter Sections */
+  .letter-section {
+    margin-bottom: 30px;
+  }
+  
+  .letter-section h2 {
+    background-color: #f2f2f2;
+    padding: 10px;
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .recipe-list {
+    column-count: 3;
+    column-gap: 20px;
+  }
+  
+  .recipe-list div {
+    break-inside: avoid;
+    margin-bottom: 10px;
+  }
+  
+  .recipe-list div:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
