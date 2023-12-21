@@ -8,7 +8,7 @@ import 'aos/dist/aos.css';
 const MealPage = () => {
   const { mealType } = useParams();
   const [recipes, setRecipes] = useState([]);
-  const [loadMoreCount, setLoadMoreCount] = useState(1);
+  const [loadMoreCount, setLoadMoreCount] = useState(6);
   const [hasMoreRecipes, setHasMoreRecipes] = useState(true);
 
   const capitalizeFirstLetter = (string) => {
@@ -53,7 +53,7 @@ const MealPage = () => {
   }, []);
 
   const loadMore = () => {
-    const newRecipesToLoad = 2;
+    const newRecipesToLoad = 6;
     const currentOffset = recipes.length;
     setLoadMoreCount(prevCount => prevCount + newRecipesToLoad);
     fetchRecipes(newRecipesToLoad, currentOffset);
@@ -61,9 +61,9 @@ const MealPage = () => {
 
   return (
     <>
-    <div className=' flex justify-center items-center bg-bg7' >
+    <div className='bg-background5 bg-cover p-4' >
       
-      <div className='w-4/5 bg-beige dark:bg-brown'>
+      <div>
         
   <div className='flex items-center justify-center py-4 md:py-8 flex-wrap'>
         <div className="text-center">

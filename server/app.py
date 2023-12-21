@@ -401,20 +401,30 @@ api.add_resource(GetRecipeByMealType, '/recipes/meal_type/<string:meal_type>')
 
 class GetUserFavorites(Resource):
     def get(self, id):
+        limit = request.args.get('limit', 20, type=int)  # Default to 20 if not provided
+        offset = request.args.get('offset', 0, type=int)  # Default to 0 if not provided
+
         user = User.query.filter(User.id == id).first()
         if not user:
             return make_response({"message": "No user"}, 404)
-       
-        rb=user.to_dict(only=('favorites',))
-        
-        return make_response(rb, 200)
+
+        favorites = user.favorites[offset:offset+limit]  # Apply pagination to favorites
+        return make_response(favorites, 200)
+
 
 class GetCreatedByUser(Resource):
     def get(self, id):
-        recipes = Recipe.query.filter(Recipe.user_id == id).all()
+        limit = request.args.get('limit', 20, type=int)  # Default to 20 if not provided
+        offset = request.args.get('offset', 0, type=int)  # Default to 0 if not provided
+
+        recipes = Recipe.query.filter(Recipe.user_id == id)\
+                              .offset(offset)\
+                              .limit(limit)\
+                              .all()
         if not recipes:
             return make_response({"message": "No Created Recipes"}, 404)
         return make_response([recipe.to_dict() for recipe in recipes], 200)
+
 
 api.add_resource(GetUserFavorites, '/favorites/<uuid:id>')
 api.add_resource(GetCreatedByUser, '/recipes/created_by/<uuid:id>')
