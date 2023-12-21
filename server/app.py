@@ -240,12 +240,37 @@ class ChangeRecipeById(Resource):
     #@cross_origin(origins=os.environ.get('CORS_ORIGIN') + '/private/update-recipe/*', methods=['PATCH', 'DELETE'])
     def patch(self, id):
         recipe = Recipe.query.filter_by(id=id).first()
-        if not recipe:
-            return make_response({"message":"Recipe not found"}, 404)
-        for key in request.json:
-            setattr(recipe, key, request.json.get(key))
-        db.session.commit()
-        return make_response(recipe.to_dict(), 200)
+        if recipe:
+            try:
+                for attr in request.json:
+                    if attr != 'ingredients':
+                        setattr(recipe, attr, request.json[attr])
+                        db.session.commit()
+                    else:
+                        for ingredient in request.json.get('ingredients'):
+                            i = Ingredient.query.filter(Ingredient.id == ingredient.get(id)).first()
+                            if i:
+                                try:
+                                    for attr in ingredient:
+                                        setattr(i, attr, ingredient[attr])
+                                        db.session.commit()
+                                        print('sucess')
+                                except ValueError: 
+                                    rb = {
+                                    "errors": ["validation errors"]
+                                    }
+                                    print('fail')
+                            else:
+                                return make_response({"message":"Ingredient not found"}, 404)
+                  
+                return make_response(recipe.to_dict(), 200)
+            except ValueError: 
+                rb = {
+                "errors": ["validation errors"]
+                }
+                return make_response(rb, 400)  
+        else:
+                return make_response({"message":"Recipe not found"}, 404)
 
     def delete(self, id):
         recipe = Recipe.query.filter_by(id=id).first()
@@ -253,6 +278,22 @@ class ChangeRecipeById(Resource):
             return make_response({"message":"Recipe not found"}, 404)
         else:
             
+            for ingredient in request.json.get('ingredients'):
+                i = Ingredient.query.filter(Ingredient.id == ingredient.get(id)).first()
+                if i:
+                    try:
+                        for attr in ingredient:
+                            setattr(i, attr, ingredient[attr])
+                            db.session.commit()
+                        return make_response(recipe.to_dict(), 200)
+                    except ValueError: 
+                        rb = {
+                        "errors": ["validation errors"]
+                        }
+                        return make_response(rb, 400) 
+                else:
+                    return make_response({"message":"Ingredient not found"}, 404)
+                
             db.session.delete(recipe)
             db.session.commit()
             return make_response({"message":"Recipe deleted"}, 204)
@@ -304,12 +345,10 @@ api.add_resource(AllIngredients, '/ingredients')
 class ChangeIngredientById(Resource):
     #@cross_origin(origins=os.environ.get('CORS_ORIGIN') + '/private/update-recipe/*', methods=['PATCH', 'DELETE'])
 
-    def patch(self, id, user_id):
+    def patch(self, id):
         ingredient = Ingredient.query.filter_by(id=id).first()
         if not ingredient:
             return make_response({"message":"Ingredient not found"}, 404)
-        if ingredient.recipe.user_id != user_id:
-            return make_response({"message":"You do not have permission to update this ingredient."}, 403)
         for key in request.json:
             setattr(ingredient, key, request.json[key])
         db.session.commit()
@@ -319,13 +358,11 @@ class ChangeIngredientById(Resource):
         ingredient = Ingredient.query.filter_by(id=id).first()
         if not ingredient:
             return make_response({"message":"Ingredient not found"}, 404)
-        if ingredient.recipe.user_id != user_id:
-            return make_response({"message":"You do not have permission to delete this ingredient."}, 403)
         db.session.delete(ingredient)
         db.session.commit()
         return make_response({"message":"Ingredient deleted"}, 204)
 
-api.add_resource(ChangeIngredientById, '/ingredients/<uuid:id>/<uuid:user_id>')
+api.add_resource(ChangeIngredientById, '/ingredients/<uuid:id>')
 
 class AllReviews(Resource):
     # @recipeId_cors(origins=os.environ.get('CORS_ORIGIN') + '/private/recipe/*', methods=['POST'])
@@ -419,26 +456,45 @@ api.add_resource(FavoriteRecipe, '/favorites/<uuid:rec_id>/<uuid:user_id>')
 
 class RecipeNames(Resource):
     def get(self):
-        # Query only the names of the recipes from the database
-        recipes = Recipe.query.with_entities(Recipe.name).all()
-        
+        # Query both the names and IDs of the recipes from the database
+        recipes = Recipe.query.with_entities(Recipe.id, Recipe.name).all()
+
         # Create a dictionary to hold the recipes sorted by first letter
         sorted_recipes = {}
         for recipe in recipes:
-            # Get the first letter of the recipe name
             first_letter = recipe.name[0].upper()
             if first_letter not in sorted_recipes:
                 sorted_recipes[first_letter] = []
-            sorted_recipes[first_letter].append(recipe.name)
-        
+            sorted_recipes[first_letter].append({"id": str(recipe.id), "name": recipe.name})  # Convert UUID to string
+
         # Sort the recipes under each letter
         for letter in sorted_recipes:
-            sorted_recipes[letter].sort()
+            sorted_recipes[letter].sort(key=lambda r: r['name'])
 
         return sorted_recipes
 
+
 # Add the resource to the API
 api.add_resource(RecipeNames, '/recipes/names')
+
+class GetRecipeByCuisineType(Resource):
+    def get(self, cuisine_type):
+        # Fetch recipes filtered by cuisine type with pagination
+        limit = request.args.get('limit', 20, type=int)  # Default to 20 if not provided
+        offset = request.args.get('offset', 0, type=int)  # Default to 0 if not provided
+
+        recipes = Recipe.query.filter(Recipe.cuisine == cuisine_type)\
+                              .offset(offset)\
+                              .limit(limit)\
+                              .all()
+
+        if not recipes:
+            return make_response({"message": "No recipes found for this cuisine type"}, 404)
+        return make_response([recipe.to_dict() for recipe in recipes], 200)
+
+# Add the resource to the API
+api.add_resource(GetRecipeByCuisineType, '/recipes/cuisine/<string:cuisine_type>')
+
 
 
 

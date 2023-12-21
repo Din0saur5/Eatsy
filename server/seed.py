@@ -92,12 +92,12 @@ if __name__ == "__main__":
         # Recipe.query.delete()
         # print("recipes are deleted")
         cuisine_types = [
-    # "american", 
-    # "asian", 
-    # "british", 
-    # "caribbean", 
-    # "central europe", 
-    # "chinese", 
+    "american", 
+    "asian", 
+    "british", 
+    "caribbean", 
+    "central europe", 
+    "chinese", 
     "eastern europe", 
     "french", 
     "greek", 
