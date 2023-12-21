@@ -74,7 +74,7 @@ const MealPage = () => {
         <div className='w-4/5'>
             <div className="m-3">
           <div className='flex items-center justify-center py-4 md:py-8 flex-wrap'>
-              <h2 className="text-2xl font-semibold">Recipes</h2>
+              <h2 className="text-2xl font-semibold">Recipes:&emsp;</h2>
               <h1 className="text-3xl font-bold">{capitalizedMealType} Recipes</h1>
             </div>
           </div>

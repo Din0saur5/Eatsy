@@ -107,15 +107,13 @@ console.log(formData)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const processedTags = formData.tags
-    .split('#')
-    .filter(tag => tag.trim() !== '') // Remove empty tags
-    .map(tag => tag.trim().replace(/_/g, ' ').replace(/,/g, '')); // Replace underscores with spaces and remove commas
+    console.log(formData.tags)
+    
 
   // Create the final form data object for submission
     const finalFormData = {
     ...formData,
-    tags: processedTags,
+    tags:formData,
     cuisine: cuisineType,
     dish_type: dishType,
   };
@@ -141,7 +139,30 @@ console.log(formData)
   };
 
 
-  
+  const deleteRecipe = async (recipeId) => {
+    const server = import.meta.env.VITE_BACK_END_SERVER; // Ensure this is the correct environment variable for your server URL
+
+    try {
+        const response = await fetch(`${server}/recipes/change/${recipeId}`, {
+            method: 'DELETE',
+            credentials: 'include', // include if needed for credentials like cookies/session
+            headers: {
+                'Content-Type': 'application/json'
+                // Include additional headers as required by your server
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log(data.message); // Logs the success message
+        // Additional logic to handle successful deletion
+    } catch (error) {
+        console.error('Error deleting recipe:', error);
+    }
+};
 
   const handleAddIngredient = () => {
     setFormData({
@@ -263,8 +284,8 @@ console.log(formData)
             </Accordion>
 
         <div className='flex flex-row justify-between'> 
-            <Button  disabled={!isFormValid} gradientMonochrome="success"  className={`mt-4 px-4 py-2 ${isFormValid ? '': 'bg-gray-500 text-gray-200'}` } type="submit">Create Recipe</Button>
-            <Button gradientMonochrome="failure" onClick={handleDelete} className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Delete Recipe</Button>
+            <Button  disabled={!isFormValid} gradientMonochrome="success"  className={`mt-4 px-4 py-2 ${isFormValid ? '': 'bg-gray-500 text-gray-200'}` } type="submit">Update Recipe</Button>
+            <Button gradientMonochrome="failure" onClick={deleteRecipe} className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Delete Recipe</Button>
             <Button gradientMonochrome="failure" onClick={handleClose} className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Cancel</Button>
 
         </div>
