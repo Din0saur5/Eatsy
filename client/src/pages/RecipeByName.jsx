@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './RecipeByName.css'; 
+import { Link } from 'react-router-dom'
 
 const RecipeSearchPage = () => {
   const [organizedRecipes, setOrganizedRecipes] = useState({});
@@ -33,19 +34,22 @@ const RecipeSearchPage = () => {
         ))}
       </div>
   
-      {Object.keys(organizedRecipes) // Get the keys of the object
-        .sort() // Sort them alphabetically
+      {Object.keys(organizedRecipes)
+        .sort()
         .map((letter) => (
           <div key={letter} id={letter} className="letter-section">
             <h2>{letter}</h2>
             <div className="recipe-list">
-              {organizedRecipes[letter].map((name, index) => (
-                <div key={index}>{name}</div> // Display each recipe name
+              {organizedRecipes[letter].map((recipe) => (
+                <Link to={`/recipe/${recipe.id}`} key={recipe.id} className="recipe-link">
+                  {recipe.name}
+                </Link>
               ))}
             </div>
           </div>
       ))}
     </div>
-  );
+);
+
 }
 export default RecipeSearchPage;

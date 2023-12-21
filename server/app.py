@@ -419,26 +419,45 @@ api.add_resource(FavoriteRecipe, '/favorites/<uuid:rec_id>/<uuid:user_id>')
 
 class RecipeNames(Resource):
     def get(self):
-        # Query only the names of the recipes from the database
-        recipes = Recipe.query.with_entities(Recipe.name).all()
-        
+        # Query both the names and IDs of the recipes from the database
+        recipes = Recipe.query.with_entities(Recipe.id, Recipe.name).all()
+
         # Create a dictionary to hold the recipes sorted by first letter
         sorted_recipes = {}
         for recipe in recipes:
-            # Get the first letter of the recipe name
             first_letter = recipe.name[0].upper()
             if first_letter not in sorted_recipes:
                 sorted_recipes[first_letter] = []
-            sorted_recipes[first_letter].append(recipe.name)
-        
+            sorted_recipes[first_letter].append({"id": str(recipe.id), "name": recipe.name})  # Convert UUID to string
+
         # Sort the recipes under each letter
         for letter in sorted_recipes:
-            sorted_recipes[letter].sort()
+            sorted_recipes[letter].sort(key=lambda r: r['name'])
 
         return sorted_recipes
 
+
 # Add the resource to the API
 api.add_resource(RecipeNames, '/recipes/names')
+
+class GetRecipeByCuisineType(Resource):
+    def get(self, cuisine_type):
+        # Fetch recipes filtered by cuisine type with pagination
+        limit = request.args.get('limit', 20, type=int)  # Default to 20 if not provided
+        offset = request.args.get('offset', 0, type=int)  # Default to 0 if not provided
+
+        recipes = Recipe.query.filter(Recipe.cuisine == cuisine_type)\
+                              .offset(offset)\
+                              .limit(limit)\
+                              .all()
+
+        if not recipes:
+            return make_response({"message": "No recipes found for this cuisine type"}, 404)
+        return make_response([recipe.to_dict() for recipe in recipes], 200)
+
+# Add the resource to the API
+api.add_resource(GetRecipeByCuisineType, '/recipes/cuisine/<string:cuisine_type>')
+
 
 
 
