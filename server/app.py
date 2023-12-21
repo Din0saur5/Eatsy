@@ -15,6 +15,7 @@ from sqlalchemy.exc import IntegrityError
 from config import app, db, api
 # Add your model imports
 from models import User, Review, Recipe, Ingredient, Favorite
+from collections import defaultdict
 
 # app.py
 
@@ -98,7 +99,7 @@ class CheckSession(Resource):
         print(user_id)
         if user_id:
             user = User.query.filter(User.id == user_id).first()
-            return make_response(user.to_dict(rules=('-favorites','-created',)), 200)
+            return make_response(user.to_dict(rules=('-created',)), 200)
         
         return make_response({'error':'not loading cookie'}, 401)
 
@@ -497,6 +498,27 @@ class GetRecipeByCuisineType(Resource):
 
 # Add the resource to the API
 api.add_resource(GetRecipeByCuisineType, '/recipes/cuisine/<string:cuisine_type>')
+
+class GetRecipesByCuisine(Resource):
+    def get(self):
+        limit = request.args.get('limit', 10, type=int)  # Default limit set to 10
+        offset = request.args.get('offset', 0, type=int)  # Default offset set to 0
+        cuisine_filter = request.args.get('cuisine', type=str)  # Optional cuisine filter
+
+        query = Recipe.query
+        if cuisine_filter:
+            query = query.filter(Recipe.cuisine == cuisine_filter)
+
+        recipes = query.offset(offset).limit(limit).all()
+
+        organized_by_cuisine = defaultdict(list)
+        for recipe in recipes:
+            organized_by_cuisine[recipe.cuisine].append(recipe.to_dict())
+
+        return dict(organized_by_cuisine)
+
+api.add_resource(GetRecipesByCuisine, '/recipes/by-cuisine')
+
 
 
 

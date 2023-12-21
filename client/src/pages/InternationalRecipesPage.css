@@ -1,0 +1,99 @@
+/* Basic Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f8f9fa; /* Optional: Adds a light background color */
+}
+
+.container {
+  width: 80%;
+  margin: 20px auto;
+}
+
+/* Search Bar */
+.search-bar {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 20px;
+  width: 100%;
+  font-size: 16px;
+}
+
+/* Cuisine Navigation */
+.cuisine-nav {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 10px 0;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+.cuisine-nav button {
+  margin: 0 10px;
+  padding: 5px 15px;
+  background-color: #e7e7e7;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.cuisine-nav button:hover {
+  background-color: #d7d7d7;
+}
+
+/* Cuisine Sections */
+.cuisine-section {
+  margin-bottom: 30px;
+}
+
+.cuisine-section h2 {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px;
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.recipe-list {
+  column-count: 3;
+  column-gap: 20px;
+}
+
+.recipe-list a {
+  display: block;
+  break-inside: avoid;
+  margin-bottom: 10px;
+  text-decoration: none;
+  color: #333;
+  padding: 5px 0;
+}
+
+.recipe-list a:hover {
+  background-color: #e7e7e7;
+  border-radius: 4px;
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .recipe-list {
+      column-count: 2;
+  }
+}
+
+@media (max-width: 480px) {
+  .recipe-list {
+      column-count: 1;
+  }
+
+  .cuisine-nav button {
+      font-size: 12px;
+      padding: 5px 10px;
+  }
+}
