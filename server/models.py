@@ -18,7 +18,7 @@ class User(db.Model, SerializerMixin):
    last_name = db.Column(db.String)
    created = db.Column(db.DateTime, server_default=db.func.now())
    
-   serialize_rules = ('-reviews', '-recipes.user', '-recipe.reviews' '-recipes.favorites', '-recipes.ingredients','-_password_hash', '-favorites.user', '-favorites.recipe' )
+   serialize_rules = ('-reviews', '-recipes.user', '-recipe.reviews' '-recipes.favorites', '-recipes.ingredients','-_password_hash', '-favorites.user' )
    
    reviews = db.relationship('Review', back_populates='user', cascade="all, delete-orphan")
    recipes = db.relationship('Recipe', back_populates='user', cascade="all, delete-orphan")
@@ -51,7 +51,7 @@ class Review(db.Model, SerializerMixin):
     user_id = db.Column(db.Uuid, db.ForeignKey('users.id'))
     recipe_id = db.Column(db.Uuid, db.ForeignKey('recipes.id'))
     
-    serialize_rules = ('-user.reviews', '-recipe.reviews')
+    serialize_rules = ('-user', '-recipe')
     
     user = db.relationship('User', back_populates='reviews')
     recipe = db.relationship('Recipe', back_populates='reviews')
@@ -74,7 +74,7 @@ class Recipe(db.Model, SerializerMixin):
     
     user_id = db.Column(db.Uuid, db.ForeignKey('users.id'))
     
-    serialize_rules = ('-user.recipes', '-ingredients.recipe', '-reviews.recipe', '-favorites.recipe')
+    serialize_rules = ('-user.recipes', '-user.reviews' '-ingredients.recipe', '-reviews.recipe', '-favorites.recipe', '-user.favorites')
     
     user = db.relationship('User', back_populates='recipes')
     ingredients = db.relationship('Ingredient', back_populates='recipe', cascade="all, delete-orphan")
