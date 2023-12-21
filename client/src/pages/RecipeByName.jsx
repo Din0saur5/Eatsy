@@ -27,24 +27,25 @@ const RecipeSearchPage = () => {
       <h1>Recipes A-Z</h1>
       <input type="search" placeholder="Search" className="search-bar" />
       <div className="alphabet-nav">
-      <h2>Find a Recipe By its first letter</h2>
+        <h2>Find a Recipe By its first letter</h2>
         {'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map((letter) => (
           <a href={`#${letter}`} key={letter}>{letter}</a>
         ))}
       </div>
-
-      {Object.entries(organizedRecipes).map(([letter, names]) => (
-        <div key={letter} id={letter} className="letter-section">
-          <h2>{letter}</h2>
-          <div className="recipe-list">
-            {names.map((name, index) => (
-              <div key={index}>{name}</div>
-            ))}
+  
+      {Object.keys(organizedRecipes) // Get the keys of the object
+        .sort() // Sort them alphabetically
+        .map((letter) => (
+          <div key={letter} id={letter} className="letter-section">
+            <h2>{letter}</h2>
+            <div className="recipe-list">
+              {organizedRecipes[letter].map((name, index) => (
+                <div key={index}>{name}</div> // Display each recipe name
+              ))}
+            </div>
           </div>
-        </div>
       ))}
     </div>
   );
-};
-
+}
 export default RecipeSearchPage;
