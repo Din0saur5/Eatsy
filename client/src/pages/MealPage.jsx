@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import RecipeCard from '../components/RecipeCard'; 
+import RecipeCard from '../components/RecipeCard';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 const MealPage = () => {
   const { mealType } = useParams();
   const [recipes, setRecipes] = useState([]);
-  const [loadMoreCount, setLoadMoreCount] = useState(6);
+  const [loadMoreCount, setLoadMoreCount] = useState(9);
   const [hasMoreRecipes, setHasMoreRecipes] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -40,55 +40,54 @@ const MealPage = () => {
       console.error('Error fetching recipes:', error);
     }
   };
-  
+
   useEffect(() => {
     fetchRecipes(loadMoreCount, 0);
   }, [mealType]);
 
   useEffect(() => {
     AOS.init({
-      duration: 1000, // values from 0 to 3000, with step 50ms
-      once: true, // whether animation should happen only once - while scrolling down
+      duration: 1000,
+      once: true,
     });
   }, []);
 
-  const loadMore = () => {
-    const newRecipesToLoad = 6;
-    const currentOffset = recipes.length;
-    setLoadMoreCount(prevCount => prevCount + newRecipesToLoad);
-    fetchRecipes(newRecipesToLoad, currentOffset);
-  };
+  const loadMoreOnScroll = useCallback(() => {
+    const currentScrollY = window.scrollY;
+    if (currentScrollY > lastScrollY && window.innerHeight + window.scrollY >= document.body.offsetHeight && hasMoreRecipes) {
+      const newRecipesToLoad = 6;
+      const currentOffset = recipes.length;
+      setLoadMoreCount(prevCount => prevCount + newRecipesToLoad);
+      fetchRecipes(newRecipesToLoad, currentOffset);
+    }
+    setLastScrollY(currentScrollY);
+  }, [lastScrollY, hasMoreRecipes, recipes.length]);
+
+  useEffect(() => {
+    window.addEventListener('scroll', loadMoreOnScroll);
+    return () => window.removeEventListener('scroll', loadMoreOnScroll);
+  }, [loadMoreOnScroll]);
 
   return (
     <>
-    <div className='bg-background5 bg-cover p-4' >
-      
-      <div>
-        
-  <div className='flex items-center justify-center py-4 md:py-8 flex-wrap'>
-        <div className="text-center">
-          <h2 className="text-2xl font-semibold">Recipes</h2>
-          <h1 className="text-3xl font-bold">{capitalizedMealType} Recipes</h1>
-        </div>
- 
-  </div>
-
-<div className="  sm:ml-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-4">
-{recipes.map((recipe, index) => (
-            <RecipeCard  key={index} recipe={recipe} /> // Use RecipeCard here
-          ))}
-  </div>
-        {hasMoreRecipes && (
-          <div className="text-center mt-4">
-            <button onClick={loadMore} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-              Load More Recipes
-            </button>
+      <div className='bg-background5 bg-cover p-4'>
+        <div>
+          <div className='flex items-center justify-center py-4 md:py-8 flex-wrap'>
+            <div className="text-center">
+              <h2 className="text-2xl font-semibold">Recipes</h2>
+              <h1 className="text-3xl font-bold">{capitalizedMealType} Recipes</h1>
+            </div>
           </div>
-        )}
-      </div>
-    </div>
-  </>
-  );
 
-        }
+          <div className="sm:ml-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {recipes.map((recipe, index) => (
+              <RecipeCard key={index} recipe={recipe} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
 export default MealPage;

@@ -1,5 +1,4 @@
-// Dashboard.jsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useOutletContext } from "react-router-dom";
 import ToggleSwitch from '../components/ToggleSwitch';
 import AOS from 'aos';
@@ -7,7 +6,6 @@ import 'aos/dist/aos.css';
 import RecipeCard from '../components/RecipeCard';
 import CreateRecipeButton from '../components/CreateRecipeButton';
 import CreateRecipe from '../components/CreateRecipe';
-import { Button } from 'flowbite-react';
 
 const Dashboard = () => {
   const [userData, setUserData] = useOutletContext();
@@ -17,6 +15,7 @@ const Dashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loadMoreCount, setLoadMoreCount] = useState(6);
   const [hasMoreRecipes, setHasMoreRecipes] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   const fetchFavorites = async () => {
     const server = import.meta.env.VITE_BACK_END_SERVE;
@@ -55,16 +54,32 @@ const Dashboard = () => {
     fetchMyRecipes();
   }, []);
 
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      once: true,
+    });
+  }, []);
+
   const toggle = () => {
     setIsToggled(!isToggled);
   };
 
+  const loadMoreOnScroll = useCallback(() => {
+    const currentScrollY = window.scrollY;
+    if (currentScrollY > lastScrollY && window.innerHeight + window.scrollY >= document.documentElement.offsetHeight && hasMoreRecipes && !isToggled) {
+      const newRecipesToLoad = 6;
+      const currentOffset = userRecipes.length;
+      setLoadMoreCount(prevCount => prevCount + newRecipesToLoad);
+      fetchMyRecipes(newRecipesToLoad, currentOffset);
+    }
+    setLastScrollY(currentScrollY);
+  }, [lastScrollY, hasMoreRecipes, userRecipes.length, isToggled]);
+
   useEffect(() => {
-    AOS.init({
-      duration: 1000, // values from 0 to 3000, with step 50ms
-      once: true, // whether animation should happen only once - while scrolling down
-    });
-  }, []);
+    window.addEventListener('scroll', loadMoreOnScroll);
+    return () => window.removeEventListener('scroll', loadMoreOnScroll);
+  }, [loadMoreOnScroll]);
 
   const RecipeList = ({ list }) => {
     return (
@@ -76,16 +91,9 @@ const Dashboard = () => {
     );
   };
 
-  const loadMore = () => {
-    const newRecipesToLoad = 6;
-    const currentOffset = userRecipes.length;
-    setLoadMoreCount(prevCount => prevCount + newRecipesToLoad);
-    fetchMyRecipes(newRecipesToLoad, currentOffset);
-  };
-
   return (
     <>
-      <div className=' flex justify-center items-center bg-bg7'>
+      <div className='flex justify-center items-center bg-bg7'>
         <div className='w-4/5 bg-beige dark:bg-brown'>
           <div className='m-3'>
             <CreateRecipeButton setIsModalOpen={setIsModalOpen} />
@@ -100,11 +108,7 @@ const Dashboard = () => {
               <RecipeList list={userRecipes} />
             )}
           </div>
-          {!isToggled && hasMoreRecipes && (
-            <div className="text-center mt-4">
-              <Button onClick={loadMore}>Load More Recipes</Button>
-            </div>
-          )}
+          {/* Removed the 'Load More' button since infinite scroll is implemented */}
         </div>
       </div>
       <CreateRecipe userData={userData} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
