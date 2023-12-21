@@ -7,7 +7,7 @@ import 'aos/dist/aos.css';
 import RecipeCard from '../components/RecipeCard';
 import CreateRecipeButton from '../components/CreateRecipeButton';
 import CreateRecipe from '../components/CreateRecipe';
-import Button from 'flowbite-react';
+import {Button} from 'flowbite-react';
 
 const Dashboard = () => {
   const [userData, setUserData] = useOutletContext();
@@ -95,12 +95,12 @@ const Dashboard = () => {
           </div>
           <div className="sm:ml-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {isToggled ? (
-              <RecipeList list={userRecipes} />
-            ) : (
               <RecipeList list={favorites} />
+            ) : (
+              <RecipeList list={userRecipes} />
             )}
           </div>
-          {isToggled && hasMoreRecipes && (
+          {!isToggled && hasMoreRecipes && (
             <div className="text-center mt-4">
               <Button onClick={loadMore}>Load More Recipes</Button>
             </div>
