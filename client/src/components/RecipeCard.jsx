@@ -1,17 +1,20 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const RecipeCard = ({recipe}) => {
+    
+    const  {name, time, image, id} = recipe
   return (
     
 <div data-aos="fade-up ">
 <div className="w-full h-auto max-w-sm bg-gray-200 dark:bg-gray-800 rounded-lg shadow bg-pink border border-gray-400 dark:border-gray-400">
-    <a href="#">
-        <img className="p-8 rounded-t-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image.jpg" alt="product image" />
-    </a>
+    <Link to={`/recipe/${id}`} >
+        <img className="p-8 rounded-t-lg" src={image} alt="product image" />
+    </Link>
     <div className="px-5 pb-5">
-        <a href="#">
-            <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">Apple Watch Series 7 GPS, Aluminium Case, Starlight Sport</h5>
-        </a>
+        <Link to={`/recipe/${id}`} >
+            <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{name}</h5>
+        </Link>
         <div className="flex items-center mt-2.5 mb-5">
             <div className="flex items-center space-x-1 rtl:space-x-reverse">
                 <svg className="w-4 h-4 text-raspberry dark:text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
@@ -33,8 +36,8 @@ const RecipeCard = ({recipe}) => {
             <span className="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ms-3">5.0</span>
         </div>
         <div className="flex items-center justify-between">
-            <span className="text-3xl font-bold text-gray-900 dark:text-white"><small>Cook Time:</small> <p>60 mins</p>   </span>
-            <a href="#" className="text-white bg-green-700 hover:bg-raspberry hover:text-beige focus:ring-4 focus:outline-none focus:ring-beige-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-raspberry dark:hover:text-beige dark:focus:ring-green-800">Cook Tonight!</a>
+            <span className="text-3xl font-bold text-gray-900 dark:text-white"><small>Cook Time:</small> <p>{time} mins</p>   </span>
+            <Link to={`/recipe/${id}`} className="text-white bg-green-700 hover:bg-raspberry hover:text-beige focus:ring-4 focus:outline-none focus:ring-beige-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-raspberry dark:hover:text-beige dark:focus:ring-green-800">Cook Tonight!</Link>
         </div>
     </div>
 </div>

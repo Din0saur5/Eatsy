@@ -5,7 +5,7 @@ const Account = () => {
   const [userData, setUserData] = useOutletContext();
   return (
     <>
-    <NavbarUser/>
+   
     <div>
       
     </div>

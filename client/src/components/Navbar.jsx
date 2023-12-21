@@ -63,7 +63,7 @@ const Navbar = ({ onLogout, userData }) => {
         <>
             <nav className="bg-beveled-edge shadow-inner-highlight" style={{zIndex:"999"}}>
                 <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-                    <Link to="/" className="flex items-center space-x-3 rtl:space-x-reverse" onClick={closeMobileMenu}>
+                    <Link to="/dashboard" className="flex items-center space-x-3 rtl:space-x-reverse" onClick={closeMobileMenu}>
                         <img src='/images/logo_s.png' className='navbar-icon' alt="Logo" />
                         <span className="navbar-logo self-center text-2xl whitespace-nowrap">Eatsy</span>
                     </Link>

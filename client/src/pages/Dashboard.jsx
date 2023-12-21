@@ -46,6 +46,7 @@ const fetchMyRecipes = async () => {
       }
       const data = await response.json();
       setUserRecipes(data);
+      console.log(userRecipes)
   } catch (error) {
       console.error('Error fetching recipes:', error);
   }
@@ -64,12 +65,14 @@ const fetchMyRecipes = async () => {
       once: true, // whether animation should happen only once - while scrolling down
     });
   }, []);
-  const RecipeList = (recipes) => {
+  const RecipeList = ({list}) => {
     return (
       <>
-        {Array.from({ length: 20 }, (_, index) => (
-          <RecipeCard key={index} />
-        ))}
+        {list.map((recipe, index)=>{
+         return <RecipeCard recipe={recipe} key={index} />
+
+        })}
+       
       </>
     );
   };
@@ -92,9 +95,9 @@ const fetchMyRecipes = async () => {
 </div>
 <div className=" sm:ml-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-4">
   {toggle ? (
-    <RecipeList />
+    <RecipeList list={userRecipes}/>
   ):(
-    <RecipeList />
+    <RecipeList list={[]}/>
   )}
   
 </div>
