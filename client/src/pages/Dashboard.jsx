@@ -7,7 +7,7 @@ import 'aos/dist/aos.css';
 import RecipeCard from '../components/RecipeCard';
 import CreateRecipeButton from '../components/CreateRecipeButton';
 import CreateRecipe from '../components/CreateRecipe';
-import Button from 'flowbite-react';
+import { Button } from 'flowbite-react';
 
 const Dashboard = () => {
   const [userData, setUserData] = useOutletContext();
