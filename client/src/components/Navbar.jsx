@@ -25,6 +25,8 @@ const Navbar = ({ onLogout, userData }) => {
     };
     const handleDropdownItemClick = (type, item) => {
         closeMobileMenu();
+        setMealsDropdown(false);
+        setIngredientsDropdown(false);
         if (type === 'meal') {
             navigate(`/meals/${item}`);
         } else if (type === 'ingredient') {

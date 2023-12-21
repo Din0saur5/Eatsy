@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+
 
 const IngredientPage = () => {
     const { ingredient } = useParams(); // Use ingredient from the URL
@@ -31,9 +31,8 @@ const IngredientPage = () => {
     }, [ingredient]); // Dependency on ingredient
 
     return (
-        <div>
-          <Navbar/>
-          <div className='bg-background5 bg-cover p-4'>
+        <div className='bg-background5 bg-cover p-4'>
+          <div>
             <div className="text-center">
               <h2 className="text-2xl font-semibold">Recipes</h2>
               <h1 className="text-3xl font-bold">{capitalizedIngredient} Recipes</h1>
