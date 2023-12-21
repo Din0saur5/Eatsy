@@ -22,9 +22,9 @@ const RecipeCard = ({owned=false, setIsModalOpen, setSelectedRecipe , favorited=
 
 
 <div data-aos="fade-up ">
-<div className="w-full h-auto max-w-sm bg-gray-200 dark:bg-gray-800 rounded-lg shadow bg-pink border border-gray-400 dark:border-gray-400">
+<div className=" relative w-full h-auto max-w-sm bg-gray-200 dark:bg-gray-800 rounded-lg shadow bg-pink border border-gray-400 dark:border-gray-400">
 {owned ? (
-        <button onClick={()=>handleEdit()}  className="absolute top-1 right-4 p-2 text-white bg-blue-500 hover:bg-blue-700 rounded"><RiDraftLine /></button> 
+        <button onClick={()=>handleEdit()}  className="absolute top-2 right-2 p-2 text-white bg-blue-500 hover:bg-blue-700 rounded"><RiDraftLine /></button> 
       ) : (
         <button  className="absolute top-1 right-4 p-2 text-white bg-green-500 hover:bg-green-700 rounded">{favorited? <FaRegHeart />:<FaHeart />
     }</button>
@@ -38,7 +38,7 @@ const RecipeCard = ({owned=false, setIsModalOpen, setSelectedRecipe , favorited=
     </Link>
     <div className="px-5 pb-5">
         <Link to={`/recipe/${id}`} >
-            <h5 className="line-clamp-2  text-xl  font-semibold tracking-tight text-gray-900 dark:text-white">{name}</h5>
+            <h5 className="line-clamp-2 h-16 text-xl  font-semibold tracking-tight text-gray-900 dark:text-white">{name}</h5>
         </Link>
         <div className="flex items-center mt-2.5 mb-5">
             <div className="flex items-center space-x-1 rtl:space-x-reverse">

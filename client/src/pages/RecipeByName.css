@@ -56,16 +56,15 @@
   }
   
   .recipe-list {
-    column-count: 3;
     column-gap: 20px;
   }
   
-  .recipe-list div {
+  .recipe-list li {
     break-inside: avoid;
-    margin-bottom: 10px;
+    
   }
   
-  .recipe-list div:hover {
+  .recipe-list li:hover {
     text-decoration: underline;
     cursor: pointer;
   }

@@ -39,13 +39,15 @@ const RecipeSearchPage = () => {
         .map((letter) => (
           <div key={letter} id={letter} className="letter-section">
             <h2>{letter}</h2>
-            <div className="recipe-list">
+            <ul className="recipe-list md:columns-3 list-disc">
               {organizedRecipes[letter].map((recipe) => (
-                <Link to={`/recipe/${recipe.id}`} key={recipe.id} className="recipe-link">
+              <li className='mb-3  ml-4' key={recipe.id}>
+                <Link to={`/recipe/${recipe.id}`}  className="recipe-link ">
                   {recipe.name}
                 </Link>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
       ))}
     </div>

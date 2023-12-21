@@ -64,7 +64,9 @@ const Navbar = ({ onLogout, userData }) => {
           method: "DELETE",
       })
       .then(() => {
-          onLogout(null);  // Assuming onLogout handles the client-side session state
+          onLogout(null); 
+          sessionStorage.clear();
+          // Assuming onLogout handles the client-side session state
             location.reload()// Redirect to the login page
       })
       .catch(error => {

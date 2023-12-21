@@ -68,8 +68,8 @@ const Dashboard = () => {
           {/* Removed the 'Load More' button since infinite scroll is implemented */}
         </div>
       </div>
-      <CreateRecipe userData={userData}  isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-      <UpdateRecipe userData={userData} selectedRecipe={selectedRecipe} isEditOpen={isEditOpen} onCloseEdit={()=>setIsEditOpen(false)} />
+      <CreateRecipe userData={userData} userRecipes={userRecipes} setUserRecipes={setUserRecipes} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <UpdateRecipe userData={userData} userRecipes={userRecipes} setUserRecipes={setUserRecipes} selectedRecipe={selectedRecipe} isEditOpen={isEditOpen} onCloseEdit={()=>setIsEditOpen(false)} />
     </>
   );
 };

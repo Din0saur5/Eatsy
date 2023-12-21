@@ -7,6 +7,11 @@ const checkSession = async () => {
     //   .then(response => response.text())
     //   .then(data => console.log(data))
     //   .catch(error => console.error('Error:', error));
+  const storedUserStr= sessionStorage.getItem('token')
+if (storedUserStr){
+   const storedUser = JSON.parse(storedUserStr)
+   return storedUser
+}else{
 
     try {
       // auto-login
@@ -17,7 +22,7 @@ const checkSession = async () => {
       });
       if (response.ok) {
         const data = await response.json();
-        // console.log(data);
+        sessionStorage.setItem('token', JSON.stringify(data))
         return data;
       } else {
         // Handle non-OK responses here, e.g., redirect to login or show message
@@ -29,7 +34,7 @@ const checkSession = async () => {
       // console.error('Error during session check:', error);
       return null;
     }
-  };
-  
+  }
+};
   export default checkSession;
   
