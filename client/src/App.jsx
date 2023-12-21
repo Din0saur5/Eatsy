@@ -21,7 +21,7 @@ import Recipe from "./pages/Recipe";
 import Account from "./pages/Account";
 import UpdateRecipe from "./pages/UpdateRecipe";
 import checkSession from "./checkSession";
-import MealHomePage from "./pages/MealHomePage"; 
+
 import RecipeSearchPage from "./pages/RecipeByName";
 
 const protectedRoute = async () => {
