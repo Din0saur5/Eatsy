@@ -18,7 +18,7 @@ class User(db.Model, SerializerMixin):
    last_name = db.Column(db.String)
    created = db.Column(db.DateTime, server_default=db.func.now())
    
-   serialize_rules = ('-reviews', '-recipes', '-_password_hash', '-favorites.user', '-favorites')
+   serialize_rules = ('-reviews', '-recipes.user', '-recipe.reviews' '-recipes.favorites', '-recipes.ingredients','-_password_hash', '-favorites.user', '-favorites.recipe' )
    
    reviews = db.relationship('Review', back_populates='user', cascade="all, delete-orphan")
    recipes = db.relationship('Recipe', back_populates='user', cascade="all, delete-orphan")

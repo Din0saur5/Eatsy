@@ -1,20 +1,44 @@
+/* eslint-disable react/prop-types */
 import React from 'react'
 import { Link } from 'react-router-dom'
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-const RecipeCard = ({recipe}) => {
-    
+import { RiDraftLine } from "react-icons/ri";
+import ImageWithFallback from './ImageWithFallBack';
+import { FaHeart } from "react-icons/fa";
+import { FaRegHeart } from "react-icons/fa";
+
+
+const RecipeCard = ({owned=false, setIsModalOpen, setSelectedRecipe , favorited=false, recipe}) => {
+    console.log(owned)
+    const handleEdit = () => {
+      setSelectedRecipe(recipe)
+      console.log(recipe)
+      setIsModalOpen(true)
+    }
     const  {name, time, image, id} = recipe
   return (
     
+
+
 <div data-aos="fade-up ">
 <div className="w-full h-auto max-w-sm bg-gray-200 dark:bg-gray-800 rounded-lg shadow bg-pink border border-gray-400 dark:border-gray-400">
+{owned ? (
+        <button onClick={()=>handleEdit()}  className="absolute top-1 right-4 p-2 text-white bg-blue-500 hover:bg-blue-700 rounded"><RiDraftLine /></button> 
+      ) : (
+        <button  className="absolute top-1 right-4 p-2 text-white bg-green-500 hover:bg-green-700 rounded">{favorited? <FaRegHeart />:<FaHeart />
+    }</button>
+      )}
     <Link to={`/recipe/${id}`} >
-        <img className="p-8 rounded-t-lg" src={image} alt="product image" />
+    <ImageWithFallback
+    cN={"p-8 rounded-t-lg"}
+      src={image}
+      alt="name"
+    />
     </Link>
     <div className="px-5 pb-5">
         <Link to={`/recipe/${id}`} >
-            <h5 className="text-xl lg:h-20 xl:h-12 font-semibold tracking-tight text-gray-900 dark:text-white">{name}</h5>
+            <h5 className="line-clamp-2  text-xl  font-semibold tracking-tight text-gray-900 dark:text-white">{name}</h5>
         </Link>
         <div className="flex items-center mt-2.5 mb-5">
             <div className="flex items-center space-x-1 rtl:space-x-reverse">
