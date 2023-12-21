@@ -98,7 +98,7 @@ class CheckSession(Resource):
         print(user_id)
         if user_id:
             user = User.query.filter(User.id == user_id).first()
-            return make_response(user.to_dict(rules=('-favorites','-created',)), 200)
+            return make_response(user.to_dict(rules=('-created',)), 200)
         
         return make_response({'error':'not loading cookie'}, 401)
 
