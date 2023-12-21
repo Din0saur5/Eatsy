@@ -88,7 +88,7 @@ const Recipe = () => {
                 {userData? 
                 (<LikeButton recipe_id={recipe.id} user_id={userData.id} favorited={recipe.favorites.includes(userData.id)}/>
                 ):(
-                  <LikeButton recipe_id={recipe.id} user_id={null} favorited={recipe.favorites.includes(userData.id)}/>
+                  <LikeButton recipe_id={recipe.id} user_id={null} favorited={recipe.favorites.includes(null)}/>
                 )
                 }
               </div>
