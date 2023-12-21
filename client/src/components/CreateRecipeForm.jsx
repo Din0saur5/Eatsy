@@ -98,6 +98,12 @@ const CreateRecipeForm = ({userData, handleClose}) => {
       ingredients: [...formData.ingredients, { text: '', food: '', quantity: '', unit: '' }]
     });
   };
+
+  const handleDeleteIngredient = (index) => {
+    const newIngredients = formData.ingredients.filter((_, i) => i !== index);
+    setFormData({ ...formData, ingredients: newIngredients });
+  };
+
   const handleChangeStep = (index, value) => {
     const newSteps = formData.steps.map((step, i) => (
       i === index ? value : step
@@ -109,6 +115,10 @@ const CreateRecipeForm = ({userData, handleClose}) => {
     setFormData({ ...formData, steps: [...formData.steps, ''] });
   };
   
+  const handleDeleteStep = (index) => {
+    const newSteps = formData.steps.filter((_, i) => i !== index);
+    setFormData({ ...formData, steps: newSteps });
+  };
 
 
   return (
@@ -151,7 +161,18 @@ const CreateRecipeForm = ({userData, handleClose}) => {
                 
                 {formData.ingredients.map((ingredient, index) => (
                 <div key={index}>
-                <input className='rounded-lg mb-2 mr-1' type="text" name={`ingredients[${index}].text`} data-index={index} data-field="text" value={ingredient.text} onChange={handleChange} placeholder="Extra Details" />
+                    <label>Ingredient {index+1}</label>
+                {formData.ingredients.length > 1 && (
+                    <button 
+                    type="button" 
+                              onClick={() => handleDeleteIngredient(index)}
+                              className=" ml-72 bg-red-500 text-white ml-1 px-1.5 rounded hover:bg-red-600"
+                            >
+                              X
+                            </button>
+                          )}
+                          <br></br>
+                <input className='rounded-lg my-2 mr-1' type="text" name={`ingredients[${index}].text`} data-index={index} data-field="text" value={ingredient.text} onChange={handleChange} placeholder="Extra Details" />
                 <input className='rounded-lg mb-2 mr-1' type="text" name={`ingredients[${index}].food`} data-index={index} data-field="food" value={ingredient.food} onChange={handleChange} placeholder="Food"  required/>
                 <input className='rounded-lg mb-2 mr-1' type="number" name={`ingredients[${index}].quantity`} data-index={index} data-field="quantity" value={ingredient.quantity} onChange={handleChange} placeholder="Quantity"  required/>
                 <input className='rounded-lg mb-2 mr-1' type="text" name={`ingredients[${index}].unit`} data-index={index} data-field="unit" value={ingredient.unit} onChange={handleChange} placeholder="Unit"  required/>
@@ -173,6 +194,15 @@ const CreateRecipeForm = ({userData, handleClose}) => {
                             className="border border-gray-400 rounded p-2 my-1"
                             required
                         />
+                        {formData.steps.length > 1 && (
+                            <button 
+                              type="button" 
+                              onClick={() => handleDeleteStep(index)}
+                              className="bg-red-500 text-white ml-1 px-1.5 rounded hover:bg-red-600"
+                            >
+                              X
+                            </button>
+                          )}
                         </div>
                     ))}
                    
