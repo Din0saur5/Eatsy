@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, redirect, RouterProvider, useParams, } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
+import Cuisine from "./pages/Cuisine"; 
 
 import MealPage from "./pages/MealPage";
 import IngredientPage from "./pages/IngredientPage";
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage/>,
     children:[
       {
+        path: "/cuisine/:cuisineType", // Add this route for cuisine
+        element: <Cuisine />,
+      },
+      {
         path: "meals",
         element: <RecipeSearchPage />,
       },
@@ -64,15 +69,6 @@ const router = createBrowserRouter([
         element: <Home/>,
          
       },
-      {
-        path: "/meals/:mealType",
-        element: <MealPage />,
-      },
-      {
-        path: "/ingredients/:ingredient",
-        element: <IngredientPage />, // Add this line for ingredient route
-      },
-      
       {
         path: "login",
         element: <Login/>,

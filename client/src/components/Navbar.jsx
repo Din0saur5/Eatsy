@@ -14,6 +14,7 @@ const Navbar = ({ onLogout, userData }) => {
     const [ingredientsDropdown, setIngredientsDropdown] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [width, setWidth] = useState(window.innerWidth);
+    const [cuisineDropdown, setCuisineDropdown] = useState(false);
     let navigate = useNavigate();
 
     const handleClick = () => setClick(!click);
@@ -23,6 +24,19 @@ const Navbar = ({ onLogout, userData }) => {
         const processedQuery = searchQuery.replace(/[,#/]/g, '').split(' ').join('-');
         navigate(`/search/${processedQuery}`);
     };
+
+    const toggleCuisineDropdown = () => {
+        setCuisineDropdown(!cuisineDropdown);
+        setMealsDropdown(false);
+        setIngredientsDropdown(false);
+    };
+
+    const handleCuisineDropdownItemClick = (cuisineType) => {
+        closeMobileMenu();
+        setCuisineDropdown(false);
+        navigate(`/cuisine/${cuisineType}`);
+    };
+
     const handleDropdownItemClick = (type, item) => {
         closeMobileMenu();
         setMealsDropdown(false);
@@ -137,6 +151,27 @@ const Navbar = ({ onLogout, userData }) => {
                                     </div>
                                 )}
                             </li>
+                            <li>
+                                <NavLink to="" onClick={closeMobileMenu} className="block py-2 px-3 text-orange-100 hover:text-green-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-950 md:p-0 md:dark:hover:text-green-950 dark:text-orange-100 dark:hover:bg-gray-700 dark:hover:text-orange-100 md:dark:hover:bg-transparent dark:border-gray-700">
+                                    International Recipes
+                                    <button onClick={toggleCuisineDropdown} className="text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-600">
+                                    ▼
+                                    </button>
+                                </NavLink>
+                                {cuisineDropdown && (
+                                    <div className="absolute z-10 bg-white rounded shadow-lg py-1 mt-1">
+                                        <a href="#" onClick={() => handleCuisineDropdownItemClick( 'american')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">American</a>
+                                        <a href="#" onClick={() => handleCuisineDropdownItemClick( 'asian')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Asian</a>
+                                        <a href="#" onClick={() => handleCuisineDropdownItemClick( 'british')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">British</a>
+                                        <a href="#" onClick={() => handleCuisineDropdownItemClick( 'caribbean')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Caribbean</a>
+                                        <a href="#" onClick={() => handleCuisineDropdownItemClick( 'central-europe')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Central Europe</a>
+                                        <a href="#" onClick={() => handleCuisineDropdownItemClick( 'chinese')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Chinese</a>
+                                        <a href="#" onClick={() => handleCuisineDropdownItemClick( 'eastern-europe')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Eastern Europe</a>
+                                        <a href="#" onClick={() => handleCuisineDropdownItemClick( 'all-cuisines')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 font-bold">View All</a>
+                                    </div>
+                                )}
+                                </li>
+
                             
                               {userData ?  (
                                <>
