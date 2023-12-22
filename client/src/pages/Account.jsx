@@ -8,7 +8,7 @@ const Account = () => {
 
   const handleUpdate = (field) => {
       // Logic to handle update
-      console.log(`Update ${field}:`, field === 'email' ? email : (field === 'username' ? username : newPassword));
+  
       // Reset password fields after update
       if (field === 'password') {
           setCurrentPassword('');
@@ -19,7 +19,7 @@ const Account = () => {
   const handleDeleteAccount = () => {
       if (window.confirm('Are you sure you want to delete your account?')) {
           // Logic to handle account deletion
-          console.log('Account deleted');
+        
       }
   };
 

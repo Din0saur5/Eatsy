@@ -11,7 +11,6 @@ const LikeButton = ({ user_id, recipe_id, favorited }) => {
         }
         const server = import.meta.env.VITE_BACK_END_SERVE;
         try {
-            console.log("Attempting to like/unlike recipe", { recipe_id, user_id, favorited: favorite });
             const response = await fetch(`${server}/favorites/${recipe_id}/${user_id}`, {
                 credentials: 'include',
                 method: 'POST',
@@ -25,7 +24,6 @@ const LikeButton = ({ user_id, recipe_id, favorited }) => {
             }
             setFavorited(prev => !prev);
         } catch (err) {
-            console.log(err);
             alert("Sorry, there was a client error");
         }
     };

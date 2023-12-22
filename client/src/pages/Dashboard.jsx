@@ -35,7 +35,7 @@ const Dashboard = () => {
     }).then(r=>r.json())
     .then(d=>setUserFavs(d))
     
-    // console.log(userFavs)
+  
   },[])
 
   
@@ -50,7 +50,7 @@ const Dashboard = () => {
       },
     }).then(r=>r.json())
     .then(d=>setUserRecipes(d))
-    // console.log(userRecipes)
+
 
   },[])
   

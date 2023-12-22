@@ -1,12 +1,6 @@
 const checkSession = async () => {
     const server = import.meta.env.VITE_BACK_END_SERVE;
-  
-    // await fetch('http://127.0.0.1:5555/set-cookie', {
-    //     credentials: 'include'
-    //   })
-    //   .then(response => response.text())
-    //   .then(data => console.log(data))
-    //   .catch(error => console.error('Error:', error));
+
   const storedUserStr= sessionStorage.getItem('token')
 if (storedUserStr){
    const storedUser = JSON.parse(storedUserStr)

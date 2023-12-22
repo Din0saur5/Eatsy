@@ -72,7 +72,7 @@ const CreateNewRecipe = () => {
     
         if (e.target.name.startsWith('ingredients')) {
           const index = parseInt(e.target.dataset.index);
-          console.log(index)
+          
           const newIngredients = formData.ingredients.map((ingredient, i) => {
             if (i === index) {
               return { ...ingredient, [e.target.dataset.field]: e.target.value };
@@ -83,14 +83,14 @@ const CreateNewRecipe = () => {
         } else {
           setFormData({ ...formData, [e.target.name]: e.target.value });
         }
-        // console.log(formData)
+
       };
 
 
 
       const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("handleSubmit called");
+       
     
         // Process tags
         const processedTags = formData.tags
@@ -108,7 +108,7 @@ const CreateNewRecipe = () => {
             steps: formData.steps.filter(step => step.trim() !== '')
         };
     
-        console.log(finalFormData);
+    
         const server = import.meta.env.VITE_BACK_END_SERVE;
     
         try {
@@ -127,7 +127,7 @@ const CreateNewRecipe = () => {
             }
     
             const recipeData = await recipeResponse.json();
-            console.log('Recipe created successfully', recipeData);
+
     
             // Use the received recipe ID to post ingredients
             const recipeId = recipeData.id;
@@ -143,7 +143,6 @@ const CreateNewRecipe = () => {
                 });
             }
     
-            console.log('Ingredients added successfully');
     
             // Navigate to a different page or reset form here
             // navigate('/some-path');

@@ -5,7 +5,7 @@ import Navbar from '../components/Navbar';
 const SearchList = () => {
   const {query} = useParams()  
   const queryParsed = query.split("-")
-  console.log(queryParsed)
+
   const [userData, setUserData] = useOutletContext();
   return (
     <>
