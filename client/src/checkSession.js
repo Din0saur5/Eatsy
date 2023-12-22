@@ -9,8 +9,8 @@ if (storedUserStr){
 
     try {
       const response = await fetch(`${server}/check_session`,{
+        credentials: 'include',     
         method: 'GET',
-        credentials: 'include'     
       });
       if (response.ok) {
         const data = await response.json();
