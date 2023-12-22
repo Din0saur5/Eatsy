@@ -2,7 +2,7 @@ import React from 'react'
 
 import { useOutletContext } from "react-router-dom";
 import CreateRecipeForm from './CreateRecipeForm';
-import './Modal.css';
+import './modal.css';
 
 const Modal = ({ isOpen, onClose, userData, content }) => {
   
