@@ -55,6 +55,12 @@ class Review(db.Model, SerializerMixin):
     
     user = db.relationship('User', back_populates='reviews')
     recipe = db.relationship('Recipe', back_populates='reviews')
+    
+    @validates('rating')
+    def validate_rating(self, key, value):
+        if not isinstance(value, int) or value < 1 or value > 5:
+            raise ValueError('Rating must be between 1 and 5')
+        return value
 
 class Recipe(db.Model, SerializerMixin):
     __tablename__ = 'recipes'
