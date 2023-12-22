@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
- // Adjust the path as per your project structure
 import { useOutletContext } from "react-router-dom";
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import { Accordion, Button, Select } from 'flowbite-react';
 import AutocompleteInput from '../components/AutoComplete';
 
@@ -72,7 +71,7 @@ const CreateNewRecipe = () => {
     
         if (e.target.name.startsWith('ingredients')) {
           const index = parseInt(e.target.dataset.index);
-          console.log(index)
+          
           const newIngredients = formData.ingredients.map((ingredient, i) => {
             if (i === index) {
               return { ...ingredient, [e.target.dataset.field]: e.target.value };
@@ -83,62 +82,68 @@ const CreateNewRecipe = () => {
         } else {
           setFormData({ ...formData, [e.target.name]: e.target.value });
         }
-        console.log(formData)
+
       };
-
-
 
       const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("handleSubmit called");
-    
-        // Process tags
         const processedTags = formData.tags
             .split('#')
             .filter(tag => tag.trim() !== '') 
             .map(tag => tag.trim().replace(/_/g, ' ').replace(/,/g, '')); 
     
-        // Create the final form data object for submission
         const finalFormData = {
             ...formData,
             tags: processedTags,
             cuisine: cuisineType,
             dish_type: dishType,
-            user_id: userData.id, // Ensure user_id is correctly assigned
-            steps: formData.steps.filter(step => step.trim() !== '') // Filter out any empty step
+            user_id: userData.id,
+            steps: formData.steps.filter(step => step.trim() !== '')
         };
     
-        console.log(finalFormData);
         const server = import.meta.env.VITE_BACK_END_SERVE;
     
         try {
-            const response = await fetch(`${server}/recipes/create`, {
+            const recipeResponse = await fetch(`${server}/recipes/create`, {
                 credentials: 'include',
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(finalFormData) // Send the final form data
+                body: JSON.stringify(finalFormData)
             });
     
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+            if (!recipeResponse.ok) {
+                throw new Error(`HTTP error! Status: ${recipeResponse.status}`);
             }
     
-            const recipeData = await response.json();
-            console.log('Recipe created successfully', recipeData);
+            const recipeData = await recipeResponse.json();
+
     
-            // Optionally navigate to a different page or reset form here
-            // navigate('/some-path');
-            // setFormData({ /* initial form state */ });
+            
+            const recipeId = recipeData.id;
+    
+            for (const ingredient of formData.ingredients) {
+                await fetch(`${server}/ingredients/${recipeId}`, {
+                    credentials: 'include',
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ ...ingredient, recipe_id: recipeId })
+                });
+            }
+    
+    
+
     
         } catch (error) {
-            console.error('Error creating recipe:', error);
-            alert('Error creating recipe');
-        }   
+            console.error('Error in creating recipe or adding ingredients:', error);
+            alert('Error creating recipe or adding ingredients');
+        }
     };
 
-    // Ensure userData is available here and is the correct object
+
     return (
         <div  className='flex h-full overflow-y-auto min-h-screen justify-center items-center bg-bg7 '>
         <div  className='w-4/5 h-full min-h-screen bg-beige dark:bg-brown'>
@@ -219,7 +224,7 @@ const CreateNewRecipe = () => {
                 <Accordion.Content >
                     <table className="table-auto">
                       {formData.steps.map((step, index) => (
-                        <React.Fragment key={`step-${index}`}> {/* Add key prop */}
+                        <React.Fragment key={`step-${index}`}> 
                           <thead>
                         <tr>
                             <th className='text-left'>Step {index+1}:</th>

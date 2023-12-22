@@ -22,7 +22,7 @@ const Cuisine = () => {
 
         const requestUrl = `${server}/recipes/cuisine/${cuisineType}?limit=${limit}&offset=${offset}`;
 
-        console.log(`Requesting URL: ${requestUrl}`);
+
 
         try {
             const response = await fetch(requestUrl);
@@ -40,7 +40,7 @@ const Cuisine = () => {
         }
         };
 
-    console.log("Cuisine Type:", cuisineType);
+
 
   useEffect(() => {
     fetchRecipes(loadMoreCount, 0);

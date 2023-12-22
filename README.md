@@ -1,7 +1,32 @@
+# Welcome to Eatsy! 🍳🥗
+
+Eatsy is a **vibrant** and **user-friendly culinary platform** where food enthusiasts can explore, create, and share their favorite recipes. Our website offers a _diverse range_ of culinary delights, catering to various cuisines, dietary preferences, and meal types. Whether you're an **experienced chef** or a **beginner** in the kitchen, Eatsy provides an interactive and engaging environment for all.
+
+## Explore a World of Flavors 🌍🍜
+
+- 📚 **Browse Recipes**: Effortlessly explore a plethora of recipes, each with vivid images and detailed instructions.
+- ⏱ **Preparation Times**: Know exactly how long it will take to prepare each dish.
+
+## Engage with the Community 👨‍🍳👩‍🍳
+
+- 📝 **Post and Edit Recipes**: Share your culinary creations and tweak them as you go.
+- 💬 **Reviews and Ratings**: Engage with other food lovers through reviews and ratings.
+
+## Why Eatsy? 🌟
+
+- **Personalized Experience**: Curate your collection of favorite recipes.
+- **User-Friendly Interface**: Navigate through our platform with ease and joy.
+- **Connect and Share**: Join a community of like-minded food lovers.
+
+---
+
+🔗 **Join Eatsy today** and dive into a world where cooking is not just about food, but an adventure in taste, creativity, and sharing. _Bon Appétit!_
+
+
 # Recipe Management System API Documentation
 
 ## Overview
-This documentation details the API endpoints for the Recipe Management System, handling operations related to recipes, ingredients, users, reviews, and sessions.
+This documentation details the updated API endpoints for the Recipe Management System, which includes operations related to recipes, ingredients, users, reviews, and sessions.
 
 ## Endpoints
 
@@ -87,14 +112,14 @@ This documentation details the API endpoints for the Recipe Management System, h
 - **Request Body**: Ingredient details.
 - **Response**: Created ingredient details or error message.
 
-#### `PATCH /ingredients/<uuid:id>`
-- **Description**: Updates an ingredient.
-- **Request Body**: Ingredient attributes.
-- **Response**: Updated ingredient details or error message.
-
 #### `DELETE /ingredients/<uuid:id>`
 - **Description**: Deletes an ingredient.
 - **Response**: Success or error message.
+
+#### `POST /ingredients/<uuid:id>`
+- **Description**: Adds an ingredient to a recipe.
+- **Request Body**: Ingredient details.
+- **Response**: Created ingredient details or error message.
 
 ### Review Management
 
@@ -130,10 +155,26 @@ This documentation details the API endpoints for the Recipe Management System, h
 - **Description**: Retrieves recipes organized by cuisine.
 - **Response**: Recipes grouped by cuisine.
 
+#### `GET /recipes/meal_type/<string:meal_type>`
+- **Description**: Retrieves recipes filtered by meal type.
+- **Response**: List of recipes or error message.
+
+#### `GET /recipes/random`
+- **Description**: Retrieves three random recipes.
+- **Response**: List of random recipes or error message.
+
 #### `POST /favorites/<uuid:rec_id>/<uuid:user_id>`
 - **Description**: Manages favorites.
 - **Request Body**: `rec_id`, `user_id`.
 - **Response**: Updated favorites or error message.
+
+#### `GET /rbu/<uuid:user_id>`
+- **Description**: Retrieves recipes created by a specific user.
+- **Response**: List of recipes or error message.
+
+#### `GET /favs/<uuid:user_id>`
+- **Description**: Retrieves favorite recipes of a user.
+- **Response**: List of favorite recipes or error message.
 
 ### Server Configuration
 - The server runs on the port, host, and debug mode as per environment variables.

@@ -1,11 +1,10 @@
-
 import { useOutletContext, useParams } from "react-router-dom";
 import Search from '../components/Search';
 import Navbar from '../components/Navbar';
 const SearchList = () => {
   const {query} = useParams()  
   const queryParsed = query.split("-")
-  console.log(queryParsed)
+
   const [userData, setUserData] = useOutletContext();
   return (
     <>
@@ -18,6 +17,3 @@ const SearchList = () => {
 }
 
 export default SearchList
-
-
-//when doing a link to{'/recipe/${id}}

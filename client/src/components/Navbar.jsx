@@ -124,6 +124,8 @@ const Navbar = ({ onLogout, userData }) => {
                                     <div className="absolute z-10 bg-white rounded shadow-lg py-1 mt-1">
                                         <a href="#" onClick={() => handleDropdownItemClick('meal', 'breakfast')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Breakfast</a>
                                         <a href="#" onClick={() => handleDropdownItemClick('meal', 'brunch')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Brunch</a>
+                                        <a href="#" onClick={() => handleDropdownItemClick('meal', 'lunch')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Lunch</a>
+                                        <a href="#" onClick={() => handleDropdownItemClick('meal', 'dinner')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dinner</a>
                                         <a href="#" onClick={() => handleDropdownItemClick('meal', 'snack')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Appetizers & Snacks</a>
                                         <a href="#" onClick={() => handleDropdownItemClick('meal', 'teatime')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">TeaTime</a>
                                     </div>                                    

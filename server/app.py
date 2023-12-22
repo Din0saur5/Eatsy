@@ -1,27 +1,15 @@
-#/server/app.py
-#!/usr/bin/env python3
 
-# Standard library imports
 import os
 from dotenv import load_dotenv
-
 load_dotenv()
-# Remote library imports
 from flask import request, make_response, session
 from flask_restful import Resource
 import random
 from sqlalchemy.exc import IntegrityError
-# from flask_cors import cross_origin, CORS
-# Local imports
 from config import app, db, api
-# Add your model imports
 from models import User, Review, Recipe, Ingredient, Favorite
 from collections import defaultdict
 import uuid
-# app.py
-
-
-
 
 @app.route('/')
 def index():
@@ -33,33 +21,10 @@ def index():
     </ul>'''
     )
 
-# @app.before_request
-# def check_if_logged_in():
-#     open_access_list = [
-#         'signup',
-#         'login',
-#         'check_session',
-#         'recipes',
-#         'ingredient'
-#         'recip_id'
-#         'home'
-#     ]
-
-#     if (request.endpoint) not in open_access_list and (not session.get('user_id')):
-#         return {'error': '401 Unauthorized'}, 401
-
-# @app.route('/set-cookie')
-# def set_cookie():
-#     # Example of setting a session variable
-#     session['user_id'] = 'some_user_id'
-#     return 'Cookie is set'
 
 class Signup(Resource):
     
     def post(self):
-
-       
-
         username = request.json.get('username')
         email = request.json.get('email')
         password = request.json.get('password')
@@ -73,67 +38,48 @@ class Signup(Resource):
             last_name=last_name,
             
         )
-
-        # the setter will encrypt this
         user.password_hash = password
         print(user)
         try:
-
             db.session.add(user)
             print(user)
             db.session.commit()
-
             session['user_id'] = user.id
             print(session['user_id']) 
             return user.to_dict(), 201
-
         except IntegrityError:
-
             return {'error': '422 Unprocessable Entity'}, 422
         
-
 class CheckSession(Resource):
-
     def get(self):
-        
         user_id = session.get('user_id')
         print(user_id)
         if user_id:
             user = User.query.filter(User.id == user_id).first()
             return make_response(user.to_dict(only=('id', 'username',)), 200)
-        
         return make_response({'error':'not loading cookie'}, 401)
 
 
 class Login(Resource):
-    
     def post(self):
-
-        
-
         username = request.json.get('username')
         password = request.json.get('password')
-
         user = User.query.filter(User.username == username).first()
 
         if user:
             if user.authenticate(password):
-
                 session['user_id'] = user.id
                 print(session['user_id']) 
                 return user.to_dict(), 200
-
         return make_response({'error': '401 Unauthorized'}, 401)
 
 class Logout(Resource):
-
     def delete(self):
-
         session.pop('user_id', None)
         response =  make_response({}, 204)
         response.set_cookie('user_id', '', expires=0)
         return response
-
+    
 api.add_resource(Signup, '/signup', endpoint='signup')
 api.add_resource(CheckSession, '/check_session')
 api.add_resource(Login, '/login', endpoint='login')
@@ -149,13 +95,9 @@ class AllUsers(Resource):
             } 
         else:
             rb = [user.to_dict(rules=('-reviews','-recipes')) for user in users]
-        return make_response(rb, 200)
-   
-        
+        return make_response(rb, 200) 
 api.add_resource(AllUsers, '/users')
 class UserById(Resource):
-    #@cross_origin(origins=os.environ.get('CORS_ORIGIN') + '/private/*', methods=['GET'])
-    #@cross_origin(origins=os.environ.get('CORS_ORIGIN') + '/private/account', methods=['PATCH', 'DELETE'])
     def get(self, id):
         user = User.query.filter_by(id=id).first()
         if not user:
@@ -181,11 +123,7 @@ class UserById(Resource):
 
 api.add_resource(UserById, '/users/<uuid:id>')
 
-
- 
 class AllRecipes(Resource):
-    #@cross_origin(origins=os.environ.get('CORS_ORIGIN') + '/private/create-recipe', methods=['POST'])
-    #@cross_origin(origins=os.environ.get('CORS_ORIGIN') + '/*', methods=['GET'])
     def get(self):
         recipes = [recipe.to_dict() for recipe in Recipe.query.all()]
         if not recipes:
@@ -195,7 +133,6 @@ class AllRecipes(Resource):
 class CreateRecipe(Resource):
     def post(self):
         try:
-            
             new_recipe = Recipe(
                 id = uuid.uuid4(),
                 name = request.json.get('name'),
@@ -212,10 +149,7 @@ class CreateRecipe(Resource):
             )
             print(new_recipe.id)
             db.session.add(new_recipe)
-            
             print(new_recipe)
-
-          
             db.session.commit()
             return make_response(new_recipe.to_dict(),201)
         except Exception as e:
@@ -225,8 +159,6 @@ api.add_resource(CreateRecipe, '/recipes/create', endpoint='create_recipe')
 api.add_resource(AllRecipes, '/recipes', endpoint='recipes')
     
 class GetRecipeById(Resource):
-    #@cross_origin(origins=os.environ.get('CORS_ORIGIN') + '/*', methods=['GET'])
-    
     def get(self, id):
         recipe = Recipe.query.filter_by(id=id).first()
         if not recipe:
@@ -234,7 +166,6 @@ class GetRecipeById(Resource):
         return make_response(recipe.to_dict(), 200)
 api.add_resource(GetRecipeById, '/recipes/<uuid:id>', endpoint='recipe_id')
 class ChangeRecipeById(Resource):
-    #@cross_origin(origins=os.environ.get('CORS_ORIGIN') + '/private/update-recipe/*', methods=['PATCH', 'DELETE'])
     def patch(self, id):
         recipe = Recipe.query.filter(Recipe.id==id).first()
         if recipe:
@@ -242,9 +173,6 @@ class ChangeRecipeById(Resource):
                 for attr in request.json:
                         setattr(recipe, attr, request.json.get(attr))
                         db.session.commit()
-                    
-                
-                  
                 return make_response(recipe.to_dict(), 200)
             except ValueError: 
                 rb = {
@@ -253,13 +181,12 @@ class ChangeRecipeById(Resource):
                 return make_response(rb, 400)  
         else:
                 return make_response({"message":"Recipe not found"}, 404)
-
+        
     def delete(self, id):
         recipe = Recipe.query.filter_by(id=id).first()
         if not recipe:
             return make_response({"message":"Recipe not found"}, 404)
-        else:
-                
+        else:     
             db.session.delete(recipe)
             db.session.commit()
             return make_response({"message":"Recipe deleted"}, 204)
@@ -268,18 +195,14 @@ api.add_resource(ChangeRecipeById, '/recipes/change/<uuid:id>')
 
 class GetRecipeByIngredient(Resource):
     def get(self, ingredient):
-        limit = request.args.get('limit', 20, type=int)  # Default to 10 if not provided
-        offset = request.args.get('offset', 0, type=int)  # Default to 0 if not provided
-
+        limit = request.args.get('limit', 20, type=int)  
+        offset = request.args.get('offset', 0, type=int) 
         filtered_recipes = []
         for recipe in Recipe.query.all():
             for ing in recipe.ingredients:
                 if recipe not in filtered_recipes and (ingredient in ing.food or ing.food in ingredient):
                     filtered_recipes.append(recipe)
-
-        # Apply pagination after filtering
         paginated_recipes = filtered_recipes[offset:offset + limit]
-
         if not paginated_recipes:
             return make_response({"message":"No matching recipes found"}, 404)
         return make_response([recipe.to_dict() for recipe in paginated_recipes], 200)
@@ -287,13 +210,12 @@ class GetRecipeByIngredient(Resource):
 api.add_resource(GetRecipeByIngredient, '/recipes/ingredient/<string:ingredient>', endpoint='ingredient')
     
 class AllIngredients(Resource):
-    
     def get(self):
         ingredients = [ingredient.to_dict(rules = ('-recipe',)) for ingredient in Ingredient.query.all()]
         if not ingredients:
             return make_response({"message":"Failed to fetch ingredients from database"}, 504)
         return make_response(ingredients, 200)
-
+    
     def post(self):
         try:
             uuidstr = request.json.get('recipe_id')
@@ -307,7 +229,6 @@ class AllIngredients(Resource):
                 quantity = float(request.json.get('quantity')),
                 unit = request.json.get('unit'),
                 recipe_id = uuidR,
-                
             )
             print(new_ingredient.id)
             db.session.add(new_ingredient)
@@ -316,21 +237,14 @@ class AllIngredients(Resource):
         except Exception as e:
             print(e)
             return make_response({"message":str(e)}, 400)
-        
-   
-
 api.add_resource(AllIngredients, '/ingredients')
 
-
 class ChangeIngredientById(Resource):
-    #@cross_origin(origins=os.environ.get('CORS_ORIGIN') + '/private/update-recipe/*', methods=['PATCH', 'DELETE'])
-
     def delete(self, id,):
         ingredients = Ingredient.query.filter(Ingredient.recipe_id==id).allows_lambda()
         if not ingredients:
             return make_response({"message":"Ingredient not found"}, 404)
         else:
-            
             for ingredient in ingredients:
                 db.session.delete(ingredient)
         db.session.commit()
@@ -338,38 +252,28 @@ class ChangeIngredientById(Resource):
     
     def post(self, id):
         try:
-
-            print(id)
-            uuidR= uuid.UUID(id)
-            print(type(uuidR))
-            print(uuidR)
             new_ingredient = Ingredient(
-                text = request.json.get('text'),
-                food = request.json.get('food'),
-                quantity = float(request.json.get('quantity')),
-                unit = request.json.get('unit'),
-                recipe_id = id,
-                
+                text=request.json.get('text'),
+                food=request.json.get('food'),
+                quantity=float(request.json.get('quantity')),
+                unit=request.json.get('unit'),
+                recipe_id=id,  # Use 'id' directly here.
             )
             db.session.add(new_ingredient)
             db.session.commit()
-            return make_response(new_ingredient.to_dict(),201)
+            return make_response(new_ingredient.to_dict(), 201)
         except Exception as e:
             print(e)
-            return make_response({"message":str(e)}, 400)
+            return make_response({"message": str(e)}, 400)
 
 api.add_resource(ChangeIngredientById, '/ingredients/<uuid:id>')
 
 class AllReviews(Resource):
-    # @recipeId_cors(origins=os.environ.get('CORS_ORIGIN') + '/private/recipe/*', methods=['POST'])
-    # @cross_origin(origins=os.environ.get('CORS_ORIGIN') + '/*', methods=['GET'])
-    
     def get(self):
         reviews = [review.to_dict(rules = ('-user', '-recipe')) for review in Review.query.all()]
         if not reviews:
             return make_response({"message":"Failed to fetch reviews from database"}, 504)
         return make_response(reviews, 200)
-
     def post(self):
         try:
             uuidstr1 = request.json.get('recipe_id')
@@ -390,14 +294,10 @@ class AllReviews(Resource):
             return make_response({"message":str(e)}, 400)
 
 api.add_resource(AllReviews, '/reviews')
-
 class GetRecipeByIngredient(Resource):
     def get(self, ingredient):
         return make_response({"message": f"Ingredient received: {ingredient}"}, 200)
-
 class ReviewById(Resource):
-    #@cross_origin(origins=os.environ.get('CORS_ORIGIN') + '/private/recipe/*', methods=['PATCH', 'DELETE'])
-
     def patch(self, id, user_id):
         review = Review.query.filter_by(id=id).first()
         if not review:
@@ -418,14 +318,12 @@ class ReviewById(Resource):
         db.session.delete(review)
         db.session.commit()
         return make_response({"message":"Review deleted"}, 204)
-
 api.add_resource(ReviewById, '/reviews/<uuid:id>/<uuid:user_id>')
 
 class GetRecipeByMealType(Resource):
     def get(self, meal_type):
-        # Fetch recipes filtered by meal type with pagination
-        limit = request.args.get('limit', 20, type=int)  # Default to 10 if not provided
-        offset = request.args.get('offset', 0, type=int)  # Default to 0 if not provided
+        limit = request.args.get('limit', 20, type=int)
+        offset = request.args.get('offset', 0, type=int)
 
         recipes = Recipe.query.filter(Recipe.meal_type == meal_type)\
                               .offset(offset)\
@@ -462,32 +360,24 @@ api.add_resource(FavoriteRecipe, '/favorites/<uuid:rec_id>/<uuid:user_id>')
 
 class RecipesByUser(Resource):
     def get(self, user_id):
-        limit = request.args.get('limit', 10, type=int)  # Default limit to 10
-        offset = request.args.get('offset', 0, type=int)  # Default offset to 0
-
-        # Apply the limit and offset directly in the query
+        limit = request.args.get('limit', 10, type=int)
+        offset = request.args.get('offset', 0, type=int)
         recipes = Recipe.query.filter(Recipe.user_id == user_id).offset(offset).limit(limit).all()
 
         if recipes:
-            # Convert recipes to dictionary format
             rb = [recipe.to_dict(only=('reviews.rating', 'image', 'name', 'time', 'id')) for recipe in recipes]
             return make_response(rb, 200)
         else:
             return make_response({"message": "No recipes found by this user"}, 404)
-
-        
-        
-        
 api.add_resource(RecipesByUser, '/rbu/<user_id>')
 class GetFavoriteRecipes(Resource):
     def get(self, user_id):
-        limit = request.args.get('limit', 10, type=int)  # Default limit to 10
-        offset = request.args.get('offset', 0, type=int)  # Default offset to 0
+        limit = request.args.get('limit', 10, type=int)
+        offset = request.args.get('offset', 0, type=int)
 
         fS = Favorite.query.filter(Favorite.user_id==user_id).all()
         if len(fS) > 0:
             recipe_ids = [f.recipe_id for f in fS]
-            # Fetch the recipes with pagination applied
             recipes = Recipe.query.filter(Recipe.id.in_(recipe_ids)).offset(offset).limit(limit).all()
             rb = [recipe.to_dict(only=('reviews.rating', 'image', 'name', 'time', 'id')) for recipe in recipes]
             return make_response(rb, 200)
@@ -499,61 +389,45 @@ api.add_resource(GetFavoriteRecipes, '/favs/<user_id>')
 
 class RecipeNames(Resource):
     def get(self):
-        # Query both the names and IDs of the recipes from the database
         recipes = Recipe.query.with_entities(Recipe.id, Recipe.name).all()
-
-        # Create a dictionary to hold the recipes sorted by first letter
         sorted_recipes = {}
         for recipe in recipes:
             first_letter = recipe.name[0].upper()
             if first_letter not in sorted_recipes:
                 sorted_recipes[first_letter] = []
-            sorted_recipes[first_letter].append({"id": str(recipe.id), "name": recipe.name})  # Convert UUID to string
-
-        # Sort the recipes under each letter
+            sorted_recipes[first_letter].append({"id": str(recipe.id), "name": recipe.name})
         for letter in sorted_recipes:
             sorted_recipes[letter].sort(key=lambda r: r['name'])
-
         return sorted_recipes
 
-
-# Add the resource to the API
 api.add_resource(RecipeNames, '/recipes/names')
 
 class GetRecipeByCuisineType(Resource):
     def get(self, cuisine_type):
-        # Fetch recipes filtered by cuisine type with pagination
-        limit = request.args.get('limit', 20, type=int)  # Default to 20 if not provided
-        offset = request.args.get('offset', 0, type=int)  # Default to 0 if not provided
-
+        limit = request.args.get('limit', 20, type=int)
+        offset = request.args.get('offset', 0, type=int)
         recipes = Recipe.query.filter(Recipe.cuisine == cuisine_type)\
                               .offset(offset)\
                               .limit(limit)\
                               .all()
-
         if not recipes:
             return make_response({"message": "No recipes found for this cuisine type"}, 404)
         return make_response([recipe.to_dict() for recipe in recipes], 200)
-
 # Add the resource to the API
 api.add_resource(GetRecipeByCuisineType, '/recipes/cuisine/<string:cuisine_type>')
 
 class GetRecipesByCuisine(Resource):
     def get(self):
-        limit = request.args.get('limit', 10, type=int)  # Default limit set to 10
-        offset = request.args.get('offset', 0, type=int)  # Default offset set to 0
-        cuisine_filter = request.args.get('cuisine', type=str)  # Optional cuisine filter
-
+        limit = request.args.get('limit', 10, type=int)
+        offset = request.args.get('offset', 0, type=int)
+        cuisine_filter = request.args.get('cuisine', type=str)
         query = Recipe.query
         if cuisine_filter:
             query = query.filter(Recipe.cuisine == cuisine_filter)
-
         recipes = query.offset(offset).limit(limit).all()
-
         organized_by_cuisine = defaultdict(list)
         for recipe in recipes:
             organized_by_cuisine[recipe.cuisine].append(recipe.to_dict())
-
         return dict(organized_by_cuisine)
 
 api.add_resource(GetRecipesByCuisine, '/recipes/by-cuisine')

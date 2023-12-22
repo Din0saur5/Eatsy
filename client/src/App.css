@@ -112,6 +112,66 @@ button.create_new:hover span {
 .animate-slideUp {
   animation: slideUp 0.5s ease-out forwards;
 }
+
+.ribbon::before
+ {
+  content: '';
+  position: absolute;
+  left: 150px;
+  transform: rotate(180deg);
+  /* transform: rotate(74deg); */
+  top: 20px;
+  width: 0;
+  height: 0;
+  border-top: 20px solid var(--ribbon-color, #6A9A62);
+  border-left: 29px solid transparent;
+  border-right: 1px solid transparent;
+  left: 81px;
+}
+
+
+.ribbon::after {
+  
+  content: '';
+  position: absolute;
+  left: 81px;
+  top: 0;
+ 
+  width: 0;
+  height: 0;
+  border-top: 20px solid var(--ribbon-color, #6A9A62);
+  border-left: 0px solid transparent;
+  border-right: 30px solid transparent;
+}
+.ribbon-blue::before
+ {
+  content: '';
+    position: absolute;
+    left: 78px;
+    transform: rotate(180deg);
+    top: 20px;
+    width: 0;
+    height: 0;
+    border-top: 20px solid var(--ribbon-color, #60a5fa);
+    border-left: 29px solid transparent;
+    border-right: 1px solid transparent;
+}
+
+
+
+.ribbon-blue::after {
+  right: 40;
+  content: '';
+  position: absolute;
+  left: 81px;
+  top: 0;
+  bottom: 5px;
+  width: 0;
+  height: 0;
+  border-top: 20px solid var(--ribbon-color, #60a5fa);
+  border-left: 0px solid transparent;
+  border-right: 30px solid transparent;
+}
 *{
   font-family: 'literata'
 }

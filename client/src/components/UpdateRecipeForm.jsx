@@ -22,7 +22,7 @@ const UpdateRecipeForm = ({userData,  selectedRecipe, userRecipes, setUserRecipe
   const [dishType, setDishType]=useState('')
   const [isFormValid, setIsFormValid] = useState(false); 
  
-console.log(formData)
+
   const cuisineTypes = [
     "american", "asian", "british", "caribbean", "central europe", "chinese", "eastern europe", 
     "french", "greek", "indian", "italian", "japanese", "korean", "kosher", "mediterranean", 
@@ -68,7 +68,7 @@ console.log(formData)
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const recipeData = await response.json()
-      console.log(recipeData)
+   
       setFormData(recipeData)
      
     }catch(err){
@@ -108,7 +108,7 @@ console.log(formData)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData.tags)
+
     
 
   // Create the final form data object for submission
@@ -125,7 +125,7 @@ console.log(formData)
     dish_type: dishType,
     ingredients: formData.ingredients,
   };
-  console.log(finalFormData);
+
     const server = import.meta.env.VITE_BACK_END_SERVE
     try {
       const response = await fetch(`${server}/recipes/change/${selectedRecipe.id}`, {
@@ -188,7 +188,7 @@ console.log(formData)
             throw new Error(`HTTP error! Status: ${resp.status}`);
           }
           const d = await resp.json()
-          console.log(d)
+       
           handleClose()
           alert('Recipe updated successfully')
           setFormData({
@@ -244,7 +244,7 @@ console.log(formData)
               storedUser.recipes = newRecipes
               sessionStorage.setItem('token', JSON.stringify(storedUser))}
               setUserRecipes(newRecipes)
-            console.log('Recipe deleted successfully');
+            
             setUserRecipes(newRecipes)
             handleClose()
             alert('Recipe deleted successfully')

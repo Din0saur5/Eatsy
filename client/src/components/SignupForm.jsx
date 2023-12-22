@@ -60,7 +60,6 @@ const SignupForm = ({ onLogin }) => {
         e.preventDefault()
         const{name, value} = e.target
         setFormInfo({...formInfo, [name]:value})
-        console.log(formInfo)
       }
       
     

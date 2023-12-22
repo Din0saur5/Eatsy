@@ -46,7 +46,7 @@ const CreateRecipeForm = ({userData, setUserData,  handleClose}) => {
     
     if (e.target.name.startsWith('ingredients')) {
       const index = parseInt(e.target.dataset.index);
-      console.log(index)
+      
       const newIngredients = formData.ingredients.map((ingredient, i) => {
         if (i === index) {
           return { ...ingredient, [e.target.dataset.field]: e.target.value };
@@ -57,11 +57,11 @@ const CreateRecipeForm = ({userData, setUserData,  handleClose}) => {
     } else {
       setFormData({ ...formData, [e.target.name]: e.target.value });
     }
-    console.log(formData)
+    
   };
 
   const handleSubmit = async (e) => {
-    console.log("handleSubmit called");
+    
     e.preventDefault();
     
     const processedTags = formData.tags
@@ -76,7 +76,7 @@ const CreateRecipeForm = ({userData, setUserData,  handleClose}) => {
     cuisine: cuisineType,
     dish_type: dishType,
   };
-  console.log(finalFormData);
+
     const server = import.meta.env.VITE_BACK_END_SERVE
 
 

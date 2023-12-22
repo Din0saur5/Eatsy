@@ -13,27 +13,25 @@ from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 
-# Instantiate app, set attributes
 app = Flask(__name__)
 
 cors = CORS(app, supports_credentials=True, resources={
     r"/*": {
-       "origins": ["http://127.0.0.1:5174"],
+       "origins": ["http://127.0.0.1:5174","https://eatsy-8ewa.onrender.com"],
        "methods": ["GET", "POST", "PATCH", "PUT", "DELETE"],
        "allow_headers": ["Content-Type", "Authorization"]
     }
 })
 app.secret_key = os.getenv('SECRET_KEY')
-
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SUPABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SESSION_COOKIE_NAME'] = 'id'
-app.config['SESSION_COOKIE_SECURE'] = True  # Send cookie over HTTPS only
-app.config['SESSION_COOKIE_HTTPONLY'] = True  # Prevent JavaScript access to session cookie
+app.config['SESSION_COOKIE_SECURE'] = True  
+app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'None' 
 app.json.compact = False
 
-# Define metadata, instantiate db
+
 metadata = MetaData(naming_convention={
     "ix": "ix_%(column_0_label)s",
     "uq": "uq_%(table_name)s_%(column_0_name)s",
@@ -47,7 +45,6 @@ migrate = Migrate(app, db, render_as_batch=True)
 db.init_app(app)
 
 bcrypt = Bcrypt(app)
-# Instantiate REST API
 api = Api(app)
 
 

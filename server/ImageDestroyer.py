@@ -5,7 +5,7 @@ import requests
 from tqdm import tqdm
 
 def check_and_delete_inaccessible_images():
-    with app.app_context():  # This creates the necessary application context
+    with app.app_context():
         recipes = Recipe.query.all()
         inaccessible_recipes = []
 
@@ -19,11 +19,11 @@ def check_and_delete_inaccessible_images():
                 print(f"Error checking image for recipe {recipe.id}: {e}")
 
 
-    # Reporting the results
+
     count = len(inaccessible_recipes)
     print(f"Found {count} recipes with inaccessible images.")
 
-    # Ask for confirmation before deletion
+    
     if count > 0:
         confirm = input("Do you want to delete these recipes? (yes/no): ")
         if confirm.lower() == 'yes':
