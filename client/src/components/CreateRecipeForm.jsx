@@ -14,10 +14,9 @@ const CreateRecipeForm = ({userData, setUserData,  handleClose}) => {
     is_draft: false,
     tags: [''],
     meal_type: '',
-    recipe_id:'',
     time: '',
     user_id: userData.id, 
-    ingredients: [{ text: '', food: '', quantity: '', unit: '' , recipe_id: ''}]
+    ingredients: [{ text: '', food: '', quantity: '', unit: '' }]
   });
 
   const [cuisineType, setCuisineType]=useState('')
@@ -62,6 +61,7 @@ const CreateRecipeForm = ({userData, setUserData,  handleClose}) => {
   };
 
   const handleSubmit = async (e) => {
+    console.log("handleSubmit called");
     e.preventDefault();
     
     const processedTags = formData.tags
@@ -78,100 +78,93 @@ const CreateRecipeForm = ({userData, setUserData,  handleClose}) => {
   };
   console.log(finalFormData);
     const server = import.meta.env.VITE_BACK_END_SERVE
-    try {
-      const response = await fetch(`${server}/recipes/create`, {
+
+
+
+  try {
+    const recipeResponse = await fetch(`${server}/recipes/create`, {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        ...finalFormData,
+        ingredients: [] // Exclude ingredients for now
+      })
+    });
+
+    if (!recipeResponse.ok) {
+      throw new Error(`HTTP error! Status: ${recipeResponse.status}`);
+    }
+
+    const recipeData = await recipeResponse.json();
+    const recipeId = recipeData.id;
+
+    for (const ingredient of finalFormData.ingredients) {
+      await fetch(`${server}/ingredients/${recipeId}`, {
         credentials: 'include',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(finalFormData)
+        body: JSON.stringify({ ...ingredient, recipe_id: recipeId })
       });
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      // Handle response
-      const data = await response.json()
-      setRecipeId(data.id)
-      console.log(recipeId)
-    } catch (error) {
-      console.error('Error creating recipe:', error);
-     
     }
-    for (const ingredient of finalFormData.ingredients) {
-      
-      console.log(ingredient)
-      console.log(recipeId)
-      const finalIng = {
-        text: ingredient.text,
-        food: ingredient.food,
-        quantity: parseFloat(ingredient.quantity),
-        unit: ingredient.unit,
-      
-       
-      }
-      try {
-      const resp = await fetch(`${server}/ingredients/${recipeId}`,{
-         credentials: 'include',
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(finalIng)
-      });
-      if (!resp.ok) {
-        throw new Error(`HTTP error! Status: ${resp.status}`);
-      }
-      const d = await resp.json()
-      console.log(d)
-    } catch (error) {
-      console.error('Error creating recipe:', error);
-    }
+
+    alert('Recipe created successfully');
+    handleClose();
+      // Reset form if needed
+      // setFormData({ ...initial form state });
+
+  } catch (error) {
+    console.error('Error creating recipe:', error);
+    alert('Error creating recipe');
   }
-      // handleClose();
-      // alert('Recipe created successfully')
-      // setFormData({
-      //   name: '',
-      //   image: '',
-      //   description: '',
-      //   steps: [''],
-      //   is_draft: false,
-      //   tags: [''],
-      //   meal_type: '',
-      //   time: '',
-      //   user_id: userData.id, 
-      //   ingredients: [{ text: '', food: '', quantity: '', unit: '' }]
-      // })
-     
-  };
 
-  const handleAddIngredient = () => {
-    setFormData({
-      ...formData,
-      ingredients: [...formData.ingredients, { text: '', food: '', quantity: '', unit: '' }]
-    });
-  };
+      }
+          handleClose();
+          alert('Recipe created successfully')
+          setFormData({
+            name: '',
+            image: '',
+            description: '',
+            steps: [''],
+            is_draft: false,
+            tags: [''],
+            meal_type: '',
+            time: '',
+            user_id: userData.id, 
+            ingredients: [{ text: '', food: '', quantity: '', unit: '' }]
+          })
 
-  const handleDeleteIngredient = (index) => {
-    const newIngredients = formData.ingredients.filter((_, i) => i !== index);
-    setFormData({ ...formData, ingredients: newIngredients });
-  };
+      const handleAddIngredient = () => {
+        setFormData({
+          ...formData,
+          ingredients: [...formData.ingredients, { text: '', food: '', quantity: '', unit: '' }]
+        });
+      };
 
-  const handleChangeStep = (index, value) => {
-    const newSteps = formData.steps.map((step, i) => (
-      i === index ? value : step
-    ));
-    setFormData({ ...formData, steps: newSteps });
-  };
+      const handleDeleteIngredient = (index) => {
+        const newIngredients = formData.ingredients.filter((_, i) => i !== index);
+        setFormData({ ...formData, ingredients: newIngredients });
+      };
 
-  const handleAddStep = () => {
-    setFormData({ ...formData, steps: [...formData.steps, ''] });
-  };
-  
-  const handleDeleteStep = (index) => {
-    const newSteps = formData.steps.filter((_, i) => i !== index);
-    setFormData({ ...formData, steps: newSteps });
-  };
+      const handleChangeStep = (index, value) => {
+        const newSteps = formData.steps.map((step, i) => (
+          i === index ? value : step
+        ));
+        setFormData({ ...formData, steps: newSteps });
+      };
+
+      const handleAddStep = () => {
+        setFormData({ ...formData, steps: [...formData.steps, ''] });
+      };
+      
+      const handleDeleteStep = (index) => {
+        const newSteps = formData.steps.filter((_, i) => i !== index);
+        setFormData({ ...formData, steps: newSteps });
+      };
 
 
   return (
@@ -238,16 +231,15 @@ const CreateRecipeForm = ({userData, setUserData,  handleClose}) => {
                 <Accordion.Title>Steps?</Accordion.Title>
                 <Accordion.Content >
                 {formData.steps.map((step, index) => (
-                        <>
-                        <input 
-                            key={index}
-                            type="text" 
-                            value={step} 
-                            onChange={(e) => handleChangeStep(index, e.target.value)} 
-                            placeholder={`Step ${index + 1}`} 
-                            className="border border-gray-400 rounded p-2 my-1"
-                            required
-                        />
+                  <React.Fragment key={index}> {/* Use React.Fragment with a key */}
+                    <input 
+                      type="text" 
+                      value={step} 
+                      onChange={(e) => handleChangeStep(index, e.target.value)} 
+                      placeholder={`Step ${index + 1}`} 
+                      className="border border-gray-400 rounded p-2 my-1"
+                      required
+                    />
                         {formData.steps.length > 1 && (
                             <button 
                               type="button" 
@@ -257,9 +249,9 @@ const CreateRecipeForm = ({userData, setUserData,  handleClose}) => {
                               X
                             </button>
                           )}
-                        </>
+                        </React.Fragment>
                     ))}
-                   
+                    
                     <button  className='border  bg-blue-400  px-2 p-0.5 rounded-lg mb-2 mr-1' type="button" onClick={handleAddStep}>Add Step</button>
                 </Accordion.Content>
             </Accordion.Panel>
@@ -270,7 +262,6 @@ const CreateRecipeForm = ({userData, setUserData,  handleClose}) => {
             <Button gradientMonochrome="failure" onClick={handleClose} className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Cancel</Button>
         </div>
     </form>
-    
   );
 };
 

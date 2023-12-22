@@ -7,6 +7,7 @@ const CreateRecipe = ({ isOpen, onClose, userData }) => {
  const [showModal, setShowModal] = useState(isOpen); 
 
   useEffect(() => {
+    console.log("Modal state changed: ", isOpen);
     setShowModal(isOpen); 
   }, [isOpen]);
   const handleClose = () => {

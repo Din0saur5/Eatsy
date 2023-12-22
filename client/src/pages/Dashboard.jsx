@@ -25,8 +25,12 @@ const Dashboard = () => {
 
   useEffect(()=>{
     setUserRecipes(userData.recipes)
-    console.log(userData.recipes)
+    // console.log(userData.recipes)
   },[])
+
+  useEffect(() => {
+    console.log("Modal state changed: ", isModalOpen);
+  }, [isModalOpen]);
   
   useEffect(()=>{
     setUserFavs(userData.favorites)
