@@ -29,7 +29,7 @@ const RecipeCard = ({owned=false, setIsModalOpen, setSelectedRecipe , favorited=
 
 
 <div data-aos="fade-up" className='justify-center items-center'>
-<div className="relative  w-full h-auto max-w-sm bg-gray-200 dark:bg-gray-800 rounded-lg shadow bg-pink border border-gray-400 dark:border-gray-400">
+<div className="relative  w-full h-auto  bg-gray-200 dark:bg-gray-800 rounded-lg shadow bg-pink border border-gray-400 dark:border-gray-400">
     {owned ? (
       <div className="absolute rounded-bl-lg rounded-tl-xxl top-14 right-3 rotate-90 bg-blue-ribbon text-white py-1 px-4 transform -translate-y-full ribbon-blue ">
       <svg xmlns="http://www.w3.org/2000/svg" className="h-4  w-4 inline-block mr-1 text-transparent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
