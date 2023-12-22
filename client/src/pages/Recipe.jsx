@@ -53,13 +53,6 @@ const Recipe = () => {
     setIsDescriptionModalOpen(!isDescriptionModalOpen);
   };
 
-  let descriptionDisplay;
-  if (recipe.description) {
-    descriptionDisplay = recipe.description.length <= descriptionMaxLength 
-      ? recipe.description 
-      : recipe.description.substring(0, descriptionMaxLength) + "...";
-  }
-
   let contents;
   if (error) {
     contents = (
@@ -87,20 +80,18 @@ const Recipe = () => {
               <h1 className='inline-flex bg-[#F5E8D6] bg-opacity-50 pb-2 rounded-2xl shadow-[0_0_10px_5px_rgba(245,232,214,0.5)]'>{recipe.name}</h1>
             </div>
             <div className='md:grid md:grid-cols-2 m-4 max-w-[1480px] mx-auto'>
-              <div className='bg-old-paper p-10 pt-20 pl-24'>
+              <div className='bg-old-paper bg-cover p-10 pt-20 pl-24'>
                 <div className='flex justify-between'>
                   <ImageWithFallback 
                     src={recipe.image} 
                     cN="aspect-square w-1/2 mb-4 rounded-lg object-contain"  
                     alt={`Image of ${recipe.name}`}
                   />
-                   <div className='text-description'>
-            <p>{descriptionDisplay}</p>
-            {recipe.description && recipe.description.length > descriptionMaxLength &&
+                   <div className='text-description bg-[#F5E8D6] bg-opacity-40 pb-2 rounded-2xl shadow-[0_0_10px_5px_rgba(245,232,214,0.4)]'>
+            <p className='text-center line-clamp-6 lg:line-clamp-[10] font-[literata-italic]'>{recipe.description}</p>
               <button onClick={toggleDescriptionModal} className="text-blue-500 hover:underline">
-                Read More
+                Full Description
               </button>
-            }
             <Modal 
               isOpen={isDescriptionModalOpen} 
               onClose={toggleDescriptionModal} 
@@ -128,7 +119,7 @@ const Recipe = () => {
                   </ul>
                 </div>
               </div>
-              <div className='bg-old-paper p-20 bg-right-top pl-12'>
+              <div className='bg-old-paper p-20 bg-right-top bg-cover pl-12'>
                 <div className='bg-[#F5E8D6] bg-opacity-40 pl-8 pb-2 rounded-2xl shadow-[0_0_10px_5px_rgba(245,232,214,0.4)]'>
                   <h2 className='text-center'>Steps</h2>
                   <ol className='list-decimal'>

@@ -49,44 +49,46 @@ const RecipeSearchPage = () => {
 
   const hasRecipes = Object.keys(filteredRecipes).length > 0;
   return (
-    <div className="container">
-      <h1>Recipes A-Z</h1>
-      <input
-        type="search"
-        placeholder="Search"
-        className="search-bar"
-        value={searchQuery}
-        onChange={handleSearchChange}
-      />
-      <div className="alphabet-nav">
-        <h2>Click a Letter to Jump to the Category</h2>
-        {'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map((letter) => (
-          <a href={`#${letter}`} key={letter}>{letter}</a>
+    <div className='bg-background2 bg-fixed bg-center bg-cover pt-2'>
+      <div className="container bg-[#F5E8D6] bg-opacity-60 rounded-2xl shadow-[0_0_10px_5px_rgba(245,232,214,0.6)]">
+        <h1>Recipes A-Z</h1>
+        <input
+          type="search"
+          placeholder="Search"
+          className="search-bar"
+          value={searchQuery}
+          onChange={handleSearchChange}
+        />
+        <div className="alphabet-nav">
+          <h2>Click a Letter to Jump to the Category</h2>
+          {'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map((letter) => (
+            <a href={`#${letter}`} key={letter}>{letter}</a>
+          ))}
+        </div>
+
+        {!hasRecipes && (
+          <div className="no-results">
+            <p>No Results Found for "{searchQuery}"</p>
+          </div>
+        )}
+
+        {hasRecipes &&Object.keys(filteredRecipes)
+          .sort()
+          .map((letter) => (
+            <div key={letter} id={letter} className="letter-section">
+              <h2>{letter}</h2>
+              <ul className="recipe-list md:columns-3 list-disc">
+                {filteredRecipes[letter].map((recipe) => (
+                  <li className='mb-3  ml-4' key={recipe.id}>
+                    <Link to={`/recipe/${recipe.id}`} className="recipe-link ">
+                      {recipe.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
         ))}
       </div>
-
-      {!hasRecipes && (
-        <div className="no-results">
-          <p>No Results Found for "{searchQuery}"</p>
-        </div>
-      )}
-
-      {hasRecipes &&Object.keys(filteredRecipes)
-        .sort()
-        .map((letter) => (
-          <div key={letter} id={letter} className="letter-section">
-            <h2>{letter}</h2>
-            <ul className="recipe-list md:columns-3 list-disc">
-              {filteredRecipes[letter].map((recipe) => (
-                <li className='mb-3  ml-4' key={recipe.id}>
-                  <Link to={`/recipe/${recipe.id}`} className="recipe-link ">
-                    {recipe.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-      ))}
     </div>
   );
 }

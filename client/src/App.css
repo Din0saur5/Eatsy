@@ -10,6 +10,14 @@
   font-family: cormorant-garamond;
   src: url('/fonts/cormorant-garamond');
 }
+@font-face {
+  font-family: literata;
+  src: url('/fonts/Literata/Literata-VariableFont_opsz,wght.ttf');
+}
+@font-face {
+  font-family: literata-italic;
+  src: url('/fonts/Literata/Literata-Italic-VariableFont_opsz,wght.ttf')
+}
 
 .text-49b349 { color: #49b349; }
 .text-e0e0b4 { color: #e0e0b4; }
@@ -103,4 +111,7 @@ button.create_new:hover span {
 
 .animate-slideUp {
   animation: slideUp 0.5s ease-out forwards;
+}
+*{
+  font-family: 'literata'
 }
