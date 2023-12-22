@@ -22,7 +22,7 @@ const CreateNewRecipe = () => {
       });
     const [cuisineType, setCuisineType]=useState('')
     const [dishType, setDishType]=useState('')
-    const [isFormValid, setIsFormValid] = useState(false); 
+ 
     const navigate = useNavigate();
     
 
@@ -146,7 +146,7 @@ const CreateNewRecipe = () => {
                 <Select name="meal_type" value={formData.meal_type} onChange={handleChange}  required> 
                     <option className='text-white hover:text-blue-400'>Meal Type</option>
                     <option>Breakfast</option>
-                    <option>Lunch/Dinner</option>
+                    <option>Brunch</option>
                     <option>Teatime</option>
                     <option>Snack</option>
                 </Select>
@@ -170,7 +170,7 @@ const CreateNewRecipe = () => {
                 
                 {formData.ingredients.map((ingredient, index) => (
                 <>
-                <div className=' sm:grid-rows-1 lg:grid-rows-4 sm:grid-flow-row lg:grid-flow-col gap-2' key={index}>
+                <div className='sm:' key={index}>
                    
                     
                     <h4 className='text-left underline'>Ingredient {index+1}:</h4>
@@ -244,8 +244,8 @@ const CreateNewRecipe = () => {
             </Accordion.Panel>
             </Accordion>
 
-        <div className='flex flex-row justify-between'> 
-            <Button  disabled={!isFormValid} gradientMonochrome="success"  className={`mt-4 px-4 py-2 ${isFormValid ? '': 'bg-gray-500 text-gray-200'}` } type="submit">Create Recipe</Button>
+        <div className='flex flex-row items-center justify-center'> 
+            <Button  gradientMonochrome="success"  className='mt-4 px-4 py-2'  type="submit">Create Recipe</Button>
         </div>
     </form>
     </div>
