@@ -117,8 +117,8 @@ const TestimonialsCarousel = () => {
       showThumbs={false}
       showStatus={false}
       autoPlay={true}
-      interval={6100}
-      transitionTime={1000}
+      interval={5100}
+      transitionTime={1500}
     >
       {testimonials.map((testimonial, index) => (
         <div key={index} className="my-4 text-center">
