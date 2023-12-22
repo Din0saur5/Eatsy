@@ -19,7 +19,7 @@ const UpdateRecipe = ({ isEditOpen, selectedRecipe,  onCloseEdit, setUserRecipes
             throw new Error(`HTTP error! Status: ${response.status}`); 
         }
             const d = await response.json()
-            console.log(data);
+      
            
         
         } catch (error) {

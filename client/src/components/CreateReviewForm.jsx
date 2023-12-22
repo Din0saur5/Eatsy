@@ -15,9 +15,9 @@ const CreateReviewForm = ({handleClose, user_id, recipe_id}) => {
     }, [formData])
     
     const handleSubmit = async (e) => {
-        console.log(formData)
+       
         e.preventDefault()
-        console.log(formData)
+
         if (!isFormValid) return
         const server = import.meta.env.VITE_BACK_END_SERVE
         try {
@@ -34,7 +34,7 @@ const CreateReviewForm = ({handleClose, user_id, recipe_id}) => {
             }
             // Handle response
             const data = await response.json()
-            console.log(data)
+           
             handleClose()
         } catch (error) {
             console.error('Error:', error);

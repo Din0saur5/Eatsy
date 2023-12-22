@@ -48,11 +48,11 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage/>,
     children:[
       {
-        path: "/international-recipes", // New route for International Recipes
+        path: "/international-recipes", 
         element: <InternationalRecipesPage />,
       },
       {
-        path: "/cuisine/:cuisineType", // Add this route for cuisine
+        path: "/cuisine/:cuisineType", 
         element: <Cuisine />,
       },
       {
@@ -69,7 +69,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/ingredients/:ingredient",
-        element: <IngredientPage />, // Add this line for ingredient route
+        element: <IngredientPage />,
       },
       {
         path: "",
@@ -109,10 +109,6 @@ const router = createBrowserRouter([
         element: <Account/>,
         loader: protectedRoute,
       }   
-            
-            
-      
-      
     ]
   }
 ]

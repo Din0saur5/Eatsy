@@ -20,13 +20,13 @@
     z-index: 2;
   }
   .section-bg {
-    background-color: rgba(255, 255, 255, 0.7); /* Adjust the opacity as needed */
+    background-color: rgba(255, 255, 255, 0.7);
   }
   .section-bg::after {
     content: "";
-    background-image: url('/path/to/your/background/image.jpg'); /* Replace with your image path */
+    background-image: url('/path/to/your/background/image.jpg');
     background-size: cover;
-    opacity: 0.7; /* Adjust the opacity as needed */
+    opacity: 0.7; 
     position: absolute;
     top: 0;
     left: 0;

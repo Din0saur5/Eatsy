@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
- // Adjust the path as per your project structure
 import { useOutletContext } from "react-router-dom";
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import { Accordion, Button, Select } from 'flowbite-react';
 import AutocompleteInput from '../components/AutoComplete';
 
@@ -72,7 +71,7 @@ const CreateNewRecipe = () => {
     
         if (e.target.name.startsWith('ingredients')) {
           const index = parseInt(e.target.dataset.index);
-          console.log(index)
+          
           const newIngredients = formData.ingredients.map((ingredient, i) => {
             if (i === index) {
               return { ...ingredient, [e.target.dataset.field]: e.target.value };
@@ -83,22 +82,16 @@ const CreateNewRecipe = () => {
         } else {
           setFormData({ ...formData, [e.target.name]: e.target.value });
         }
-        // console.log(formData)
+
       };
-
-
 
       const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("handleSubmit called");
-    
-        // Process tags
         const processedTags = formData.tags
             .split('#')
             .filter(tag => tag.trim() !== '') 
             .map(tag => tag.trim().replace(/_/g, ' ').replace(/,/g, '')); 
     
-        // Create the final form data object for submission (excluding ingredients)
         const finalFormData = {
             ...formData,
             tags: processedTags,
@@ -108,11 +101,9 @@ const CreateNewRecipe = () => {
             steps: formData.steps.filter(step => step.trim() !== '')
         };
     
-        console.log(finalFormData);
         const server = import.meta.env.VITE_BACK_END_SERVE;
     
         try {
-            // Post the recipe (excluding ingredients)
             const recipeResponse = await fetch(`${server}/recipes/create`, {
                 credentials: 'include',
                 method: 'POST',
@@ -127,9 +118,9 @@ const CreateNewRecipe = () => {
             }
     
             const recipeData = await recipeResponse.json();
-            console.log('Recipe created successfully', recipeData);
+
     
-            // Use the received recipe ID to post ingredients
+            
             const recipeId = recipeData.id;
     
             for (const ingredient of formData.ingredients) {
@@ -143,11 +134,8 @@ const CreateNewRecipe = () => {
                 });
             }
     
-            console.log('Ingredients added successfully');
     
-            // Navigate to a different page or reset form here
-            // navigate('/some-path');
-            // setFormData({ /* initial form state */ });
+
     
         } catch (error) {
             console.error('Error in creating recipe or adding ingredients:', error);
@@ -155,7 +143,7 @@ const CreateNewRecipe = () => {
         }
     };
 
-    // Ensure userData is available here and is the correct object
+
     return (
         <div  className='flex h-full overflow-y-auto min-h-screen justify-center items-center bg-bg7 '>
         <div  className='w-4/5 h-full min-h-screen bg-beige dark:bg-brown'>
@@ -236,7 +224,7 @@ const CreateNewRecipe = () => {
                 <Accordion.Content >
                     <table className="table-auto">
                       {formData.steps.map((step, index) => (
-                        <React.Fragment key={`step-${index}`}> {/* Add key prop */}
+                        <React.Fragment key={`step-${index}`}> 
                           <thead>
                         <tr>
                             <th className='text-left'>Step {index+1}:</th>

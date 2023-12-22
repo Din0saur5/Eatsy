@@ -8,7 +8,7 @@ import CreateRecipeButton from '../components/CreateRecipeButton';
 import UpdateRecipe from '../components/UpdateRecipe';
 
 const Dashboard = () => {
-  const [isToggled, setIsToggled] = useState(true); // true for 'My Recipes', false for 'Favorites'
+  const [isToggled, setIsToggled] = useState(true); 
   const [userData, setUserData] = useOutletContext();
   const [userRecipes, setUserRecipes] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,12 +30,12 @@ const Dashboard = () => {
       credentials: 'include',
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json', // Specify the content type header
+        'Content-Type': 'application/json', 
       },
     }).then(r=>r.json())
     .then(d=>setUserFavs(d))
     
-    // console.log(userFavs)
+  
   },[])
 
   
@@ -46,11 +46,11 @@ const Dashboard = () => {
       credentials: 'include',
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json', // Specify the content type header
+        'Content-Type': 'application/json',
       },
     }).then(r=>r.json())
     .then(d=>setUserRecipes(d))
-    // console.log(userRecipes)
+
 
   },[])
   
