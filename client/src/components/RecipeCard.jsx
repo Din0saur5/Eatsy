@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React from 'react'
+import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -7,6 +7,8 @@ import { RiDraftLine } from "react-icons/ri";
 import ImageWithFallback from './ImageWithFallBack';
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
+import LikeButton from '../components/LikeButton';
+import { useOutletContext} from 'react-router-dom';
 
 
 const RecipeCard = ({owned=false, setIsModalOpen, setSelectedRecipe , favorited=false, recipe}) => {
@@ -17,7 +19,7 @@ const RecipeCard = ({owned=false, setIsModalOpen, setSelectedRecipe , favorited=
       setIsModalOpen(true)
     }
     const  {name, time, image, id, reviews } = recipe
-
+    const [userData, setUserData] = useOutletContext();
     const avgRating = Math.round(reviews.reduce((sum, review) => sum + review.rating, 0) / recipe.reviews.length)
     let avgStars = ''
     for(let i = 0; i < avgRating; i++){
@@ -29,13 +31,20 @@ const RecipeCard = ({owned=false, setIsModalOpen, setSelectedRecipe , favorited=
 
 
 <div data-aos="fade-up ">
-<div className=" relative w-full h-auto max-w-sm bg-gray-200 dark:bg-gray-800 rounded-lg shadow bg-pink border border-gray-400 dark:border-gray-400">
-{owned ? (
-        <button onClick={()=>handleEdit()}  className="absolute top-2 right-2 p-2 text-white bg-blue-500 hover:bg-blue-700 rounded"><RiDraftLine /></button> 
-      ) : (
-        <button  className="absolute top-1 right-4 p-2 text-white bg-green-500 hover:bg-green-700 rounded">{favorited? <FaRegHeart />:<FaHeart />
-    }</button>
-      )}
+<div className="relative w-full h-auto max-w-sm bg-gray-200 dark:bg-gray-800 rounded-lg shadow bg-pink border border-gray-400 dark:border-gray-400">
+    {owned ? (
+        <button onClick={() => handleEdit()} className="absolute top-2 right-2 p-2 text-white bg-blue-500 hover:bg-blue-700 rounded">
+            <RiDraftLine />
+        </button>
+    ) : (
+        userData && (
+            <LikeButton 
+                recipe_id={recipe.id} 
+                user_id={userData.id} 
+                favorited={recipe.favorites.includes(userData.id)}
+            />
+        )
+    )}
     <Link to={`/recipe/${id}`} >
     <ImageWithFallback
     cN={"p-8 rounded-t-lg"}
