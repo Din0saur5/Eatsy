@@ -67,7 +67,7 @@ const Navbar = ({ onLogout, userData }) => {
           onLogout(null); 
           sessionStorage.clear();
           // Assuming onLogout handles the client-side session state
-            location.reload()// Redirect to the login page
+            navigate('/')   // Redirect to the login page
       })
       .catch(error => {
           console.error('Logout failed:', error);

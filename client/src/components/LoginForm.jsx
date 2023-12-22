@@ -29,10 +29,13 @@ const LoginForm = ({ onLogin }) => {
         password: formInfo.password,
       }),
     }).then((r) => {
-      setIsLoading(false);
       if (r.ok) {
-        r.json().then((user) => onLogin(user));
-        navigate('/dashboard')
+        r.json().then((user) =>{
+          onLogin(user)
+          setIsLoading(false);
+          navigate('/dashboard')
+        }) 
+        
       } else {
         r.json().then((err) => setErrors(err.errors));
       }
