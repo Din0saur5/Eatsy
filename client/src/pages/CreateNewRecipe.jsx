@@ -183,11 +183,21 @@ const CreateNewRecipe = () => {
              
                 
                 {formData.ingredients.map((ingredient, index) => (
-                <div key={`ingredient-${index}`}> {/* Add key prop */}
-                <div className='sm:' key={index}>
+                <>
+                <div className="md: grid grid-flow-row auto-rows-max" key={index}>
                    
                     
-                    <h4 className='text-left underline'>Ingredient {index+1}:</h4>
+                    <h4 className='text-left mt-6 mb-3 underline'>Ingredient {index+1}:</h4>
+                        {formData.ingredients.length > 1 && (
+                    <button 
+                    type="button" 
+                    onClick={() => handleDeleteIngredient(index)}
+                    className=" mb-4 bg-red-500 text-white ml-1 px-1.5 rounded hover:bg-red-600"
+                    >
+                              X
+                    </button>
+                   
+                          )}
                     <div></div>
                     <input className='rounded-lg ml-5 my-2 mr-1' type="text" name={`ingredients[${index}].text`} data-index={index} data-field="text" value={ingredient.text} onChange={handleChange} placeholder="Extra Details" required />
                     <div></div>
@@ -196,22 +206,12 @@ const CreateNewRecipe = () => {
                     <input className='rounded-lg ml-5 mt-2 mb-2 mr-1' type="number" name={`ingredients[${index}].quantity`} data-index={index} data-field="quantity" value={ingredient.quantity} onChange={handleChange} placeholder="Quantity"  required/>
                     <div></div>
                     <input className='rounded-lg ml-5 mt-2 mb-2 mr-1' type="text" name={`ingredients[${index}].unit`} data-index={index} data-field="unit" value={ingredient.unit} onChange={handleChange} placeholder="Unit"  required/> 
-                        {formData.ingredients.length > 1 && (
-                    <button 
-                    type="button" 
-                    onClick={() => handleDeleteIngredient(index)}
-                    className=" ml-5 bg-red-500 text-white ml-1 px-1.5 rounded hover:bg-red-600"
-                    >
-                              X
-                    </button>
-                   
-                          )}
                 </div>
                
                 </div>
             ))}
           
-            <button className='border bg-blue-400  px-2 p-0.5 rounded-lg mt-2 mb-2 mr-1' type="button" onClick={handleAddIngredient}>Add Ingredient</button>
+            <button className='border bg-blue-400  px-2 p-0.5 rounded-lg mt-6 mb-2 mr-1' type="button" onClick={handleAddIngredient}>Add Ingredient</button>
                 </Accordion.Content>
             </Accordion.Panel>
             <Accordion.Panel>
@@ -225,15 +225,15 @@ const CreateNewRecipe = () => {
                             <th className='text-left'>Step {index+1}:</th>
                         </tr>
                     </thead>
-                    <tbody>
-                    <tr>
-                        <td>
+                    <tbody >
+                    <tr >
+                        <td >
                             <input 
                                 type="text" 
                                 value={step} 
                                 onChange={(e) => handleChangeStep(index, e.target.value)} 
                                 placeholder={`Step ${index + 1}`} 
-                                className="border border-gray-400 rounded p-2 my-1"
+                                className="border border-gray-400 rounded p-2 lg:w-96 my-1"
                                 required
                             />
                         </td>
