@@ -13,6 +13,7 @@ const Recipe = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [error, setError] = useState(null);
   const [recipe, setRecipe] = useState({});
+  const [quantity, setQuantity] = useState(1);
   const server = import.meta.env.VITE_BACK_END_SERVE;
   const descriptionMaxLength = 470;
   const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false);
@@ -44,7 +45,13 @@ const Recipe = () => {
     fetchRecipe();
   }, [id, server, isModalOpen]);
 
-  const ingredients = recipe.ingredients ? recipe.ingredients.map(i => i.text) : [];
+  const ingredients = recipe.ingredients ? recipe.ingredients.map(i =>{ 
+    if(quantity == 1){
+      return i.text
+    } else {
+      return `${i.quantity*quantity} ${i.unit} ${i.food}`
+    }
+  }) : [];
   const reviews = recipe.reviews ? recipe.reviews.map(review => (
     <Review review={review} key={review.id} />
   )) : [];
@@ -74,7 +81,7 @@ const Recipe = () => {
   } else {
     contents = (
       <div className='bg-[#F5E8D6]'>
-        <div className='min-h-screen bg-background1 bg-cover'>
+        <div className='min-h-screen bg-background1 bg-cover bg-fixed'>
           <div className='text-black'>
             <div className="text-center p-6 font-bold">
               <h1 className='inline-flex bg-[#F5E8D6] bg-opacity-50 pb-2 rounded-2xl shadow-[0_0_10px_5px_rgba(245,232,214,0.5)]'>{recipe.name}</h1>
@@ -105,13 +112,26 @@ const Recipe = () => {
             />
           </div>
                 </div>
-                {userData && (
-                  <LikeButton 
-                    recipe_id={recipe.id} 
-                    user_id={userData.id} 
-                    favorited={recipe.favorites.includes(userData.id)}
-                  />
-                )}
+                <div className='flex flex-row justify-between'>
+                  <div>
+                    {userData && (
+                      <LikeButton 
+                        recipe_id={recipe.id} 
+                        user_id={userData.id} 
+                        favorited={recipe.favorites.includes(userData.id)}
+                      />
+                    )} &emsp;{recipe.favorites.length}
+                  </div>
+                    <div>
+                      <p>Multiply by: </p>
+                      <input 
+                        type='number'
+                        value={quantity}
+                        onChange={e => setQuantity(e.target.value)}
+                        className='rounded-lg'
+                        min={0.25}/>
+                    </div>
+                </div>
                 <div className='bg-[#F5E8D6] bg-opacity-40 pb-2 rounded-2xl shadow-[0_0_10px_5px_rgba(245,232,214,0.4)]'>
                   <h2 className='text-center'>Ingredients</h2>
                   <ul className='list-disc pl-4 font-semibold'>
@@ -140,11 +160,13 @@ const Recipe = () => {
               </div>
             </div>
           </div>
-        </div>
-        <div>
+          <div>
           {userData && (
             <>
-              <CreateReviewButton setIsModalOpen={setIsModalOpen}/>
+              <div className='ml-4'>
+                <CreateReviewButton 
+                  setIsModalOpen={setIsModalOpen}/>
+              </div>
               <Modal
                 isOpen={isModalOpen}
                 content={
@@ -158,6 +180,9 @@ const Recipe = () => {
             </>
           )}
           {reviews}
+        </div>
+
+
         </div>
       </div>
     );
