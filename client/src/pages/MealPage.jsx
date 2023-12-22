@@ -21,9 +21,6 @@ const MealPage = () => {
     const server = import.meta.env.VITE_BACK_END_SERVE;
     let queryMealType = mealType;
 
-    if (mealType === 'lunch' || mealType === 'dinner') {
-      queryMealType = 'lunch%2Fdinner';
-    }
 
     setIsFetching(true);
     try {
