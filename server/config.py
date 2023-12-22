@@ -17,7 +17,7 @@ app = Flask(__name__)
 
 cors = CORS(app, supports_credentials=True, resources={
     r"/*": {
-       "origins": ["http://127.0.0.1:5174"],
+       "origins": ["http://127.0.0.1:5174","https://eatsy-8ewa.onrender.com"],
        "methods": ["GET", "POST", "PATCH", "PUT", "DELETE"],
        "allow_headers": ["Content-Type", "Authorization"]
     }
