@@ -16,6 +16,7 @@ const Dashboard = () => {
   const [isEditOpen, setIsEditOpen]= useState(false)
   const [selectedRecipe, setSelectedRecipe] = useState({})
   const [userFavs, setUserFavs] = useState([])
+  const server = import.meta.env.VITE_BACK_END_SERVE
   useEffect(() => {
     AOS.init({
       duration: 1000,
@@ -24,8 +25,16 @@ const Dashboard = () => {
   }, []);
 
   useEffect(()=>{
-    setUserRecipes(userData.recipes)
-    // console.log(userData.recipes)
+    fetch(`${server}/favs/${userData.id}`,{
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json', // Specify the content type header
+      },
+    }).then(r=>r.json())
+    .then(d=>setUserFavs(d))
+    
+    console.log(userFavs)
   },[])
 
   useEffect(() => {
@@ -33,7 +42,15 @@ const Dashboard = () => {
   }, [isModalOpen]);
   
   useEffect(()=>{
-    setUserFavs(userData.favorites)
+    fetch(`${server}/rbu/${userData.id}`,{
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json', // Specify the content type header
+      },
+    }).then(r=>r.json())
+    .then(d=>setUserRecipes(d))
+    console.log(userRecipes)
 
   },[])
   
@@ -56,14 +73,14 @@ const Dashboard = () => {
           <div className="flex items-center justify-center py-4 md:py-8 flex-wrap">
             <ToggleSwitch toggle={toggle} isToggled={isToggled} />
           </div>
-          <div className="sm:ml-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="lg:ml-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
            {isToggled? (
-              userFavs ? (
+              userFavs.length >0 ? (
                 userFavs.map((recipe, index)=>{
                 return  <RecipeCard owned={false} setIsModalOpen={setIsEditOpen} setSelectedRecipe={setSelectedRecipe} recipe={recipe} key={index} />
                 })):(<div className='block h-screen'><h1>no recipes</h1></div>)
             ):(
-              userRecipes ? (
+              userRecipes.length >0 ? (
                 userRecipes.map((recipe, index)=>{
                 return  <RecipeCard owned={true} setIsModalOpen={setIsEditOpen} setSelectedRecipe={setSelectedRecipe} recipe={recipe} key={index} />
                 })):( <div className='h-screen'><h1>no recipes</h1></div>)

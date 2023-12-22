@@ -100,7 +100,7 @@ class CheckSession(Resource):
         print(user_id)
         if user_id:
             user = User.query.filter(User.id == user_id).first()
-            return make_response(user.to_dict(rules=('-created',)), 200)
+            return make_response(user.to_dict(only=('id', 'username',)), 200)
         
         return make_response({'error':'not loading cookie'}, 401)
 
@@ -458,6 +458,30 @@ class FavoriteRecipe(Resource):
             return make_response(favorite.to_dict(rules=('-user', '-recipe')), 201)
 
 api.add_resource(FavoriteRecipe, '/favorites/<uuid:rec_id>/<uuid:user_id>')
+
+
+class RecipesByUser(Resource):
+    def get(self, user_id):
+        rS = Recipe.query.filter(Recipe.user_id==user_id).all()
+        if len(rS)>0:
+            rb = [r.to_dict(only=('reviews.rating', 'image','name', 'time', 'id')) for r in rS]
+            return make_response(rb, 200)
+        else:
+            return make_response({"message": "No recipes found by this user"}, 404)
+        
+        
+        
+api.add_resource(RecipesByUser, '/rbu/<user_id>')
+class GetFavoriteRecipes(Resource):
+     def get(self, user_id):
+        fS = Favorite.query.filter(Favorite.user_id==user_id).all()
+        if len(fS) > 0:
+            rb = [f.to_dict() for f in fS]
+            return make_response(rb, 200)
+        else:
+            return make_response({"message": "No recipes found by this user"}, 404)
+                                 
+api.add_resource(GetFavoriteRecipes, '/favs/<user_id>')
 
 class RecipeNames(Resource):
     def get(self):
