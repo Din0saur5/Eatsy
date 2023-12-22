@@ -8,7 +8,7 @@ import Cuisine from "./pages/Cuisine";
 import MealPage from "./pages/MealPage";
 import IngredientPage from "./pages/IngredientPage";
 import ErrorPage from './pages/ErrorPage';
-
+import CreateNewRecipe from './pages/CreateNewRecipe';
 import './App.css';
 import Dashboard from "./pages/Dashboard";
 
@@ -54,6 +54,10 @@ const router = createBrowserRouter([
       {
         path: "/cuisine/:cuisineType", // Add this route for cuisine
         element: <Cuisine />,
+      },
+      {
+        path: "/create-new-recipe",
+        element: <CreateNewRecipe />
       },
       {
         path: "meals",

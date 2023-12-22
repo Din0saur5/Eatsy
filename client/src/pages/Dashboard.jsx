@@ -5,7 +5,6 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import RecipeCard from '../components/RecipeCard';
 import CreateRecipeButton from '../components/CreateRecipeButton';
-import CreateRecipe from '../components/CreateRecipe';
 import UpdateRecipe from '../components/UpdateRecipe';
 
 const Dashboard = () => {
@@ -68,7 +67,7 @@ const Dashboard = () => {
       <div  className='flex h-full min-h-screen justify-center items-center bg-bg7 '>
         <div  className='w-4/5 h-full min-h-screen bg-beige dark:bg-brown'>
           <div className='m-3'>
-            <CreateRecipeButton setIsModalOpen={setIsModalOpen} />
+            <CreateRecipeButton/>
           </div>
           <div className="flex items-center justify-center py-4 md:py-8 flex-wrap">
             <ToggleSwitch toggle={toggle} isToggled={isToggled} />
@@ -90,9 +89,7 @@ const Dashboard = () => {
          
         </div>
       </div>
-      <CreateRecipe userData={userData} userRecipes={userRecipes} setUserRecipes={setUserRecipes} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <UpdateRecipe userData={userData} userRecipes={userRecipes} setUserRecipes={setUserRecipes} selectedRecipe={selectedRecipe} isEditOpen={isEditOpen} onCloseEdit={()=>setIsEditOpen(false)} />
-      
     </>
   );
 };
