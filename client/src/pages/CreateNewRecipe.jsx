@@ -83,7 +83,7 @@ const CreateNewRecipe = () => {
         } else {
           setFormData({ ...formData, [e.target.name]: e.target.value });
         }
-        console.log(formData)
+        // console.log(formData)
       };
 
 
@@ -98,44 +98,61 @@ const CreateNewRecipe = () => {
             .filter(tag => tag.trim() !== '') 
             .map(tag => tag.trim().replace(/_/g, ' ').replace(/,/g, '')); 
     
-        // Create the final form data object for submission
+        // Create the final form data object for submission (excluding ingredients)
         const finalFormData = {
             ...formData,
             tags: processedTags,
             cuisine: cuisineType,
             dish_type: dishType,
-            user_id: userData.id, // Ensure user_id is correctly assigned
-            steps: formData.steps.filter(step => step.trim() !== '') // Filter out any empty step
+            user_id: userData.id,
+            steps: formData.steps.filter(step => step.trim() !== '')
         };
     
         console.log(finalFormData);
         const server = import.meta.env.VITE_BACK_END_SERVE;
     
         try {
-            const response = await fetch(`${server}/recipes/create`, {
+            // Post the recipe (excluding ingredients)
+            const recipeResponse = await fetch(`${server}/recipes/create`, {
                 credentials: 'include',
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(finalFormData) // Send the final form data
+                body: JSON.stringify(finalFormData)
             });
     
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+            if (!recipeResponse.ok) {
+                throw new Error(`HTTP error! Status: ${recipeResponse.status}`);
             }
     
-            const recipeData = await response.json();
+            const recipeData = await recipeResponse.json();
             console.log('Recipe created successfully', recipeData);
     
-            // Optionally navigate to a different page or reset form here
+            // Use the received recipe ID to post ingredients
+            const recipeId = recipeData.id;
+    
+            for (const ingredient of formData.ingredients) {
+                await fetch(`${server}/ingredients/${recipeId}`, {
+                    credentials: 'include',
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ ...ingredient, recipe_id: recipeId })
+                });
+            }
+    
+            console.log('Ingredients added successfully');
+    
+            // Navigate to a different page or reset form here
             // navigate('/some-path');
             // setFormData({ /* initial form state */ });
     
         } catch (error) {
-            console.error('Error creating recipe:', error);
-            alert('Error creating recipe');
-        }   
+            console.error('Error in creating recipe or adding ingredients:', error);
+            alert('Error creating recipe or adding ingredients');
+        }
     };
 
     // Ensure userData is available here and is the correct object

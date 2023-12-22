@@ -338,25 +338,21 @@ class ChangeIngredientById(Resource):
     
     def post(self, id):
         try:
-
-            print(id)
-            uuidR= uuid.UUID(id)
-            print(type(uuidR))
-            print(uuidR)
+            # Since 'id' is already a UUID object, we don't need to convert it again.
+            # Just use it directly.
             new_ingredient = Ingredient(
-                text = request.json.get('text'),
-                food = request.json.get('food'),
-                quantity = float(request.json.get('quantity')),
-                unit = request.json.get('unit'),
-                recipe_id = id,
-                
+                text=request.json.get('text'),
+                food=request.json.get('food'),
+                quantity=float(request.json.get('quantity')),
+                unit=request.json.get('unit'),
+                recipe_id=id,  # Use 'id' directly here.
             )
             db.session.add(new_ingredient)
             db.session.commit()
-            return make_response(new_ingredient.to_dict(),201)
+            return make_response(new_ingredient.to_dict(), 201)
         except Exception as e:
             print(e)
-            return make_response({"message":str(e)}, 400)
+            return make_response({"message": str(e)}, 400)
 
 api.add_resource(ChangeIngredientById, '/ingredients/<uuid:id>')
 
