@@ -166,36 +166,37 @@ const CreateNewRecipe = () => {
             <Accordion.Panel>
                 <Accordion.Title>Ingredients?</Accordion.Title>
                 <Accordion.Content>
-                <table className=" lg:visible">
+             
                 
                 {formData.ingredients.map((ingredient, index) => (
                 <>
-                <thead key={index}>
-                    <tr>
-                    <th className='text-left'>Ingredient {index+1}:</th>
-                    </tr>
-                </thead>
-                <tbody>
-                  <tr>        
-                    <td><input className='rounded-lg  my-2 mr-1' type="text" name={`ingredients[${index}].text`} data-index={index} data-field="text" value={ingredient.text} onChange={handleChange} placeholder="Extra Details" required /></td>
-                    <td><input className='rounded-lg ml-5 mt-2 mb-2 mr-1' type="text" name={`ingredients[${index}].food`} data-index={index} data-field="food" value={ingredient.food} onChange={handleChange} placeholder="Food"  required/></td>
-                    <td><input className='rounded-lg ml-5 mt-2 mb-2 mr-1' type="number" name={`ingredients[${index}].quantity`} data-index={index} data-field="quantity" value={ingredient.quantity} onChange={handleChange} placeholder="Quantity"  required/></td>
-                    <td><input className='rounded-lg ml-5 mt-2 mb-2 mr-1' type="text" name={`ingredients[${index}].unit`} data-index={index} data-field="unit" value={ingredient.unit} onChange={handleChange} placeholder="Unit"  required/> </td>
+                <div className=' sm:grid-rows-1 lg:grid-rows-4 sm:grid-flow-row lg:grid-flow-col gap-2' key={index}>
+                   
+                    
+                    <h4 className='text-left underline'>Ingredient {index+1}:</h4>
+                    <div></div>
+                    <input className='rounded-lg ml-5 my-2 mr-1' type="text" name={`ingredients[${index}].text`} data-index={index} data-field="text" value={ingredient.text} onChange={handleChange} placeholder="Extra Details" required />
+                    <div></div>
+                    <input className='rounded-lg ml-5 mt-2 mb-2 mr-1' type="text" name={`ingredients[${index}].food`} data-index={index} data-field="food" value={ingredient.food} onChange={handleChange} placeholder="Food"  required/>
+                    <div></div>
+                    <input className='rounded-lg ml-5 mt-2 mb-2 mr-1' type="number" name={`ingredients[${index}].quantity`} data-index={index} data-field="quantity" value={ingredient.quantity} onChange={handleChange} placeholder="Quantity"  required/>
+                    <div></div>
+                    <input className='rounded-lg ml-5 mt-2 mb-2 mr-1' type="text" name={`ingredients[${index}].unit`} data-index={index} data-field="unit" value={ingredient.unit} onChange={handleChange} placeholder="Unit"  required/> 
                         {formData.ingredients.length > 1 && (
-                    <td><button 
+                    <button 
                     type="button" 
                     onClick={() => handleDeleteIngredient(index)}
                     className=" ml-5 bg-red-500 text-white ml-1 px-1.5 rounded hover:bg-red-600"
                     >
                               X
                     </button>
-                    </td>
+                   
                           )}
-                  </tr>
-                </tbody>
+                </div>
+               
                 </>
             ))}
-            </table>
+          
             <button className='border bg-blue-400  px-2 p-0.5 rounded-lg mt-2 mb-2 mr-1' type="button" onClick={handleAddIngredient}>Add Ingredient</button>
                 </Accordion.Content>
             </Accordion.Panel>
