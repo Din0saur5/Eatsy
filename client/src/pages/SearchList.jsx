@@ -1,4 +1,3 @@
-
 import { useOutletContext, useParams } from "react-router-dom";
 import Search from '../components/Search';
 import Navbar from '../components/Navbar';
@@ -18,6 +17,3 @@ const SearchList = () => {
 }
 
 export default SearchList
-
-
-//when doing a link to{'/recipe/${id}}

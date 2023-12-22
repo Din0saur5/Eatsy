@@ -7,9 +7,7 @@ const Account = () => {
   const [newPassword, setNewPassword] = useState('');
 
   const handleUpdate = (field) => {
-      // Logic to handle update
-  
-      // Reset password fields after update
+
       if (field === 'password') {
           setCurrentPassword('');
           setNewPassword('');
@@ -18,8 +16,7 @@ const Account = () => {
 
   const handleDeleteAccount = () => {
       if (window.confirm('Are you sure you want to delete your account?')) {
-          // Logic to handle account deletion
-        
+
       }
   };
 

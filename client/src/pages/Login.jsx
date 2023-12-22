@@ -1,9 +1,5 @@
-// Login.jsx
 import { useState } from 'react';
-
 import { Link, redirect, useNavigate, useOutletContext } from 'react-router-dom';
-
-
 import LoginForm from '../components/LoginForm';
 import { Card } from 'flowbite-react';
 import SignupForm from '../components/SignupForm';

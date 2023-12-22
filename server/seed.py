@@ -38,7 +38,7 @@ def get_recipes(parsed_data):
     recipes = Recipe.query.all()
     for item in parsed_data:
         recipe_data = item['recipe']
-        dish_type = recipe_data['dishType'][0] if 'dishType' in recipe_data else 'Unknown'  # Handle missing dishType
+        dish_type = recipe_data['dishType'][0] if 'dishType' in recipe_data else 'Unknown'  
         if not recipe_data['url'] in [recipe.source for recipe in recipes]:
             recipe = Recipe(
                 name = recipe_data['label'],

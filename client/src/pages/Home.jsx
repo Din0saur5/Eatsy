@@ -25,7 +25,6 @@ const HomePage = () => {
 
   return (
     <div className="hero bg-background1 bg-cover text-center py-20">
-      {/* Hero Section */}
       <section className="hero text-center py-20 bg-opacity-100">
         <div className="text-content">
           <h1 className="text-4xl font-bold mb-4">Explore the World Through Flavors</h1>
@@ -33,7 +32,6 @@ const HomePage = () => {
           <Link to="/meals" className="btn btn-primary">Find Recipes</Link>
         </div>
       </section>
-      {/* Featured Recipes */}
       <section className="featured-recipes py-20">
         <h2 className="text-3xl text-center font-bold mb-6">Featured Recipes</h2>
         <div className="sm:ml-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -42,12 +40,10 @@ const HomePage = () => {
           ))}
         </div>
       </section>
-      {/* Testimonials Section */}
       <section className="testimonials py-20">
         <h2 className="text-3xl text-center font-bold mb-6">What Our Users Say</h2>
         <TestimonialsCarousel />
       </section>
-      {/* Call to Action */}
       <section className="cta py-20 section-bg">
         <div className="text-center">
           <h2 className="text-3xl font-bold mb-4">Join Our Foodie Family</h2>
