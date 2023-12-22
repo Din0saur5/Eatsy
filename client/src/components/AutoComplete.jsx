@@ -10,7 +10,7 @@ const AutocompleteInput = ({dataSet, placeholder, action, valueOf}) => {
     const value = e.target.value;
    
     action(value)
-    console.log(valueOf)
+    
     if (!value) {
       setSuggestions([]);
       return;
@@ -37,7 +37,7 @@ const AutocompleteInput = ({dataSet, placeholder, action, valueOf}) => {
         className="border border-gray-400 rounded-lg mr-1 p-2"
       />
       {suggestions.length > 0 && (
-        <ul className="absolute z-50 border border-gray-400 bg-white w-full rounded mt-0 p-0">
+        <ul className="absolute z-50 border border-gray-400 bg-white w-3/4 rounded mt-0 p-0">
           {suggestions.map((suggestion, index) => (
             <li
               key={index}

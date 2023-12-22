@@ -35,6 +35,7 @@ const RecipeCard = ({owned=false, setIsModalOpen, setSelectedRecipe , favorited=
             <RiDraftLine />
         </button>
     ) : (
+      
         userData && (
             <LikeButton 
                 recipe_id={recipe.id} 
