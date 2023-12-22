@@ -47,6 +47,7 @@ const SignupForm = ({ onLogin }) => {
           setIsLoading(false);
           if (r.ok) {
             r.json().then((user) => {onLogin(user); navigate('/dashboard')});
+            alert("Account has been created. Welcome!");
           } else {
             r.json().then((err) => setErrors(err.errors));
           }
