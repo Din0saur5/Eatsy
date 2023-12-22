@@ -36,6 +36,10 @@ const Recipe = () => {
     }
   };
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   useEffect(() => {
     fetchRecipe();
   }, [id, server, isModalOpen]);
@@ -130,6 +134,17 @@ const Recipe = () => {
                   <ol className='list-decimal'>
                     {recipe.steps && recipe.steps.map(instruction => <li key={instruction}>{instruction}</li>)}
                   </ol>
+                  <div className='text-center p-6 font-bold'>
+                    <div className="print-button-container">
+                      <button 
+                        onClick={handlePrint} 
+                        className="print-button"
+                        style={{ fontSize: '30px' }}
+                      >
+                        Click to Print Recipe
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
