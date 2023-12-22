@@ -28,20 +28,34 @@ const RecipeCard = ({owned=false, setIsModalOpen, setSelectedRecipe , favorited=
     
 
 
-<div data-aos="fade-up ">
-<div className="relative w-full h-auto max-w-sm bg-gray-200 dark:bg-gray-800 rounded-lg shadow bg-pink border border-gray-400 dark:border-gray-400">
+<div data-aos="fade-up" className='justify-center items-center'>
+<div className="relative  w-full h-auto max-w-sm bg-gray-200 dark:bg-gray-800 rounded-lg shadow bg-pink border border-gray-400 dark:border-gray-400">
     {owned ? (
-        <button onClick={() => handleEdit()} className="absolute top-2 right-2 p-2 text-white bg-blue-500 hover:bg-blue-700 rounded">
+      <div className="absolute rounded-bl-lg rounded-tl-xxl top-14 right-3 rotate-90 bg-blue-ribbon text-white py-1 px-4 transform -translate-y-full ribbon-blue ">
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-4  w-4 inline-block mr-1 text-transparent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7" />
+      </svg>
+        <button onClick={() => handleEdit()} className=" -rotate-90 hover:blue-500 hover:bg-blue-700 rounded  p-2 text-white  text-white">
             <RiDraftLine />
         </button>
-    ) : (
-      
+        
+    </div>
+    ) : ( //need this Likebutton Component to go on the ribbon
         userData && (
-            <LikeButton 
-                recipe_id={recipe.id} 
-                user_id={userData.id} 
-                favorited={recipe.favorites?.includes(userData.id)}
+        <div className="absolute rounded-bl-lg rounded-tl-xxl top-14 right-3 rotate-90 bg-ribbon text-white py-1 px-4 transform -translate-y-full ribbon ">
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-4  w-4 inline-block mr-1 text-transparent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7" />
+      </svg>
+      
+        <LikeButton 
+          cN={'-rotate-90 bg-transparent'}
+            recipe_id={recipe.id} 
+            user_id={userData.id} 
+            favorited={recipe.favorites?.includes(userData.id)}
             />
+        
+     
+    </div>
         )
     )}
     <Link to={`/recipe/${id}`} >

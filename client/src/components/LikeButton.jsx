@@ -1,7 +1,7 @@
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import React, { useState } from 'react';
 
-const LikeButton = ({ user_id, recipe_id, favorited }) => {
+const LikeButton = ({ user_id, recipe_id, favorited, cN='' }) => {
     const [favorite, setFavorited] = useState(favorited);
     
     const onLike = async () => {
@@ -32,7 +32,7 @@ const LikeButton = ({ user_id, recipe_id, favorited }) => {
 
     return (
         <button 
-            className="p-2 text-white bg-green-500 hover:bg-green-700 rounded"
+            className={` p-2 text-white bg-green-500 hover:bg-green-700 rounded ${cN} `}
             onClick={onLike}>
             {favorite ? <FaHeart /> : <FaRegHeart />}
         </button>
