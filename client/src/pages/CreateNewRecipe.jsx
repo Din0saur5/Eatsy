@@ -89,40 +89,54 @@ const CreateNewRecipe = () => {
 
 
       const handleSubmit = async (e) => {
-        console.log("handleSubmit called");
         e.preventDefault();
-        
+        console.log("handleSubmit called");
+    
+        // Process tags
         const processedTags = formData.tags
-        .split('#')
-        .filter(tag => tag.trim() !== '') // Remove empty tags
-        .map(tag => tag.trim().replace(/_/g, ' ').replace(/,/g, '')); // Replace underscores with spaces and remove commas
+            .split('#')
+            .filter(tag => tag.trim() !== '') 
+            .map(tag => tag.trim().replace(/_/g, ' ').replace(/,/g, '')); 
     
-      // Create the final form data object for submission
+        // Create the final form data object for submission
         const finalFormData = {
-        ...formData,
-        tags: processedTags,
-        cuisine: cuisineType,
-        dish_type: dishType,
-      };
-      console.log(finalFormData);
-        const server = import.meta.env.VITE_BACK_END_SERVE
-        try{
-            fetch(`${server}/recipes/create`, {
-            credentials: 'include',
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({})
-            //ADD BODY
-            })
-        }catch (error) {
-                console.error('Error creating recipe:', error);
-                alert('Error creating recipe');
-              }   
-  
+            ...formData,
+            tags: processedTags,
+            cuisine: cuisineType,
+            dish_type: dishType,
+            user_id: userData.id, // Ensure user_id is correctly assigned
+            steps: formData.steps.filter(step => step.trim() !== '') // Filter out any empty step
+        };
     
-      }
+        console.log(finalFormData);
+        const server = import.meta.env.VITE_BACK_END_SERVE;
+    
+        try {
+            const response = await fetch(`${server}/recipes/create`, {
+                credentials: 'include',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(finalFormData) // Send the final form data
+            });
+    
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+    
+            const recipeData = await response.json();
+            console.log('Recipe created successfully', recipeData);
+    
+            // Optionally navigate to a different page or reset form here
+            // navigate('/some-path');
+            // setFormData({ /* initial form state */ });
+    
+        } catch (error) {
+            console.error('Error creating recipe:', error);
+            alert('Error creating recipe');
+        }   
+    };
 
     // Ensure userData is available here and is the correct object
     return (
@@ -169,7 +183,7 @@ const CreateNewRecipe = () => {
              
                 
                 {formData.ingredients.map((ingredient, index) => (
-                <>
+                <div key={`ingredient-${index}`}> {/* Add key prop */}
                 <div className='sm:' key={index}>
                    
                     
@@ -194,7 +208,7 @@ const CreateNewRecipe = () => {
                           )}
                 </div>
                
-                </>
+                </div>
             ))}
           
             <button className='border bg-blue-400  px-2 p-0.5 rounded-lg mt-2 mb-2 mr-1' type="button" onClick={handleAddIngredient}>Add Ingredient</button>
@@ -204,9 +218,9 @@ const CreateNewRecipe = () => {
                 <Accordion.Title>Steps?</Accordion.Title>
                 <Accordion.Content >
                     <table className="table-auto">
-                {formData.steps.map((step, index) => (
-                  <React.Fragment key={index}> {/* Use React.Fragment with a key */}
-                    <thead>
+                      {formData.steps.map((step, index) => (
+                        <React.Fragment key={`step-${index}`}> {/* Add key prop */}
+                          <thead>
                         <tr>
                             <th className='text-left'>Step {index+1}:</th>
                         </tr>
