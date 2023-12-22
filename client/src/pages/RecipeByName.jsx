@@ -37,12 +37,16 @@ const RecipeSearchPage = () => {
   };
 
   const filteredRecipes = Object.entries(organizedRecipes).reduce((acc, [letter, recipes]) => {
-    const filtered = recipes.filter(recipe => recipe.name.toLowerCase().includes(searchQuery));
+    const filtered = searchQuery === ''
+      ? recipes
+      : recipes.filter(recipe => recipe.name.toLowerCase().includes(searchQuery));
+
     if (filtered.length) {
       acc[letter] = filtered;
     }
     return acc;
   }, {});
+
   const hasRecipes = Object.keys(filteredRecipes).length > 0;
   return (
     <div className="container">
@@ -60,7 +64,7 @@ const RecipeSearchPage = () => {
           <a href={`#${letter}`} key={letter}>{letter}</a>
         ))}
       </div>
-      
+
       {!hasRecipes && (
         <div className="no-results">
           <p>No Results Found for "{searchQuery}"</p>
