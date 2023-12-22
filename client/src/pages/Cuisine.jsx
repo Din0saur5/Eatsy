@@ -71,7 +71,7 @@ const Cuisine = () => {
 
   return (
     <>
-      <div className='flex justify-center items-center bg-background5'>
+      <div className='flex justify-center items-center bg-background2 bg-cover bg-fixed'>
         <div className='w-4/5'>
           <div className="m-3">
             <div className='flex items-center justify-center py-4 md:py-8 flex-wrap'>
@@ -80,7 +80,7 @@ const Cuisine = () => {
             </div>
           </div>
 
-          <div className="sm:ml-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="sm:ml-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
             {recipes.map((recipe, index) => (
               <RecipeCard key={index} recipe={recipe} />
             ))}
