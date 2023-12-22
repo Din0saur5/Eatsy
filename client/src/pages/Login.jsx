@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, redirect, useNavigate, useOutletContext } from 'react-router-dom';
 import LoginForm from '../components/LoginForm';
 import { Card } from 'flowbite-react';
@@ -7,9 +7,14 @@ const Login = () => {
   const [showLogin, setShowLogin] = useState(true);
   const [userData, setUserData] = useOutletContext(); 
   
-  if (userData !== null){
-    redirect('/dashboard')
-  }
+const navigate = useNavigate();
+
+
+  useEffect(()=>{
+    navigate('/dashboard')
+
+  },[userData]) 
+  
  
 
 
