@@ -476,7 +476,12 @@ class GetFavoriteRecipes(Resource):
      def get(self, user_id):
         fS = Favorite.query.filter(Favorite.user_id==user_id).all()
         if len(fS) > 0:
-            rb = [f.to_dict() for f in fS]
+            if len(fS) > 0:
+                recipe_ids = [f.recipe_id for f in fS]
+                recipes = Recipe.query.filter(Recipe.id.in_(recipe_ids)).all()
+                rb = [recipe.to_dict(only=('reviews.rating', 'image', 'name', 'time', 'id')) for recipe in recipes]
+                return make_response(rb, 200)
+                
             return make_response(rb, 200)
         else:
             return make_response({"message": "No recipes found by this user"}, 404)

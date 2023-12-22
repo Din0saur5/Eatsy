@@ -10,13 +10,20 @@ import { FaRegHeart } from "react-icons/fa";
 
 
 const RecipeCard = ({owned=false, setIsModalOpen, setSelectedRecipe , favorited=false, recipe}) => {
-    console.log(owned)
+    console.log(recipe)
     const handleEdit = () => {
       setSelectedRecipe(recipe)
       console.log(recipe)
       setIsModalOpen(true)
     }
-    const  {name, time, image, id} = recipe
+    const  {name, time, image, id, reviews } = recipe
+
+    const avgRating = Math.round(reviews.reduce((sum, review) => sum + review.rating, 0) / recipe.reviews.length)
+    let avgStars = ''
+    for(let i = 0; i < avgRating; i++){
+      avgStars += '⭐'}
+    
+
   return (
     
 
@@ -42,13 +49,9 @@ const RecipeCard = ({owned=false, setIsModalOpen, setSelectedRecipe , favorited=
         </Link>
         <div className="flex items-center mt-2.5 mb-5">
             <div className="flex items-center space-x-1 rtl:space-x-reverse">
-            {/* {const avgRating = Math.round(recipe.reviews.reduce((sum, review) => sum + review.rating, 0) / recipe.reviews.length)
-              let avgStars = ''
-              for(let i = 0; i < avgRating; i++){
-                avgStars += '⭐'
-              }   } */}
+             {avgStars}
             </div>
-            <span className="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ms-3">5.0</span>
+            <span className="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ms-3">{avgRating? avgRating: 0}</span>
         </div>
         <div className="flex items-center justify-between">
             <span className="text-3xl font-bold text-gray-900 dark:text-white"><small>Cook Time:</small> <p>{time} mins</p>   </span>
