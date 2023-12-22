@@ -142,6 +142,7 @@ const Recipe = () => {
               <div className='bg-old-paper p-20 bg-right-top bg-cover pl-12'>
                 <div className='bg-[#F5E8D6] bg-opacity-40 pl-8 pb-2 rounded-2xl shadow-[0_0_10px_5px_rgba(245,232,214,0.4)]'>
                   <h2 className='text-center'>Steps</h2>
+                  <p>{recipe.time? `Time: ${recipe.time} minutes`:''}</p>
                   <ol className='list-decimal'>
                     {recipe.steps && recipe.steps.map(instruction => <li key={instruction}>{instruction}</li>)}
                   </ol>
