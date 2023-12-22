@@ -8,8 +8,8 @@ const MealPage = () => {
   const { mealType } = useParams();
   const [recipes, setRecipes] = useState([]);
   const [loadMoreCount, setLoadMoreCount] = useState(9);
+  const [isFetching, setIsFetching] = useState(false);
   const [hasMoreRecipes, setHasMoreRecipes] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
 
   const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -25,6 +25,7 @@ const MealPage = () => {
       queryMealType = 'lunch%2Fdinner';
     }
 
+    setIsFetching(true);
     try {
       const response = await fetch(`${server}/recipes/meal_type/${queryMealType}?limit=${limit}&offset=${offset}`);
       if (!response.ok) {
@@ -33,11 +34,11 @@ const MealPage = () => {
       const data = await response.json();
       setRecipes(prevRecipes => [...prevRecipes, ...data]);
 
-      if (data.length < limit) {
-        setHasMoreRecipes(false);
-      }
+      setHasMoreRecipes(data.length === limit);
     } catch (error) {
       console.error('Error fetching recipes:', error);
+    } finally {
+      setIsFetching(false);
     }
   };
 
@@ -46,22 +47,14 @@ const MealPage = () => {
   }, [mealType]);
 
   useEffect(() => {
-    AOS.init({
-      duration: 1000,
-      once: true,
-    });
+    AOS.init({ duration: 1000, once: true });
   }, []);
 
   const loadMoreOnScroll = useCallback(() => {
-    const currentScrollY = window.scrollY;
-    if (currentScrollY > lastScrollY && window.innerHeight + window.scrollY >= document.body.offsetHeight - 200 && hasMoreRecipes) {
-      const newRecipesToLoad = 6;
-      const currentOffset = recipes.length;
-      setLoadMoreCount(prevCount => prevCount + newRecipesToLoad);
-      fetchRecipes(newRecipesToLoad, currentOffset);
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200 && hasMoreRecipes && !isFetching) {
+      fetchRecipes(6, recipes.length);
     }
-    setLastScrollY(currentScrollY);
-  }, [lastScrollY, hasMoreRecipes, recipes.length]);
+  }, [recipes.length, hasMoreRecipes, isFetching]);
 
   useEffect(() => {
     window.addEventListener('scroll', loadMoreOnScroll);
