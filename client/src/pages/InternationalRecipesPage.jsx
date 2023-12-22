@@ -11,8 +11,8 @@ const InternationalRecipesPage = () => {
   const cuisines = [
     "american", "asian", "british", "caribbean", "central europe", "chinese", 
     "eastern europe", "french", "greek", "indian", "italian", "japanese", 
-    "korean", "kosher", "mediterranean", "mexican", "middle eastern", 
-    "nordic", "south american", "south east asian", "world", "all"
+    "korean", "kosher", "mediterranean", "mexican", "Middle Eastern", 
+    "nordic", "south american", "south East Asian", "World"
   ];
 
   useEffect(() => {

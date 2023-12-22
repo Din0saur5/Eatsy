@@ -27,7 +27,7 @@ body {
 /* Cuisine Navigation */
 .cuisine-nav {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   padding: 10px 0;
   background-color: #fff;
   border-bottom: 1px solid #ddd;
@@ -39,6 +39,7 @@ body {
   background-color: #e7e7e7;
   border: none;
   border-radius: 4px;
+  margin-bottom: 50px;
   cursor: pointer;
   font-size: 14px;
 }
