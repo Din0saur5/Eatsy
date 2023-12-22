@@ -147,7 +147,6 @@ const Navbar = ({ onLogout, userData }) => {
                                         <a href="#" onClick={() => handleCuisineDropdownItemClick( 'central-europe')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Central Europe</a>
                                         <a href="#" onClick={() => handleCuisineDropdownItemClick( 'chinese')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Chinese</a>
                                         <a href="#" onClick={() => handleCuisineDropdownItemClick( 'eastern-europe')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Eastern Europe</a>
-                                        <a href="#" onClick={() => handleCuisineDropdownItemClick( 'all-cuisines')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 font-bold">View All</a>
                                     </div>
                                 )}
                                 </li>
