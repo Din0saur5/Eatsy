@@ -14,7 +14,7 @@ const Recipe = () => {
   const [error, setError] = useState(null);
   const [recipe, setRecipe] = useState({});
   const server = import.meta.env.VITE_BACK_END_SERVE;
-  const descriptionMaxLength = 200;
+  const descriptionMaxLength = 470;
   const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false);
 
   const fetchRecipe = async () => {
