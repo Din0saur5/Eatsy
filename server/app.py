@@ -462,29 +462,38 @@ api.add_resource(FavoriteRecipe, '/favorites/<uuid:rec_id>/<uuid:user_id>')
 
 class RecipesByUser(Resource):
     def get(self, user_id):
-        rS = Recipe.query.filter(Recipe.user_id==user_id).all()
-        if len(rS)>0:
-            rb = [r.to_dict(only=('reviews.rating', 'image','name', 'time', 'id')) for r in rS]
+        limit = request.args.get('limit', 10, type=int)  # Default limit to 10
+        offset = request.args.get('offset', 0, type=int)  # Default offset to 0
+
+        # Apply the limit and offset directly in the query
+        recipes = Recipe.query.filter(Recipe.user_id == user_id).offset(offset).limit(limit).all()
+
+        if recipes:
+            # Convert recipes to dictionary format
+            rb = [recipe.to_dict(only=('reviews.rating', 'image', 'name', 'time', 'id')) for recipe in recipes]
             return make_response(rb, 200)
         else:
             return make_response({"message": "No recipes found by this user"}, 404)
+
         
         
         
 api.add_resource(RecipesByUser, '/rbu/<user_id>')
 class GetFavoriteRecipes(Resource):
-     def get(self, user_id):
+    def get(self, user_id):
+        limit = request.args.get('limit', 10, type=int)  # Default limit to 10
+        offset = request.args.get('offset', 0, type=int)  # Default offset to 0
+
         fS = Favorite.query.filter(Favorite.user_id==user_id).all()
         if len(fS) > 0:
-            if len(fS) > 0:
-                recipe_ids = [f.recipe_id for f in fS]
-                recipes = Recipe.query.filter(Recipe.id.in_(recipe_ids)).all()
-                rb = [recipe.to_dict(only=('reviews.rating', 'image', 'name', 'time', 'id')) for recipe in recipes]
-                return make_response(rb, 200)
-                
+            recipe_ids = [f.recipe_id for f in fS]
+            # Fetch the recipes with pagination applied
+            recipes = Recipe.query.filter(Recipe.id.in_(recipe_ids)).offset(offset).limit(limit).all()
+            rb = [recipe.to_dict(only=('reviews.rating', 'image', 'name', 'time', 'id')) for recipe in recipes]
             return make_response(rb, 200)
         else:
-            return make_response({"message": "No recipes found by this user"}, 404)
+            return make_response({"message": "No favorite recipes found"}, 404)
+
                                  
 api.add_resource(GetFavoriteRecipes, '/favs/<user_id>')
 

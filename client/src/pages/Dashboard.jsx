@@ -24,7 +24,9 @@ const Dashboard = () => {
   }, []);
 
   useEffect(()=>{
-    fetch(`${server}/favs/${userData.id}`,{
+    const limit = 10; 
+    const offset = 0;
+    fetch(`${server}/favs/${userData.id}?limit=${limit}&offset=${offset}`,{
       credentials: 'include',
       method: 'GET',
       headers: {
@@ -33,15 +35,14 @@ const Dashboard = () => {
     }).then(r=>r.json())
     .then(d=>setUserFavs(d))
     
-    console.log(userFavs)
+    // console.log(userFavs)
   },[])
 
-  useEffect(() => {
-    console.log("Modal state changed: ", isModalOpen);
-  }, [isModalOpen]);
   
   useEffect(()=>{
-    fetch(`${server}/rbu/${userData.id}`,{
+    const limit = 10; 
+    const offset = 0;
+    fetch(`${server}/rbu/${userData.id}?limit=${limit}&offset=${offset}`,{
       credentials: 'include',
       method: 'GET',
       headers: {
@@ -49,7 +50,7 @@ const Dashboard = () => {
       },
     }).then(r=>r.json())
     .then(d=>setUserRecipes(d))
-    console.log(userRecipes)
+    // console.log(userRecipes)
 
   },[])
   
@@ -77,12 +78,12 @@ const Dashboard = () => {
               userFavs.length >0 ? (
                 userFavs.map((recipe, index)=>{
                 return  <RecipeCard owned={false} setIsModalOpen={setIsEditOpen} setSelectedRecipe={setSelectedRecipe} recipe={recipe} key={index} />
-                })):(<div className='block h-screen'><h1>no recipes</h1></div>)
+                })):(<div className='block h-screen'><h2>No Favorites Yet, Start Liking Recipes</h2></div>)
             ):(
               userRecipes.length >0 ? (
                 userRecipes.map((recipe, index)=>{
                 return  <RecipeCard owned={true} setIsModalOpen={setIsEditOpen} setSelectedRecipe={setSelectedRecipe} recipe={recipe} key={index} />
-                })):( <div className='h-screen'><h1>no recipes</h1></div>)
+                })):( <div className='h-screen'><h1>No Recipes Yet, Start Creating Recipes</h1></div>)
               )  
            }
           </div>
