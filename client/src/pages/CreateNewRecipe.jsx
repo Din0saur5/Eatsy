@@ -208,7 +208,7 @@ const CreateNewRecipe = () => {
                     <input className='rounded-lg ml-5 mt-2 mb-2 mr-1' type="text" name={`ingredients[${index}].unit`} data-index={index} data-field="unit" value={ingredient.unit} onChange={handleChange} placeholder="Unit"  required/> 
                 </div>
                
-                </div>
+                </>
             ))}
           
             <button className='border bg-blue-400  px-2 p-0.5 rounded-lg mt-6 mb-2 mr-1' type="button" onClick={handleAddIngredient}>Add Ingredient</button>
