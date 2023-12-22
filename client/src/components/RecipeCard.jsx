@@ -35,17 +35,7 @@ const RecipeCard = ({owned=false, setIsModalOpen, setSelectedRecipe , favorited=
             <RiDraftLine />
         </button>
     ) : (
-
-      <div class="container mx-auto p-4">
-      <div class="card bg-white rounded-lg shadow-lg relative overflow-hidden">
-    <!-- Ribbon -->
-    <div class="ribbon bg-green-500 text-white py-1 px-4">
-      <svg class="h-6 w-6 inline-block text-red-500" fill="currentColor" viewBox="0 0 20 20">
-        <!-- You can replace this SVG with a heart icon from your icon library -->
-        <path d="M10 3a5 5 0 0110 0 ..."></path>
-      </svg>
-      <span>Favorites</span>
-    </div>
+      
         userData && (
             <LikeButton 
                 recipe_id={recipe.id} 
