@@ -33,7 +33,6 @@ const HomePage = () => {
           <Link to="/meals" className="btn btn-primary">Find Recipes</Link>
         </div>
       </section>
-
       {/* Featured Recipes */}
       <section className="featured-recipes py-20">
         <h2 className="text-3xl text-center font-bold mb-6">Featured Recipes</h2>
@@ -43,13 +42,6 @@ const HomePage = () => {
           ))}
         </div>
       </section>
-
-      {/* Categories Section */}
-      <section className="categories py-20 section-bg" >
-        <h2 className="text-3xl text-center font-bold mb-6">Browse by Category</h2>
-        {/* Category cards go here */}
-      </section>
-
       {/* Testimonials Section */}
       <section className="testimonials py-20">
         <h2 className="text-3xl text-center font-bold mb-6">What Our Users Say</h2>
