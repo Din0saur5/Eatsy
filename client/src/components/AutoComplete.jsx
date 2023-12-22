@@ -10,7 +10,7 @@ const AutocompleteInput = ({dataSet, placeholder, action, valueOf}) => {
     const value = e.target.value;
    
     action(value)
-    console.log(valueOf)
+    
     if (!value) {
       setSuggestions([]);
       return;
