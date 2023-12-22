@@ -1,24 +1,51 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import RecipeCard from '../components/RecipeCard';
 import { Link } from 'react-router-dom';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import './Home.css';
+import TestimonialsCarousel from '../components/TestimonialsCarousel';
 
 const HomePage = () => {
+  const [randomRecipes, setRandomRecipes] = useState([]);
+  const server = import.meta.env.VITE_BACK_END_SERVE;
+
+  useEffect(() => {
+    fetch(`${server}/recipes/random`)
+      .then(response => response.json())
+      .then(data => setRandomRecipes(data))
+      .catch(error => console.error('Error fetching random recipes:', error));
+  }, []);
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      once: true,
+    });
+  }, []);
+
   return (
-    <div>
+    <div className="hero bg-background1 bg-cover text-center py-20">
       {/* Hero Section */}
-      <section className="hero bg-background1 bg-cover text-center py-20">
-        <h1 className="text-4xl font-bold mb-4">Explore the World Through Flavors</h1>
-        <p className="text-xl mb-6">Discover new recipes and culinary inspirations daily.</p>
-        <Link to="/search" className="btn btn-primary">Find Recipes</Link>
+      <section className="hero text-center py-20 bg-opacity-100">
+        <div className="text-content">
+          <h1 className="text-4xl font-bold mb-4">Explore the World Through Flavors</h1>
+          <p className="text-xl mb-6">Discover new recipes and culinary inspirations daily.</p>
+          <Link to="/meals" className="btn btn-primary">Find Recipes</Link>
+        </div>
       </section>
 
       {/* Featured Recipes */}
       <section className="featured-recipes py-20">
         <h2 className="text-3xl text-center font-bold mb-6">Featured Recipes</h2>
-        {/* Recipes grid or carousel goes here */}
+        <div className="sm:ml-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {randomRecipes.map((recipe, index) => (
+            <RecipeCard key={index} recipe={recipe} />
+          ))}
+        </div>
       </section>
 
       {/* Categories Section */}
-      <section className="categories py-20 bg-gray-100">
+      <section className="categories py-20 section-bg" >
         <h2 className="text-3xl text-center font-bold mb-6">Browse by Category</h2>
         {/* Category cards go here */}
       </section>
@@ -26,21 +53,14 @@ const HomePage = () => {
       {/* Testimonials Section */}
       <section className="testimonials py-20">
         <h2 className="text-3xl text-center font-bold mb-6">What Our Users Say</h2>
-        {/* Testimonials carousel goes here */}
+        <TestimonialsCarousel />
       </section>
-
-      {/* Blog Highlights */}
-      <section className="blog-highlights py-20 bg-gray-100">
-        <h2 className="text-3xl text-center font-bold mb-6">From Our Blog</h2>
-        {/* Blog post previews go here */}
-      </section>
-
       {/* Call to Action */}
-      <section className="cta py-20">
+      <section className="cta py-20 section-bg">
         <div className="text-center">
           <h2 className="text-3xl font-bold mb-4">Join Our Foodie Family</h2>
           <p className="mb-6">Get the latest recipes and tips directly to your inbox.</p>
-          <Link to="/signup" className="btn btn-primary">Sign Up</Link>
+          <Link to="/login" className="btn btn-primary">Sign Up</Link>
         </div>
       </section>
     </div>

@@ -1,0 +1,37 @@
+/* Home.css */
+.hero {
+    position: relative;
+    z-index: 1;
+  }
+  
+  .hero::after {
+    content: "";
+    background-color: rgba(255, 255, 255, 0.7); /* Adjust the opacity as needed */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+  }
+  
+  .text-content {
+    position: relative;
+    z-index: 2;
+  }
+  .section-bg {
+    background-color: rgba(255, 255, 255, 0.7); /* Adjust the opacity as needed */
+  }
+  .section-bg::after {
+    content: "";
+    background-image: url('/path/to/your/background/image.jpg'); /* Replace with your image path */
+    background-size: cover;
+    opacity: 0.7; /* Adjust the opacity as needed */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+  }
+  

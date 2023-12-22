@@ -9,6 +9,7 @@ load_dotenv()
 # Remote library imports
 from flask import request, make_response, session
 from flask_restful import Resource
+import random
 from sqlalchemy.exc import IntegrityError
 # from flask_cors import cross_origin, CORS
 # Local imports
@@ -480,8 +481,16 @@ class GetRecipesByCuisine(Resource):
 
 api.add_resource(GetRecipesByCuisine, '/recipes/by-cuisine')
 
+class RandomRecipes(Resource):
+    def get(self):
+        try:
+            all_recipes = Recipe.query.all()
+            random_recipes = random.sample(all_recipes, min(len(all_recipes), 3))
+            return [recipe.to_dict() for recipe in random_recipes], 200
+        except ValueError:
+            return {'message': 'Not enough recipes in the database to fetch three random ones'}, 400
 
-
+api.add_resource(RandomRecipes, '/recipes/random')
 
 
 port = os.getenv('SERVER_PORT')

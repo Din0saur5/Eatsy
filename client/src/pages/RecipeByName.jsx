@@ -46,7 +46,7 @@ const RecipeSearchPage = () => {
         onChange={handleSearchChange}
       />
       <div className="alphabet-nav">
-        <h2>Find a Recipe By its first letter</h2>
+        <h2>Click a Letter to Jump to the Category</h2>
         {'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map((letter) => (
           <a href={`#${letter}`} key={letter}>{letter}</a>
         ))}
