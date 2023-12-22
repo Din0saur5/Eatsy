@@ -448,4 +448,4 @@ port = os.getenv('SERVER_PORT')
 debug = os.getenv('SERVER_DEBUG')
 host = os.getenv('SERVER_HOST')
 if __name__ == '__main__':
-    app.run(host = host, port = 5555, debug = debug)
+    app.run(host = host, port = port, debug = debug)
