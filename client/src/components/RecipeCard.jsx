@@ -12,10 +12,8 @@ import { useOutletContext} from 'react-router-dom';
 
 
 const RecipeCard = ({owned=false, setIsModalOpen, setSelectedRecipe , favorited=false, recipe}) => {
-    console.log(recipe)
     const handleEdit = () => {
       setSelectedRecipe(recipe)
-      console.log(recipe)
       setIsModalOpen(true)
     }
     const  {name, time, image, id, reviews } = recipe
@@ -41,7 +39,7 @@ const RecipeCard = ({owned=false, setIsModalOpen, setSelectedRecipe , favorited=
             <LikeButton 
                 recipe_id={recipe.id} 
                 user_id={userData.id} 
-                favorited={recipe.favorites.includes(userData.id)}
+                favorited={recipe.favorites?.includes(userData.id)}
             />
         )
     )}
