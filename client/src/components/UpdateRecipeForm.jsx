@@ -21,7 +21,7 @@ const UpdateRecipeForm = ({userData,  selectedRecipe, userRecipes, setUserRecipe
   const [cuisineType, setCuisineType]=useState('')
   const [dishType, setDishType]=useState('')
   const [isFormValid, setIsFormValid] = useState(false); 
-  const [ogData, setOgData] = useState([])
+ 
 console.log(formData)
   const cuisineTypes = [
     "american", "asian", "british", "caribbean", "central europe", "chinese", "eastern europe", 
@@ -44,7 +44,7 @@ console.log(formData)
         meal_type: selectedRecipe.meal_type || '',
         time: selectedRecipe.time || '',
          user_id: userData.id,
-        ingredients: selectedRecipe.ingredients || [{ text: '', food: '', quantity: '', unit: '', id: '' }]
+        ingredients: [{ text: '', food: '', quantity: '', unit: '',recipe_id: selectedRecipe.id }]
       });
       setCuisineType(selectedRecipe.cuisine || '');
       setDishType(selectedRecipe.dish_type || '');
@@ -70,8 +70,7 @@ console.log(formData)
       const recipeData = await response.json()
       console.log(recipeData)
       setFormData(recipeData)
-      setOgData(recipeData.ingredients)
-      console.log(ogData)
+     
     }catch(err){
         console.error('Error creating recipe:', err);
     }
@@ -153,9 +152,7 @@ console.log(formData)
       }
       const data = await response.json()
       
-      
       const newRecipes = userData.recipes.map(recipe => recipe.id === data.id ? data : recipe);
-      
       const storedUserStr= sessionStorage.getItem('token')
       if (storedUserStr){
         let storedUser = JSON.parse(storedUserStr)
@@ -164,59 +161,17 @@ console.log(formData)
         setUserRecipes(newRecipes)
       } catch (error) {
         console.error('Error updating recipe:', error);
-        
       }
-      for(const ingredient of selectedRecipe.ingredients) { 
-        console.log(finalFormData.ingredients)
-        console.log(selectedRecipe.ingredients)
-       if(!(ingredient in finalFormData.ingredients) ){
-        try {
-          const response = await fetch(`${server}/ingredients/${ingredient.id}`, {
-              method: 'DELETE',
-              credentials: 'include', // include if needed for credentials like cookies/session
-              
-          });
-  
-          if (!response.ok) {
-              throw new Error(`HTTP error! Status: ${response.status}`); 
-          }
-              const data = await response.json()
-              console.log(data);
-             
-          
-          } catch (error) {
-          console.error('Er ')
-       }}
-        if (ingredient.id && ingredient in finalFormData.ingredients){
-        try{
-        const resp = await fetch(`${server}/ingredients/${ingredient.id}`, {
-            credentials: 'include',
-            method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-            text: ingredient.text,
-            food: ingredient.food,
-            quantity: ingredient.quantity,
-            unit: ingredient.unit,
-            recipe_id: ingredient.recipe_id,
-            })
-          })
-          if (!resp.ok) {
-            throw new Error(`HTTP error! Status: ${resp.status}`);
-          }
-          const d = await resp.json()
-          console.log(d)
-        } catch (error) {
-          console.error('Error updating recipe:', error);
-          handleClose();
-          alert('Error updating recipe')
-        }
-      }else {
+      
+     
+        
+      
+      
+      
+      for(const ingredient of finalFormData.ingredients)  {
         try {
           const resp = await fetch(`${server}/ingredients`,{
-             credentials: 'include',
+            credentials: 'include',
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -226,44 +181,46 @@ console.log(formData)
               food: ingredient.food,
               quantity: ingredient.quantity,
               unit: ingredient.unit,
-              recipe_id: ingredient.recipe_id,
-              })
+              recipe_id: selectedRecipe.id,
+            })
           });
           if (!resp.ok) {
             throw new Error(`HTTP error! Status: ${resp.status}`);
           }
           const d = await resp.json()
           console.log(d)
+          handleClose()
+          alert('Recipe updated successfully')
+          setFormData({
+            name: '',
+            image: '',
+            description: '',
+            steps: [''],
+            is_draft: false,
+            tags: [''],
+            meal_type: '',
+            time: '',
+            user_id: userData.id, 
+            ingredients: [{ text: '', food: '', quantity: '', unit: '' }]
+          })
+
+
         } catch (error) {
           console.error('Error creating recipe:', error);
         }
-
-
+        
       }
-    }
-      handleClose()
-      alert('Recipe updated successfully')
-      setFormData({
-        name: '',
-        image: '',
-        description: '',
-        steps: [''],
-        is_draft: false,
-        tags: [''],
-        meal_type: '',
-        time: '',
-        user_id: userData.id, 
-        ingredients: [{ text: '', food: '', quantity: '', unit: '' }]
-      })
+      
+    
       
    
+    }
+      
+      
 
-   
-
-  };
-
-
-  const deleteRecipe = async (recipeId) => {
+    
+    
+    const deleteRecipe = async (recipeId) => {
     const server = import.meta.env.VITE_BACK_END_SERVE; // Ensure this is the correct environment variable for your server URL
 
     try {

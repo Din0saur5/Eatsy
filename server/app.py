@@ -296,21 +296,28 @@ class AllIngredients(Resource):
 
     def post(self):
         try:
-            
+            uuidstr = request.json.get('recipe_id')
+            print(uuidstr)
+            uuidR= uuid.UUID(uuidstr)
+            print(type(uuidR))
+            print(uuidR)
             new_ingredient = Ingredient(
                 text = request.json.get('text'),
                 food = request.json.get('food'),
-                quantity = request.json.get('quantity'),
+                quantity = float(request.json.get('quantity')),
                 unit = request.json.get('unit'),
-                recipe_id = request.json.get('recipe_id'),
-                id = request.json.get('id')
+                recipe_id = uuidR,
+                
             )
+            print(new_ingredient.id)
             db.session.add(new_ingredient)
             db.session.commit()
             return make_response(new_ingredient.to_dict(),201)
         except Exception as e:
             print(e)
             return make_response({"message":str(e)}, 400)
+        
+   
 
 api.add_resource(AllIngredients, '/ingredients')
 
@@ -318,22 +325,38 @@ api.add_resource(AllIngredients, '/ingredients')
 class ChangeIngredientById(Resource):
     #@cross_origin(origins=os.environ.get('CORS_ORIGIN') + '/private/update-recipe/*', methods=['PATCH', 'DELETE'])
 
-    def patch(self, id):
-        ingredient = Ingredient.query.filter_by(id=id).first()
-        if not ingredient:
-            return make_response({"message":"Ingredient not found"}, 404)
-        for key in request.json:
-            setattr(ingredient, key, request.json.get(key))
-        db.session.commit()
-        return make_response(ingredient.to_dict(), 200)
-
     def delete(self, id,):
-        ingredient = Ingredient.query.filter_by(id=id).first()
-        if not ingredient:
+        ingredients = Ingredient.query.filter(Ingredient.recipe_id==id).allows_lambda()
+        if not ingredients:
             return make_response({"message":"Ingredient not found"}, 404)
-        db.session.delete(ingredient)
+        else:
+            
+            for ingredient in ingredients:
+                db.session.delete(ingredient)
         db.session.commit()
         return make_response({"message":"Ingredient deleted"}, 204)
+    
+    def post(self, id):
+        try:
+
+            print(id)
+            uuidR= uuid.UUID(id)
+            print(type(uuidR))
+            print(uuidR)
+            new_ingredient = Ingredient(
+                text = request.json.get('text'),
+                food = request.json.get('food'),
+                quantity = float(request.json.get('quantity')),
+                unit = request.json.get('unit'),
+                recipe_id = id,
+                
+            )
+            db.session.add(new_ingredient)
+            db.session.commit()
+            return make_response(new_ingredient.to_dict(),201)
+        except Exception as e:
+            print(e)
+            return make_response({"message":str(e)}, 400)
 
 api.add_resource(ChangeIngredientById, '/ingredients/<uuid:id>')
 
@@ -349,13 +372,16 @@ class AllReviews(Resource):
 
     def post(self):
         try:
-           
+            uuidstr1 = request.json.get('recipe_id')
+            uuidstr2 = request.json.get('user_id')
+            uuidRec = uuid.UUID(uuidstr1)
+            uuidUse = uuid.UUID(uuidstr2)
             new_review = Review(
                 title=request.json.get('title'),
                 comment=request.json.get('comment'),
                 rating=request.json.get('rating'),
-                user_id = request.json.get('user_id'),
-                recipe_id = request.json.get('recipe_id')
+                user_id = uuidUse,
+                recipe_id = uuidRec
             )
             db.session.add(new_review)
             db.session.commit()

@@ -107,11 +107,11 @@ const CreateRecipeForm = ({userData, setUserData,  handleClose}) => {
         food: ingredient.food,
         quantity: parseFloat(ingredient.quantity),
         unit: ingredient.unit,
-        recipe_id: recipeId
+      
        
       }
       try {
-      const resp = await fetch(`${server}/ingredients`,{
+      const resp = await fetch(`${server}/ingredients/${recipeId}`,{
          credentials: 'include',
         method: 'POST',
         headers: {
@@ -128,20 +128,20 @@ const CreateRecipeForm = ({userData, setUserData,  handleClose}) => {
       console.error('Error creating recipe:', error);
     }
   }
-      handleClose();
-      alert('Recipe created successfully')
-      setFormData({
-        name: '',
-        image: '',
-        description: '',
-        steps: [''],
-        is_draft: false,
-        tags: [''],
-        meal_type: '',
-        time: '',
-        user_id: userData.id, 
-        ingredients: [{ text: '', food: '', quantity: '', unit: '' }]
-      })
+      // handleClose();
+      // alert('Recipe created successfully')
+      // setFormData({
+      //   name: '',
+      //   image: '',
+      //   description: '',
+      //   steps: [''],
+      //   is_draft: false,
+      //   tags: [''],
+      //   meal_type: '',
+      //   time: '',
+      //   user_id: userData.id, 
+      //   ingredients: [{ text: '', food: '', quantity: '', unit: '' }]
+      // })
      
   };
 

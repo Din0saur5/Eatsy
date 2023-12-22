@@ -4,9 +4,28 @@ import UpdateRecipeForm from './UpdateRecipeForm'
 
 const UpdateRecipe = ({ isEditOpen, selectedRecipe,  onCloseEdit, setUserRecipes, userData }) => {
  const [showModal, setShowModal] = useState(isEditOpen); 
-
+ const server = import.meta.env.VITE_BACK_END_SERVE
   useEffect(() => {
     setShowModal(isEditOpen); 
+    if(isEditOpen){async ()  =>{
+      try {
+        const response = await fetch(`${server}/ingredients/${selectedRecipe.id}`, {
+            method: 'DELETE',
+            credentials: 'include', // include if needed for credentials like cookies/session
+            
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`); 
+        }
+            const d = await response.json()
+            console.log(data);
+           
+        
+        } catch (error) {
+          console.error('Error updating recipe:', error);
+     }
+    }}
   }, [isEditOpen]);
   const handleClose = () => {
     // Start the slide up animation
