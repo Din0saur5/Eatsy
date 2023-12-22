@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaPlus } from 'react-icons/fa'; // Import your icon
 
-const CreateRecipeButton = ({setIsModalOpen}) => {
+const CreateReviewButton = ({setIsModalOpen}) => {
   return (
     <button onClick={()=>setIsModalOpen(true)} className=" create_new flex items-center bg-blue-500 text-white rounded p-2 overflow-hidden relative transition-all duration-500">
       <FaPlus className="w-6 h-6" />
@@ -12,4 +12,4 @@ const CreateRecipeButton = ({setIsModalOpen}) => {
   );
 };
 
-export default CreateRecipeButton;
+export default CreateReviewButton;

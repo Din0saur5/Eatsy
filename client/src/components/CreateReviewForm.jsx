@@ -13,6 +13,7 @@ const CreateReviewForm = ({handleClose, user_id, recipe_id}) => {
     useEffect(() => {
         setIsFormValid(formData.rating > 0 && formData.rating < 6)
     }, [formData])
+    
     const handleSubmit = async (e) => {
         console.log(formData)
         e.preventDefault()

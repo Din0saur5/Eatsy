@@ -2,6 +2,7 @@
 import { Accordion, Button, Select } from 'flowbite-react';
 import React, { useEffect, useState } from 'react';
 import AutocompleteInput from './AutoComplete';
+import { v4 as uuidv4 } from 'uuid'
 
 const CreateRecipeForm = ({userData, setUserData,  handleClose}) => {
 
@@ -13,6 +14,7 @@ const CreateRecipeForm = ({userData, setUserData,  handleClose}) => {
     is_draft: false,
     tags: [''],
     meal_type: '',
+    recipe_id:'',
     time: '',
     user_id: userData.id, 
     ingredients: [{ text: '', food: '', quantity: '', unit: '' , recipe_id: ''}]
@@ -21,7 +23,7 @@ const CreateRecipeForm = ({userData, setUserData,  handleClose}) => {
   const [cuisineType, setCuisineType]=useState('')
   const [dishType, setDishType]=useState('')
   const [isFormValid, setIsFormValid] = useState(false); 
-
+  const [recipeId, setRecipeId]= useState('')
 
   const cuisineTypes = [
     "american", "asian", "british", "caribbean", "central europe", "chinese", "eastern europe", 
@@ -45,6 +47,7 @@ const CreateRecipeForm = ({userData, setUserData,  handleClose}) => {
     
     if (e.target.name.startsWith('ingredients')) {
       const index = parseInt(e.target.dataset.index);
+      console.log(index)
       const newIngredients = formData.ingredients.map((ingredient, i) => {
         if (i === index) {
           return { ...ingredient, [e.target.dataset.field]: e.target.value };
@@ -55,10 +58,12 @@ const CreateRecipeForm = ({userData, setUserData,  handleClose}) => {
     } else {
       setFormData({ ...formData, [e.target.name]: e.target.value });
     }
+    console.log(formData)
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     const processedTags = formData.tags
     .split('#')
     .filter(tag => tag.trim() !== '') // Remove empty tags
@@ -87,12 +92,24 @@ const CreateRecipeForm = ({userData, setUserData,  handleClose}) => {
       }
       // Handle response
       const data = await response.json()
-      finalFormData.ingredients.recipe_id=data.id
+      setRecipeId(data.id)
+      console.log(recipeId)
     } catch (error) {
       console.error('Error creating recipe:', error);
      
     }
-    for (const ingredient in finalFormData.ingredients) {
+    for (const ingredient of finalFormData.ingredients) {
+      
+      console.log(ingredient)
+      console.log(recipeId)
+      const finalIng = {
+        text: ingredient.text,
+        food: ingredient.food,
+        quantity: parseFloat(ingredient.quantity),
+        unit: ingredient.unit,
+        recipe_id: recipeId
+       
+      }
       try {
       const resp = await fetch(`${server}/ingredients`,{
          credentials: 'include',
@@ -100,13 +117,7 @@ const CreateRecipeForm = ({userData, setUserData,  handleClose}) => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          text: ingredient.text,
-          food: ingredient.food,
-          quantity: ingredient.quantity,
-          unit: ingredient.unit,
-          recipe_id: ingredient.recipe_id,
-          })
+        body: JSON.stringify(finalIng)
       });
       if (!resp.ok) {
         throw new Error(`HTTP error! Status: ${resp.status}`);
@@ -214,7 +225,7 @@ const CreateRecipeForm = ({userData, setUserData,  handleClose}) => {
                             </button>
                           )}
                           <br></br>
-                <input className='rounded-lg my-2 mr-1' type="text" name={`ingredients[${index}].text`} data-index={index} data-field="text" value={ingredient.text} onChange={handleChange} placeholder="Extra Details" />
+                <input className='rounded-lg my-2 mr-1' type="text" name={`ingredients[${index}].text`} data-index={index} data-field="text" value={ingredient.text} onChange={handleChange} placeholder="Extra Details" required />
                 <input className='rounded-lg mb-2 mr-1' type="text" name={`ingredients[${index}].food`} data-index={index} data-field="food" value={ingredient.food} onChange={handleChange} placeholder="Food"  required/>
                 <input className='rounded-lg mb-2 mr-1' type="number" name={`ingredients[${index}].quantity`} data-index={index} data-field="quantity" value={ingredient.quantity} onChange={handleChange} placeholder="Quantity"  required/>
                 <input className='rounded-lg mb-2 mr-1' type="text" name={`ingredients[${index}].unit`} data-index={index} data-field="unit" value={ingredient.unit} onChange={handleChange} placeholder="Unit"  required/>
@@ -227,8 +238,9 @@ const CreateRecipeForm = ({userData, setUserData,  handleClose}) => {
                 <Accordion.Title>Steps?</Accordion.Title>
                 <Accordion.Content >
                 {formData.steps.map((step, index) => (
-                        <div key={index}>
+                        <>
                         <input 
+                            key={index}
                             type="text" 
                             value={step} 
                             onChange={(e) => handleChangeStep(index, e.target.value)} 
@@ -245,7 +257,7 @@ const CreateRecipeForm = ({userData, setUserData,  handleClose}) => {
                               X
                             </button>
                           )}
-                        </div>
+                        </>
                     ))}
                    
                     <button  className='border  bg-blue-400  px-2 p-0.5 rounded-lg mb-2 mr-1' type="button" onClick={handleAddStep}>Add Step</button>

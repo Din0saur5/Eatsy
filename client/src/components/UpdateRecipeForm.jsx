@@ -21,7 +21,7 @@ const UpdateRecipeForm = ({userData,  selectedRecipe, userRecipes, setUserRecipe
   const [cuisineType, setCuisineType]=useState('')
   const [dishType, setDishType]=useState('')
   const [isFormValid, setIsFormValid] = useState(false); 
-
+  const [ogData, setOgData] = useState([])
 console.log(formData)
   const cuisineTypes = [
     "american", "asian", "british", "caribbean", "central europe", "chinese", "eastern europe", 
@@ -70,6 +70,8 @@ console.log(formData)
       const recipeData = await response.json()
       console.log(recipeData)
       setFormData(recipeData)
+      setOgData(recipeData.ingredients)
+      console.log(ogData)
     }catch(err){
         console.error('Error creating recipe:', err);
     }
@@ -164,16 +166,15 @@ console.log(formData)
         console.error('Error updating recipe:', error);
         
       }
-      for(const ingredient in selectedRecipe.ingredients ) { 
+      for(const ingredient of selectedRecipe.ingredients) { 
+        console.log(finalFormData.ingredients)
+        console.log(selectedRecipe.ingredients)
        if(!(ingredient in finalFormData.ingredients) ){
         try {
           const response = await fetch(`${server}/ingredients/${ingredient.id}`, {
               method: 'DELETE',
               credentials: 'include', // include if needed for credentials like cookies/session
-              headers: {
-                  'Content-Type': 'application/json'
-                  // Include additional headers as required by your server
-              }
+              
           });
   
           if (!response.ok) {
@@ -199,7 +200,7 @@ console.log(formData)
             food: ingredient.food,
             quantity: ingredient.quantity,
             unit: ingredient.unit,
-            
+            recipe_id: ingredient.recipe_id,
             })
           })
           if (!resp.ok) {
@@ -212,7 +213,7 @@ console.log(formData)
           handleClose();
           alert('Error updating recipe')
         }
-      }else{
+      }else {
         try {
           const resp = await fetch(`${server}/ingredients`,{
              credentials: 'include',
@@ -278,9 +279,16 @@ console.log(formData)
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`); 
         }
-            const data = await response.json()
+            const newRecipes = userData.recipes.filter(recipe => recipe.id !== recipeId );
+          
+            const storedUserStr= sessionStorage.getItem('token')
+            if (storedUserStr){
+              let storedUser = JSON.parse(storedUserStr)
+              storedUser.recipes = newRecipes
+              sessionStorage.setItem('token', JSON.stringify(storedUser))}
+              setUserRecipes(newRecipes)
             console.log('Recipe deleted successfully');
-            setUserRecipes(userRecipes.filter((r)=> r!== response))
+            setUserRecipes(newRecipes)
             handleClose()
             alert('Recipe deleted successfully')
             setFormData({
@@ -368,28 +376,73 @@ console.log(formData)
             <Accordion.Panel>
                 <Accordion.Title>Ingredients?</Accordion.Title>
                 <Accordion.Content>
-                
-                {formData.ingredients.map((ingredient, index) => (
-                <div key={index}>
-                    <label>Ingredient {index+1}</label>
+    {formData.ingredients ? formData.ingredients.map((ingredient, index) => (
+        <div key={index} className="mb-4">
+            <div className="flex items-center mb-2">
+                <label className="flex-grow">Ingredient {index + 1}</label>
                 {formData.ingredients.length > 1 && (
                     <button 
-                    type="button" 
-                              onClick={() => handleDeleteIngredient(index)}
-                              className=" ml-72 bg-red-500 text-white ml-1 px-1.5 rounded hover:bg-red-600"
-                            >
-                              X
-                            </button>
-                          )}
-                          <br></br>
-                <input className='rounded-lg my-2 mr-1' type="text" name={`ingredients[${index}].text`} data-index={index} data-field="text" value={ingredient.text} onChange={handleChange} placeholder="Extra Details" />
-                <input className='rounded-lg mb-2 mr-1' type="text" name={`ingredients[${index}].food`} data-index={index} data-field="food" value={ingredient.food} onChange={handleChange} placeholder="Food"  required/>
-                <input className='rounded-lg mb-2 mr-1' type="number" name={`ingredients[${index}].quantity`} data-index={index} data-field="quantity" value={ingredient.quantity} onChange={handleChange} placeholder="Quantity"  required/>
-                <input className='rounded-lg mb-2 mr-1' type="text" name={`ingredients[${index}].unit`} data-index={index} data-field="unit" value={ingredient.unit} onChange={handleChange} placeholder="Unit"  required/>
-                </div>
-            ))}
-            <button className='border bg-blue-400  px-2 p-0.5 rounded-lg mb-2 mr-1' type="button" onClick={handleAddIngredient}>Add Ingredient</button>
-                </Accordion.Content>
+                        type="button" 
+                        onClick={() => handleDeleteIngredient(index)}
+                        className="ml-2 bg-red-500 text-white px-1.5 rounded hover:bg-red-600"
+                    >
+                        X
+                    </button>
+                )}
+            </div>
+            <input
+                className='rounded-lg mb-2 mr-1 w-full'
+                type="text"
+                name={`ingredients[${index}].text`}
+                data-index={index}
+                data-field="text"
+                value={ingredient.text}
+                onChange={handleChange}
+                placeholder="Extra Details"
+            />
+            <input
+                className='rounded-lg mb-2 mr-1 w-full'
+                type="text"
+                name={`ingredients[${index}].food`}
+                data-index={index}
+                data-field="food"
+                value={ingredient.food}
+                onChange={handleChange}
+                placeholder="Food"
+                required
+            />
+            <input
+                className='rounded-lg mb-2 mr-1 w-full'
+                type="number"
+                name={`ingredients[${index}].quantity`}
+                data-index={index}
+                data-field="quantity"
+                value={ingredient.quantity}
+                onChange={handleChange}
+                placeholder="Quantity"
+                required
+            />
+            <input
+                className='rounded-lg mb-2 mr-1 w-full'
+                type="text"
+                name={`ingredients[${index}].unit`}
+                data-index={index}
+                data-field="unit"
+                value={ingredient.unit}
+                onChange={handleChange}
+                placeholder="Unit"
+                required
+                />
+            </div>
+        )) : (<></>)}
+        <button
+            className='border bg-blue-400 px-2 py-0.5 rounded-lg mt-2'
+            type="button"
+            onClick={handleAddIngredient}
+        >
+            Add Ingredient
+        </button>
+    </Accordion.Content>
             </Accordion.Panel>
             <Accordion.Panel>
                 <Accordion.Title>Steps?</Accordion.Title>

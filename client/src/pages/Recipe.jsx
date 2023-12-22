@@ -184,7 +184,8 @@ const Recipe = () => {
           
         </div>
       </div>
-      <div>
+      <div>{userData? (
+        <>
         <CreateReviewButton setIsModalOpen={setIsModalOpen}/>
         <Modal
           isOpen={isModalOpen}
@@ -194,6 +195,11 @@ const Recipe = () => {
               user_id={userData.id}
               recipe_id={recipe.id}/>}
             />
+        </>
+      ):(
+        <></>
+
+      )}
         {reviews}
       </div>
     </div>

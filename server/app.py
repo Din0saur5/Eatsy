@@ -287,8 +287,7 @@ class GetRecipeByIngredient(Resource):
 api.add_resource(GetRecipeByIngredient, '/recipes/ingredient/<string:ingredient>', endpoint='ingredient')
     
 class AllIngredients(Resource):
-    #@cross_origin(origins=os.environ.get('CORS_ORIGIN') + '/private/update-recipe/*', methods=['POST'])
-    #@cross_origin(origins=os.environ.get('CORS_ORIGIN') + '/*', methods=['GET'])
+    
     def get(self):
         ingredients = [ingredient.to_dict(rules = ('-recipe',)) for ingredient in Ingredient.query.all()]
         if not ingredients:
@@ -297,12 +296,20 @@ class AllIngredients(Resource):
 
     def post(self):
         try:
-            data = request.get_json()
-            new_ingredient = Ingredient(**data)
+            
+            new_ingredient = Ingredient(
+                text = request.json.get('text'),
+                food = request.json.get('food'),
+                quantity = request.json.get('quantity'),
+                unit = request.json.get('unit'),
+                recipe_id = request.json.get('recipe_id'),
+                id = request.json.get('id')
+            )
             db.session.add(new_ingredient)
             db.session.commit()
             return make_response(new_ingredient.to_dict(),201)
         except Exception as e:
+            print(e)
             return make_response({"message":str(e)}, 400)
 
 api.add_resource(AllIngredients, '/ingredients')
@@ -316,11 +323,11 @@ class ChangeIngredientById(Resource):
         if not ingredient:
             return make_response({"message":"Ingredient not found"}, 404)
         for key in request.json:
-            setattr(ingredient, key, request.json[key])
+            setattr(ingredient, key, request.json.get(key))
         db.session.commit()
         return make_response(ingredient.to_dict(), 200)
 
-    def delete(self, id, user_id):
+    def delete(self, id,):
         ingredient = Ingredient.query.filter_by(id=id).first()
         if not ingredient:
             return make_response({"message":"Ingredient not found"}, 404)
@@ -342,8 +349,14 @@ class AllReviews(Resource):
 
     def post(self):
         try:
-            data = request.get_json()
-            new_review = Review(**data)
+           
+            new_review = Review(
+                title=request.json.get('title'),
+                comment=request.json.get('comment'),
+                rating=request.json.get('rating'),
+                user_id = request.json.get('user_id'),
+                recipe_id = request.json.get('recipe_id')
+            )
             db.session.add(new_review)
             db.session.commit()
             return make_response(new_review.to_dict(rules=('-user', '-recipe')),201)
