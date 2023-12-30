@@ -80,10 +80,10 @@ class Logout(Resource):
         response.set_cookie('user_id', '', expires=0)
         return response
     
-api.add_resource(Signup, '/signup', endpoint='signup')
+api.add_resource(Signup, '/signup')
 api.add_resource(CheckSession, '/check_session')
-api.add_resource(Login, '/login', endpoint='login')
-api.add_resource(Logout, '/logout', endpoint='logout')
+api.add_resource(Login, '/login')
+api.add_resource(Logout, '/logout')
 
 class AllUsers(Resource):
     #@cross_origin(origins=os.environ.get('CORS_ORIGIN') + '/signup', methods=['POST'])
