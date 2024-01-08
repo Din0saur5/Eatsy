@@ -69,7 +69,7 @@ class Login(Resource):
         if user:
             if user.authenticate(password):
                 session['user_id'] = user.id
-                print(session['user_id']) 
+                #print(session['user_id']) 
                 return user.to_dict(), 200
         return make_response({'error': '401 Unauthorized'}, 401)
 
