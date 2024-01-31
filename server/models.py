@@ -77,7 +77,7 @@ class Recipe(db.Model, SerializerMixin):
     dish_type = db.Column(db.String)
     time = db.Column(db.Integer)
     source = db.Column(db.String)
-    
+    ingredient_list = db.Column(db.ARRAY(db.TEXT),nullable=True, default=[])
     user_id = db.Column(db.Uuid, db.ForeignKey('users.id'))
     
     serialize_rules = ('-user.recipes', '-user.reviews' '-ingredients.recipe', '-reviews.recipe', '-favorites.recipe', '-user.favorites')
