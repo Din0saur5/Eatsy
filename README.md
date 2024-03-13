@@ -23,5 +23,5 @@ Eatsy is a **vibrant** and **user-friendly culinary platform** where food enthus
 🔗 **Join Eatsy today** and dive into a world where cooking is not just about food, but an adventure in taste, creativity, and sharing. _Bon Appétit!_
 
 
-#New version currently in development! 
-##This version will have many more recipes and quicker functionality useing typescript, next, supabase, and vercel!
+# New version currently in development! 
+## This version will have many more recipes and quicker functionality useing typescript, next, supabase, and vercel!
